@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import './scss/base.scss'
 import { userType, checkUserLS } from './shared/localStorage'
+import Footer from "./components/Footer/Footer"
 
 const Context = React.createContext({})
 
@@ -16,6 +17,7 @@ const App: React.FC = () => {
       <main>
 
       </main>
+      <Footer/>
     </Context.Provider>
   )
 }
