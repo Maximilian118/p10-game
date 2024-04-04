@@ -20,7 +20,7 @@ const NavItem: React.FC<navItemProps> = ({ item, style, setValue }) => {
     const radius = diameter / 2
 
     circle.addEventListener('animationend', () => item.removeChild(circle))
-
+ 
     circle.style.width = circle.style.height = `${diameter}px`
     circle.style.left = `${e.pageX - (item.offsetLeft + radius) - navPos.left}px`
     circle.style.top = `${e.pageY - (item.offsetTop + radius) - navPos.top}px`

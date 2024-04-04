@@ -1,13 +1,13 @@
-@import '../../../scss/keyframes.scss';
-@import '../../../scss/mixins.scss';
-@import '../../../scss/variables.scss';
+@use '../../../scss/keyframes.scss';
+@use '../../../scss/mixins.scss';
+@use '../../../scss/variables.scss';
 
 .nav-item {
   height: 100%;
   padding: 0 20px;
-  @include flexbox;
+  @include mixins.flexbox;
   cursor: pointer;
-  color: $colour-4;
+  color: variables.$colour-4;
   position: relative;
   overflow: hidden;
   transition: background 300ms;
