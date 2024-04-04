@@ -3,6 +3,7 @@ import './scss/base.scss'
 import { userType, checkUserLS } from './shared/localStorage'
 import Footer from './components/footer/Footer'
 import Nav from './components/nav/Nav'
+import Spinner from './components/utility/spinner/Spinner'
 
 const Context = React.createContext({})
 
@@ -14,6 +15,7 @@ const App: React.FC = () => {
     <Context.Provider value={{ loading, setLoading, user, setUser }}>
       <main>
         <Nav/>
+        <Spinner/>
       </main>
       <Footer/>
     </Context.Provider>

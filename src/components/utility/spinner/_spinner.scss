@@ -1,0 +1,33 @@
+@use '../../../scss/keyframes';
+@use '../../../scss/mixins';
+@use '../../../scss/variables';
+
+.spinner-container {
+  width: 100%;
+  flex-grow: 1;
+  @include mixins.flexbox;
+
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border: 10px solid variables.$colour-9;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+  }
+  .spinner::after {
+    content: '';  
+    box-sizing: border-box;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 3px solid;
+    border-color: variables.$pirelli-red transparent;
+  }
+}
