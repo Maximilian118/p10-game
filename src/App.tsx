@@ -4,6 +4,7 @@ import { userType, checkUserLS } from './shared/localStorage'
 import Footer from './components/footer/Footer'
 import Nav from './components/nav/Nav'
 import Spinner from './components/utility/spinner/Spinner'
+import Router from './Router'
 
 const Context = React.createContext({})
 
@@ -15,7 +16,7 @@ const App: React.FC = () => {
     <Context.Provider value={{ loading, setLoading, user, setUser }}>
       <main>
         <Nav/>
-        <Spinner/>
+        {loading ? <Spinner/> : <Router user={user}/>}
       </main>
       <Footer/>
     </Context.Provider>
