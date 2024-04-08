@@ -32,7 +32,7 @@ body {
       width: 700px;
       height: 80%;
       border-radius: 25px;
-      background: variables.$elemBackground;
+      background: white;
       box-shadow: variables.$shadow;
       @include mixins.flexbox;
       flex-flow: column nowrap;
@@ -44,10 +44,8 @@ body {
         height: 60px;
         @include mixins.flexbox;
         justify-content: flex-start;
-        background: white;
         box-sizing: border-box;
         padding: 0 20px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.35);
         position: relative;  
       }
 
