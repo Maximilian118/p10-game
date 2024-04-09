@@ -1,0 +1,21 @@
+@use '../../../scss/variables';
+@use '../../../scss/mixins';
+
+.user-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: variables.$colour-1;
+  box-shadow: variables.$shadow;
+  @include mixins.flexbox;
+  cursor: pointer;
+  color: variables.$colour-9;
+  font-size: 10px;
+  font-weight: 700;
+  margin-right: 15px;
+
+  &:hover {
+    background-color: variables.$colour-9;
+    color: variables.$colour-1;
+  }
+}

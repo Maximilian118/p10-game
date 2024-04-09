@@ -7,16 +7,15 @@
   padding: 0 20px;
   @include mixins.flexbox;
   cursor: pointer;
-  color: variables.$colour-4;
   position: relative;
   overflow: hidden;
   transition: background 300ms;
 
+  &:first-child {
+    padding-left: 40px;
+  }
+
   &:hover {
     color: black;
   }
-}
-
-nav .nav-item:first-child {
-  padding-left: 40px;
 }

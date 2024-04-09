@@ -1,7 +1,13 @@
 import React from "react"
 import NavItem from './navItem/NavItem'
+import UserIcon from "../utility/userIcon/UserIcon"
+import { userType } from "../../shared/localStorage"
 
-const Nav: React.FC = () => {
+interface navType {
+  user: userType,
+}
+
+const Nav: React.FC<navType> = ({ user }) => {
   const navItems = [
     {
       text: "Home",
@@ -15,7 +21,13 @@ const Nav: React.FC = () => {
 
   return (
     <nav>
-      {navItems.map((item, i) => (<NavItem key={i} item={{...item, i}}/>))}
+      <div className="nav-left">
+        {navItems.map((item, i) => (<NavItem key={i} item={item}/>))}
+      </div>
+      {!user.token ? <UserIcon user={user}/> : <NavItem item={{
+        text: "Login",
+        url: "/login",
+      }}/>}
     </nav>
   )
 }

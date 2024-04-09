@@ -15,7 +15,7 @@ const App: React.FC = () => {
   return (
     <Context.Provider value={{ loading, setLoading, user, setUser }}>
       <main>
-        <Nav/>
+        <Nav user={user}/>
         {loading ? <Spinner/> : <Router user={user}/>}
       </main>
       <Footer/>

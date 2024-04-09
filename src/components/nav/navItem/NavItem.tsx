@@ -6,7 +6,6 @@ interface navItemProps {
   item: {
     text: string,
     url: string,
-    i: number,
   },
 }
 
@@ -17,7 +16,10 @@ const NavItem: React.FC<navItemProps> = ({ item }) => {
   return (
     <div 
       className="nav-item" 
-      style={{ color: location.pathname === item.url ? "black" : ""}} 
+      style={{ 
+        color: location.pathname === item.url ? "black" : "",
+        paddingRight: item.url === "/login" ? 40 : "",
+      }} 
       onClick={() => navigate(item.url)}
     >
       <p>{item.text}</p>
