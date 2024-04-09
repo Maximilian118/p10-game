@@ -24,7 +24,7 @@ const Nav: React.FC<navType> = ({ user }) => {
       <div className="nav-left">
         {navItems.map((item, i) => (<NavItem key={i} item={item}/>))}
       </div>
-      {!user.token ? <UserIcon user={user}/> : <NavItem item={{
+      {user.token ? <UserIcon user={user}/> : <NavItem item={{
         text: "Login",
         url: "/login",
       }}/>}
