@@ -3,7 +3,7 @@ import React from "react"
 interface formStateType {
   name?: string
   email: string
-  password: string
+  password?: string
   passConfirm?: string
 }
 
@@ -67,7 +67,7 @@ export const updateForm = (
 // Determine whether a form is valid for submission.
 export const formValid = (
   form: formStateType,
-  formError: formStateType,
+  formErr: formStateType,
 ): boolean => {
   for (const keys in form) {
     if (form[keys as keyof formStateType] === "") {
@@ -78,8 +78,8 @@ export const formValid = (
   }
 
   let withErr = false
-  for (const keys in formError) {
-    if (formError[keys as keyof formStateType]) {
+  for (const keys in formErr) {
+    if (formErr[keys as keyof formStateType]) {
       withErr = true
     }
   }

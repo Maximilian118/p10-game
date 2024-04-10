@@ -1,11 +1,11 @@
-import { TextField, Button } from "@mui/material"
 import React, { useState } from "react"
+import { TextField, Button } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { updateForm, formValid } from '../shared/formValidation'
 
 interface loginFormType {
   email: string
-  password: string
+  password?: string
 }
 
 const Login: React.FC = () => {
