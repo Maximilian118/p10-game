@@ -5,7 +5,7 @@ import { updateForm, formValid } from '../shared/formValidation'
 
 interface loginFormType {
   email: string
-  password?: string
+  password: string
 }
 
 const Login: React.FC = () => {
@@ -34,7 +34,7 @@ const Login: React.FC = () => {
           name="email"
           label={`Email${formErr.email && `: ${formErr.email}`}`}
           variant="outlined" 
-          onChange={e => updateForm(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<loginFormType>(e, form, setForm, setFormErr)}
           error={formErr.email ? true : false}
         />
         <TextField 
@@ -44,13 +44,13 @@ const Login: React.FC = () => {
           name="password" 
           label={`Password${formErr.password && `: ${formErr.password}`}`} 
           variant="outlined"
-          onChange={e => updateForm(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<loginFormType>(e, form, setForm, setFormErr)}
           error={formErr.password ? true : false}
         />
         <Button 
           variant="outlined" 
           type="submit"
-          disabled={!formValid(form, formErr)}
+          disabled={!formValid<loginFormType>(form, formErr)}
         >Login</Button>
       </form>
       <h5 onClick={() => navigate("/forgot")}>Forgotten Password?</h5>

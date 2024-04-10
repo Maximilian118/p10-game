@@ -1,12 +1,15 @@
 import React, { useState } from "react"
 import { TextField, Button } from "@mui/material"
 import { updateForm, formValid } from '../shared/formValidation'
+import DropZone from "../components/utility/dropZone/DropZone"
 
 interface createFormType {
-  name?: string
+  name: string
   email: string
-  password?: string
-  passConfirm?: string
+  password: string
+  passConfirm: string
+  icon: string
+  profile_picture: string
 }
 
 const Create: React.FC = () => {
@@ -15,12 +18,16 @@ const Create: React.FC = () => {
     email: "",
     password: "",
     passConfirm: "",
+    icon: "",
+    profile_picture: "",
   })
   const [ formErr, setFormErr ] = useState<createFormType>({
     name: "",
     email: "",
     password: "",
     passConfirm: "",
+    icon: "",
+    profile_picture: "",
   })
 
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,13 +38,14 @@ const Create: React.FC = () => {
   return (
     <div className="content-container">
       <form onSubmit={e => onSubmitHandler(e)}>
+        <DropZone<createFormType> setForm={setForm} setFormErr={setFormErr}/>
         <TextField
           required={!formErr.name}
           className="mui-form-el"
           name="name"
           label={`Name${formErr.name && `: ${formErr.name}`}`}
           variant="outlined" 
-          onChange={e => updateForm(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType>(e, form, setForm, setFormErr)}
           error={formErr.name ? true : false}
         />
         <TextField
@@ -46,7 +54,7 @@ const Create: React.FC = () => {
           name="email"
           label={`Email${formErr.email && `: ${formErr.email}`}`}
           variant="outlined" 
-          onChange={e => updateForm(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType>(e, form, setForm, setFormErr)}
           error={formErr.email ? true : false}
         />
         <TextField 
@@ -56,7 +64,7 @@ const Create: React.FC = () => {
           name="password" 
           label={`Password${formErr.password && `: ${formErr.password}`}`} 
           variant="outlined"
-          onChange={e => updateForm(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType>(e, form, setForm, setFormErr)}
           error={formErr.password ? true : false}
         />
         <TextField 
@@ -66,13 +74,13 @@ const Create: React.FC = () => {
           name="passConfirm" 
           label={`Confirm Password${formErr.passConfirm && `: ${formErr.passConfirm}`}`} 
           variant="outlined"
-          onChange={e => updateForm(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType>(e, form, setForm, setFormErr)}
           error={formErr.passConfirm ? true : false}
         />
         <Button 
           variant="outlined" 
           type="submit"
-          disabled={!formValid(form, formErr)}
+          disabled={!formValid<createFormType>(form, formErr)}
         >Create</Button>
       </form>
     </div>
