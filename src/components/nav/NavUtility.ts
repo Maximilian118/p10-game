@@ -16,6 +16,6 @@ export const navRight = [
   },
   {
     text: "Create Account",
-    url: "/createAccount",
+    url: "/create",
   },
 ]

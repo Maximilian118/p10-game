@@ -24,7 +24,6 @@ const Forgot: React.FC = () => {
       <form onSubmit={e => onSubmitHandler(e)}>
         <TextField
           required={!formErr.email}
-          id="outlined-required"
           className="mui-form-el"
           name="email"
           label={`Email${formErr.email && `: ${formErr.email}`}`}

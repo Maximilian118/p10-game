@@ -1,24 +1,27 @@
 import React, { useState } from "react"
 import { TextField, Button } from "@mui/material"
-import { useNavigate } from "react-router-dom"
 import { updateForm, formValid } from '../shared/formValidation'
 
-interface loginFormType {
+interface createFormType {
+  name?: string
   email: string
   password?: string
+  passConfirm?: string
 }
 
-const Login: React.FC = () => {
-  const [ form, setForm ] = useState<loginFormType>({
+const Create: React.FC = () => {
+  const [ form, setForm ] = useState<createFormType>({
+    name: "",
     email: "",
     password: "",
+    passConfirm: "",
   })
-  const [ formErr, setFormErr ] = useState<loginFormType>({
+  const [ formErr, setFormErr ] = useState<createFormType>({
+    name: "",
     email: "",
     password: "",
+    passConfirm: "",
   })
-
-  const navigate = useNavigate()
 
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -28,6 +31,15 @@ const Login: React.FC = () => {
   return (
     <div className="content-container">
       <form onSubmit={e => onSubmitHandler(e)}>
+        <TextField
+          required={!formErr.name}
+          className="mui-form-el"
+          name="name"
+          label={`Name${formErr.name && `: ${formErr.name}`}`}
+          variant="outlined" 
+          onChange={e => updateForm(e, form, setForm, setFormErr)}
+          error={formErr.name ? true : false}
+        />
         <TextField
           required={!formErr.email}
           className="mui-form-el"
@@ -47,15 +59,24 @@ const Login: React.FC = () => {
           onChange={e => updateForm(e, form, setForm, setFormErr)}
           error={formErr.password ? true : false}
         />
+        <TextField 
+          required={!formErr.passConfirm}
+          type="password"
+          className="mui-form-el"
+          name="passConfirm" 
+          label={`Confirm Password${formErr.passConfirm && `: ${formErr.passConfirm}`}`} 
+          variant="outlined"
+          onChange={e => updateForm(e, form, setForm, setFormErr)}
+          error={formErr.passConfirm ? true : false}
+        />
         <Button 
           variant="outlined" 
           type="submit"
           disabled={!formValid(form, formErr)}
-        >Login</Button>
+        >Create</Button>
       </form>
-      <h5 onClick={() => navigate("/forgot")}>Forgotten Password?</h5>
     </div>
   )
 }
 
-export default Login
+export default Create

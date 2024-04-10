@@ -7,6 +7,7 @@ import Home from './page/Home'
 import Splash from './page/Splash'
 import Login from './page/Login'
 import Forgot from "./page/Forgot"
+import Create from "./page/Create"
 
 interface routerType {
   user: userType,
@@ -23,6 +24,7 @@ const Router: React.FC<routerType> = ({ user }) => user.token ? (
     <Route path="/" Component={Splash}/>
     <Route path="/login" Component={Login}/>
     <Route path="/forgot" Component={Forgot}/>
+    <Route path="/create" Component={Create}/>
   </Routes>
 )
 
