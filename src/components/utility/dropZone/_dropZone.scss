@@ -1,4 +1,35 @@
+@use '../../../scss/mixins';
+@use '../../../scss/variables';
+
 .dropzone {
-  width: 50%;
-  margin-bottom: 20px;
+  width: 45%;
+  aspect-ratio: 1 / 1;
+  margin-bottom: 40px;
+  cursor: pointer;
+  border: 1px solid variables.$mui-border;
+  border-radius: 50%;
+  @include mixins.flexbox;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+
+  .inside-border {
+    width: 100%;
+    height: 100%;
+    border: 2px dashed variables.$mui-border;
+    @include mixins.flexbox;
+    border-radius: 50%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+    }
+  }
+
+  &:hover {
+    border: 1px solid black;
+  }
 }
