@@ -20,6 +20,7 @@ interface compressedImagesType {
 
 const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) => {
   const [ thumb, setThumb ] = useState<string>("")
+  const [ error, setError ] = useState<string>("")
 
   // Determine if the window has drag and drop capabilities.
   const canDragDrop = (): boolean => {
@@ -32,19 +33,20 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
     accept: { // Only allow these file types.
       'image/jpeg': [],
       'image/png': [],
-      'image/gif': [],
     },
     multiple: false, // Only 1 file.
     maxSize: 10000000, // Maximum file size = 10mb.
   })
 
   // When a file is accepted, compress into two different sizes.
+  // Then, setThumb with a url string for the thumbnail.
   // Then, setForm with compressed Files.
   useEffect(() => {
-    if (acceptedFiles.length > 0) {
+    if (acceptedFiles.length > 0 && fileRejections.length === 0) {
       const acceptedFilesHandler = async (
         setForm: React.Dispatch<React.SetStateAction<T>>,
         setFormErr: React.Dispatch<React.SetStateAction<T>>,
+        setError: React.Dispatch<React.SetStateAction<string>>,
       ): Promise<void> => {
         const compressImages = async (file: File): Promise<compressedImagesType> => {
           return {
@@ -56,6 +58,14 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
         const compressedImages = await compressImages(acceptedFiles[0])
 
         setThumb(URL.createObjectURL(compressedImages.profile_picture))
+        setError("")
+        
+        setFormErr(prevFormErr => {
+          return {
+            ...prevFormErr,
+            profile_picture: null,
+          }
+        })
 
         setForm(prevForm => {
           return {
@@ -65,14 +75,30 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
         })
       }
 
-      acceptedFilesHandler(setForm, setFormErr)
+      acceptedFilesHandler(setForm, setFormErr, setError)
+    } else if (fileRejections.length > 0) {
+      const err = fileRejections[0].errors[0].message
+
+      setThumb("")
+      setError(err)
+      setFormErr(prevFormErr => {
+        return {
+          ...prevFormErr,
+          profile_picture: err,
+        }
+      })
     }
-  }, [acceptedFiles, setForm, setFormErr])
+  }, [acceptedFiles, fileRejections, setForm, setFormErr])
 
   const dropZoneContent = (
     canDragDrop: () => boolean,
     thumb: string,
+    error: string,
   ): JSX.Element => {
+    if (error) {
+      return <p>{error}</p>
+    }
+
     if (thumb) {
       return <img alt="Thumbnail" src={thumb}/>
     }
@@ -84,7 +110,7 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
     <div {...getRootProps({className: 'dropzone'})}>
       <div className={`inside-border ${isDragActive ? "drag-active" : ""}`}>
         <input {...getInputProps()} />
-        {dropZoneContent(canDragDrop, thumb)}
+        {dropZoneContent(canDragDrop, thumb, error)}
       </div>
     </div>
   )
