@@ -1,5 +1,6 @@
 @use '../../../scss/mixins';
 @use '../../../scss/variables';
+@use '../../../scss/keyframes';
 
 .dropzone {
   width: 45%;
@@ -33,7 +34,7 @@
       position: absolute;
     }
   }
-
+  
   .drag-active {
     border: 2px dashed black;
   }
