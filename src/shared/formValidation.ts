@@ -70,9 +70,9 @@ export const formValid = <T extends formStateType>(
   formErr: T,
 ): boolean => {
   for (const keys in form) {
-    if (form[keys as keyof T] === "") {
-      return false
-    } else if (!form[keys as keyof T]) {
+    const key = form[keys as keyof T]
+
+    if (!key && key !== null) {
       return false
     }
   }

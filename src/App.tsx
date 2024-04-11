@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
+import AppContext from './context'
 import './scss/base.scss'
 import { userType, checkUserLS } from './shared/localStorage'
 import Footer from './components/footer/Footer'
@@ -6,22 +7,19 @@ import Nav from './components/nav/Nav'
 import Spinner from './components/utility/spinner/Spinner'
 import Router from './Router'
 
-const Context = React.createContext({})
-
 const App: React.FC = () => {
-  const [ loading, setLoading ] = useState<boolean>(false)
   const [ user, setUser ] = useState<userType>(checkUserLS())
+  const [ loading, setLoading ] = useState<boolean>(false)
 
   return (
-    <Context.Provider value={{ loading, setLoading, user, setUser }}>
+    <AppContext.Provider value={{ loading, setLoading, user, setUser }}>
       <main>
         <Nav user={user}/>
         {loading ? <Spinner/> : <Router user={user}/>}
       </main>
       <Footer/>
-    </Context.Provider>
+    </AppContext.Provider>
   )
 }
 
 export default App
-export {Context}

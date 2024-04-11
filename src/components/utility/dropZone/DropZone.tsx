@@ -8,17 +8,12 @@ interface dropZoneType<T> {
   setFormErr: React.Dispatch<React.SetStateAction<T>>,
 }
 
-interface formType {
-  icon: string,
-  profile_picture: string,
-}
-
 interface compressImagesType {
-  icon: File,
-  profile_picture: File,
+  icon: File | null,
+  profile_picture: File | null,
 }
 
-const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) => {
+const DropZone = <T extends compressImagesType>({ setForm, setFormErr }: dropZoneType<T>) => { 
   // Determine if the window has drag and drop capabilities.
   const canDragDrop = (): boolean => {
     const testDiv = document.createElement('div')
@@ -37,7 +32,7 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
   })
 
   // When a file is accepted, compress into two different sizes.
-  // Then, upload to the AWS S3 bucket and update form state with the URL strings.
+  // Then, setForm with compressed Files.
   useEffect(() => {
     if (acceptedFiles.length > 0) {
       const acceptedFilesHandler = async (
@@ -50,10 +45,15 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
             profile_picture: await compressImage(file, 1),
           }
         }
-        //
-        // Give the compressed images in the blow line to backend and then upload to AWS S3 Bucket.
-        //
-        await compressImages(acceptedFiles[0])
+
+        const compressedImages = await compressImages(acceptedFiles[0])
+
+        setForm(prevForm => {
+          return {
+            ...prevForm,
+            ...compressedImages,
+          }
+        })
       }
 
       acceptedFilesHandler(setForm, setFormErr)

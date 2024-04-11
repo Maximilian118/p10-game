@@ -8,8 +8,8 @@ interface createFormType {
   email: string
   password: string
   passConfirm: string
-  icon: string
-  profile_picture: string
+  icon: File | null,
+  profile_picture: File | null,
 }
 
 const Create: React.FC = () => {
@@ -18,20 +18,21 @@ const Create: React.FC = () => {
     email: "",
     password: "",
     passConfirm: "",
-    icon: "",
-    profile_picture: "",
+    icon: null,
+    profile_picture: null,
   })
   const [ formErr, setFormErr ] = useState<createFormType>({
     name: "",
     email: "",
     password: "",
     passConfirm: "",
-    icon: "",
-    profile_picture: "",
+    icon: null,
+    profile_picture: null,
   })
 
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    console.log(form)
     // Backend Request...
   }
 
