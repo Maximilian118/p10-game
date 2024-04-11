@@ -76,13 +76,13 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
     if (thumb) {
       return <img alt="Thumbnail" src={thumb}/>
     }
-    
+
     return <p>{`${canDragDrop() ? `Drag and drop` : `Select`} an image...`}</p>
   }
 
   return (
     <div {...getRootProps({className: 'dropzone'})}>
-      <div className="inside-border">
+      <div className={`inside-border ${isDragActive ? "drag-active" : ""}`}>
         <input {...getInputProps()} />
         {dropZoneContent(canDragDrop, thumb)}
       </div>

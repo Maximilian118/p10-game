@@ -29,6 +29,10 @@
     }
   }
 
+  .drag-active {
+    border: 2px dashed black;
+  }
+
   &:hover {
     border: 1px solid black;
   }
