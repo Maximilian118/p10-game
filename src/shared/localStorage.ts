@@ -1,6 +1,6 @@
 export interface userType {
-  token: string
   _id: string
+  token: string
   name: string
   email: string
   icon: string
@@ -16,8 +16,8 @@ export interface userType {
 
 // A user object template with falsy values.
 const blankUser = {
-  token: "",
   _id: "",
+  token: "",
   name: "",
   email: "",
   icon: "",

@@ -17,7 +17,7 @@ const theme = createTheme({
     },
     button: {
       textTransform: "none",
-    }
+    },
   },
 })
 

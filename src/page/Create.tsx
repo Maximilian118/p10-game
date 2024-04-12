@@ -1,9 +1,11 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { TextField, Button } from "@mui/material"
 import { updateForm, formValid } from '../shared/formValidation'
 import DropZone from "../components/utility/dropZone/DropZone"
+import { createUser } from "../shared/requests/userRequests"
+import AppContext from "../context"
 
-interface createFormType {
+export interface createFormType {
   name: string
   email: string
   password: string
@@ -13,6 +15,7 @@ interface createFormType {
 }
 
 const Create: React.FC = () => {
+  const { user, setUser, setLoading } = useContext(AppContext)
   const [ form, setForm ] = useState<createFormType>({
     name: "",
     email: "",
@@ -32,8 +35,7 @@ const Create: React.FC = () => {
 
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(form)
-    // Backend Request...
+    createUser(form, user, setUser, setLoading)
   }
 
   return (
