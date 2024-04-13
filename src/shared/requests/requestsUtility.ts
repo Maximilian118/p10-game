@@ -14,14 +14,15 @@ const formatString = (str: string) => {
 }
 // Format name of all files to be uploaded to s3.
 export const formatFilename = (
-  _id: string,
   name: string,
   category: `${string}/`,
   file: File,
 ): string => {
   const username = formatString(name)
+  const cat = formatString(category)
   const date = formatString(moment().format())
+  const size = Math.floor(file.size)
   const filename = formatString(file.name)
 
-  return `${username}-${_id}/${category}${date}-${file.size}/${filename}`
+  return `${username}/${cat}${date}-${size}/${filename}`
 }
