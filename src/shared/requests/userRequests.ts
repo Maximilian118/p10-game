@@ -17,27 +17,27 @@ export const createUser = async (
         variables: form,
         query: `
           mutation CreateUser($name: String!, $email: String!, $password: String!, $passConfirm: String!, $icon: String, $profile_picture: String) {
-            createUser(userInput: {name: $name, email: $email, password: $password, pass_confirm: $passConfirm, icon: $icon, profile_picture: $profile_picture}) {
+            createUser(userInput: {name: $name, email: $email, password: $password, passConfirm: $passConfirm, icon: $icon, profile_picture: $profile_picture}) {
               ${populateUser}
             }
           }
         `,
       })
-      .then(async (res) => {
+      .then(async (res: any) => {
         if (res.data.errors) {
           console.log(res.data.errors[0].message)
         } else {
-          console.log(res)
+          console.log(res.data.data.createUser)
         }
 
         setLoading(false)
       })
-      .catch((err) => {
-        console.log(JSON.parse(err.response.data.errors[0].message))
+      .catch((err: any) => {
+        console.log(err.response.data.errors[0])
         setLoading(false)
       })
-  } catch (err) {
-    console.log(err)
+  } catch (err: any) {
+    console.log(err.response.data)
     setLoading(false)
   }
 }

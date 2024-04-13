@@ -3,7 +3,7 @@ import { headers, checkAuth } from "../authUtility"
 import { userType } from "../localStorage"
 import { formatFilename } from "./requestsUtility"
 
-export const uploadToS3 = async (
+export const signS3 = async (
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   category: `${string}/`,
@@ -11,7 +11,6 @@ export const uploadToS3 = async (
 ): Promise<string> => {
   let fileURL = ""
   const filename = formatFilename(user._id, user.name, category, file)
-  console.log(user.name)
   try {
     await axios
       .post(

@@ -1,5 +1,14 @@
 import moment from "moment"
 
+export interface requestErrorType {
+  type?: string
+  message: string
+  code?: number
+  value?: any
+  locations: []
+  path?: []
+}
+
 const formatString = (str: string) => {
   return str.toLowerCase().replace(/[^a-z0-9]/g, "-")
 }

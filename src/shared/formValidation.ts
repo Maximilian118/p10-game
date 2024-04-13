@@ -50,8 +50,8 @@ export const updateForm = <T extends formStateType>(
       handleInput<T>(e.target.name, setFormErr)
     } else {
       let passErr = "At least one letter and one number."
-      passErr = e.target.value.trim().length <= 8 ? "Minimum 8 characters." : passErr
-      passErr = e.target.value.trim().length >= 40 ? "Maximum 40 characters." : passErr
+      passErr = e.target.value.length <= 8 ? "Minimum 8 characters." : passErr
+      passErr = e.target.value.length >= 40 ? "Maximum 40 characters." : passErr
 
       handleInput<T>(e.target.name, setFormErr, passErr)
     }; break
