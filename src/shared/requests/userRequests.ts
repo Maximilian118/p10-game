@@ -10,6 +10,7 @@ export const createUser = async (
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<string>>,
 ): Promise<void> => {
   setLoading(true)
   let iconURL = ""
@@ -19,8 +20,10 @@ export const createUser = async (
     iconURL = await uplaodS3(user, "icon", form.icon)
     ppURL = await uplaodS3(user, "profile_picture", form.profile_picture)
 
-    if (iconURL === "" || ppURL === "") {
-      console.error("Error: Failed to upload image.")
+    if (!iconURL || !ppURL) {
+      const errorMessage = "Failed to upload image."
+      console.error(`Error: ${errorMessage}`)
+      setBackendErr(`${errorMessage} Try again!`)
       setLoading(false)
       return
     }
@@ -62,7 +65,12 @@ export const createUser = async (
         if (res.data.errors) {
           formatGraphQLError("createUser", res.data.errors[0].message, true)
         } else {
-          formatGraphQLResponse("createUser", res, true)
+          setUser((prevUser) => {
+            return {
+              ...prevUser,
+              ...formatGraphQLResponse("createUser", res, true),
+            }
+          })
         }
       })
       .catch((err: any) => {

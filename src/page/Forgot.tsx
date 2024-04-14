@@ -28,13 +28,13 @@ const Forgot: React.FC = () => {
           name="email"
           label={`Email${formErr.email && `: ${formErr.email}`}`}
           variant="outlined" 
-          onChange={e => updateForm<forgotFormType>(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<forgotFormType, forgotFormType>(e, form, setForm, setFormErr)}
           error={formErr.email ? true : false}
         />
         <Button 
           variant="outlined" 
           type="submit"
-          disabled={!formValid<forgotFormType>(form, formErr)}
+          disabled={!formValid<forgotFormType, forgotFormType>(form, formErr)}
         >Submit</Button>
       </form>
     </div>

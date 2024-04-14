@@ -3,19 +3,29 @@ import { TextField, Button } from "@mui/material"
 import { updateForm, formValid } from '../shared/formValidation'
 import DropZone from "../components/utility/dropZone/DropZone"
 import { createUser } from "../shared/requests/userRequests"
+import Spinner from "../components/utility/spinner/Spinner"
 import AppContext from "../context"
 
-export interface createFormType {
+interface createFormBaseType {
   name: string
   email: string
   password: string
   passConfirm: string
-  icon: File | null,
-  profile_picture: File | null,
+}
+
+export interface createFormType extends createFormBaseType {
+  icon: File | null
+  profile_picture: File | null
+}
+
+export interface createFormErrType extends createFormBaseType {
+  dropzone: string
 }
 
 const Create: React.FC = () => {
-  const { user, setUser, setLoading } = useContext(AppContext)
+  const { user, setUser } = useContext(AppContext)
+  const [ loading, setLoading ] = useState<boolean>(false)
+  const [ backendErr, setBackendErr ] = useState<string>("")
   const [ form, setForm ] = useState<createFormType>({
     name: "",
     email: "",
@@ -24,31 +34,36 @@ const Create: React.FC = () => {
     icon: null,
     profile_picture: null,
   })
-  const [ formErr, setFormErr ] = useState<createFormType>({
+  const [ formErr, setFormErr ] = useState<createFormErrType>({
     name: "",
     email: "",
     password: "",
     passConfirm: "",
-    icon: null,
-    profile_picture: null,
+    dropzone: "",
   })
 
-  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    createUser(form, user, setUser, setLoading)
+    createUser(form, user, setUser, setLoading, setBackendErr)
   }
 
-  return (
+  return loading ? <Spinner/> : (
     <div className="content-container">
       <form onSubmit={e => onSubmitHandler(e)}>
-        <DropZone<createFormType> setForm={setForm} setFormErr={setFormErr}/>
+        <DropZone<createFormType, createFormErrType> 
+          setForm={setForm} 
+          setFormErr={setFormErr} 
+          backendErr={backendErr}
+          setBackendErr={setBackendErr}
+        />
         <TextField
           required={!formErr.name}
           className="mui-form-el"
           name="name"
           label={`Name${formErr.name && `: ${formErr.name}`}`}
           variant="outlined" 
-          onChange={e => updateForm<createFormType>(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr)}
+          value={form.name}
           error={formErr.name ? true : false}
         />
         <TextField
@@ -57,7 +72,8 @@ const Create: React.FC = () => {
           name="email"
           label={`Email${formErr.email && `: ${formErr.email}`}`}
           variant="outlined" 
-          onChange={e => updateForm<createFormType>(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr)}
+          value={form.email}
           error={formErr.email ? true : false}
         />
         <TextField 
@@ -67,7 +83,8 @@ const Create: React.FC = () => {
           name="password" 
           label={`Password${formErr.password && `: ${formErr.password}`}`} 
           variant="outlined"
-          onChange={e => updateForm<createFormType>(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr)}
+          value={form.password}
           error={formErr.password ? true : false}
         />
         <TextField 
@@ -77,13 +94,14 @@ const Create: React.FC = () => {
           name="passConfirm" 
           label={`Confirm Password${formErr.passConfirm && `: ${formErr.passConfirm}`}`} 
           variant="outlined"
-          onChange={e => updateForm<createFormType>(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr)}
+          value={form.passConfirm}
           error={formErr.passConfirm ? true : false}
         />
         <Button 
           variant="outlined" 
           type="submit"
-          disabled={!formValid<createFormType>(form, formErr)}
+          disabled={!formValid<createFormType, createFormErrType>(form, formErr)}
         >Create</Button>
       </form>
     </div>

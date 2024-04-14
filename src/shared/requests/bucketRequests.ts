@@ -18,7 +18,7 @@ export const uplaodS3 = async (
   category: string,
   file: File,
 ): Promise<string> => {
-  let fileURL = ""
+  let url = ""
 
   try {
     await axios
@@ -40,7 +40,7 @@ export const uplaodS3 = async (
         if (res.data.errors) {
           formatGraphQLError("signS3", res.data.errors[0].message, true)
         } else {
-          fileURL = res.data.url
+          url = res.data.url
           await putS3(file, res.data.signedRequest)
         }
       })
@@ -52,5 +52,5 @@ export const uplaodS3 = async (
     formatGraphQLError("signS3", err.response.data, true)
   }
 
-  return fileURL
+  return url
 }

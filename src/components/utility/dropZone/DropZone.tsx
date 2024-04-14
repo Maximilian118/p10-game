@@ -4,14 +4,20 @@ import { compressImage } from "./dropZoneUtility"
 import Spinner from "../spinner/Spinner"
 import './_dropZone.scss'
 
-interface dropZoneType<T> {
+interface dropZoneType<T, U> {
   setForm: React.Dispatch<React.SetStateAction<T>>,
-  setFormErr: React.Dispatch<React.SetStateAction<T>>,
+  setFormErr: React.Dispatch<React.SetStateAction<U>>,
+  backendErr?: string,
+  setBackendErr?: React.Dispatch<React.SetStateAction<string>>,
 }
 
 interface formType {
-  icon: File | null,
-  profile_picture: File | null,
+  icon: File | null
+  profile_picture: File | null
+}
+
+interface formErrType {
+  dropzone: string
 }
 
 interface compressedImagesType {
@@ -19,7 +25,7 @@ interface compressedImagesType {
   profile_picture: File,
 }
 
-const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) => {
+const DropZone = <T extends formType, U extends formErrType>({ setForm, setFormErr, backendErr, setBackendErr }: dropZoneType<T, U>) => {
   const [ thumb, setThumb ] = useState<string>("")
   const [ error, setError ] = useState<string>("")
   const [ loading, setLoading ] = useState<boolean>(false)
@@ -46,10 +52,11 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
   useEffect(() => {
     if (acceptedFiles.length > 0 && fileRejections.length === 0) {
       setLoading(true)
+      setBackendErr && setBackendErr("")
 
       const acceptedFilesHandler = async (
         setForm: React.Dispatch<React.SetStateAction<T>>,
-        setFormErr: React.Dispatch<React.SetStateAction<T>>,
+        setFormErr: React.Dispatch<React.SetStateAction<U>>,
         setError: React.Dispatch<React.SetStateAction<string>>,
       ): Promise<void> => {
         const compressImages = async (file: File): Promise<compressedImagesType> => {
@@ -63,10 +70,10 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
 
         setThumb(URL.createObjectURL(compressedImages.profile_picture))
         setError("")
-        setFormErr(prevFormErr => {
+        setFormErr((prevFormErr): U => {
           return {
             ...prevFormErr,
-            profile_picture: null,
+            dropzone: "",
           }
         })
         setForm(prevForm => {
@@ -85,22 +92,23 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
 
       setThumb("")
       setError(err)
-      setFormErr(prevFormErr => {
+      setFormErr((prevFormErr): U => {
         return {
           ...prevFormErr,
-          profile_picture: err,
+          dropzone: err,
         }
       })
 
       setLoading(false)
     }
-  }, [acceptedFiles, fileRejections, setForm, setFormErr])
+  }, [acceptedFiles, fileRejections, setForm, setFormErr, setBackendErr])
 
   const dropZoneContent = (
     canDragDrop: () => boolean,
     thumb: string,
     error: string,
     loading: boolean,
+    backendErr?: string,
   ): JSX.Element => {
     if (loading) {
       return <Spinner size={"25%"}/>
@@ -108,6 +116,10 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
 
     if (error) {
       return <p>{error}</p>
+    }
+
+    if (backendErr) {
+      return <p>{backendErr}</p>
     }
 
     if (thumb) {
@@ -121,7 +133,7 @@ const DropZone = <T extends formType>({ setForm, setFormErr }: dropZoneType<T>) 
     <div {...getRootProps({className: 'dropzone'})}>
       <div className={`inside-border ${isDragActive ? "drag-active" : ""}`}>
         <input {...getInputProps()} />
-        {dropZoneContent(canDragDrop, thumb, error, loading)}
+        {dropZoneContent(canDragDrop, thumb, error, loading, backendErr)}
       </div>
     </div>
   )
