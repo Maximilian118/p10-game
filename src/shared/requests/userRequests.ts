@@ -12,16 +12,27 @@ export const createUser = async (
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<void> => {
   setLoading(true)
+  let iconURL = ""
+  let ppURL = ""
+
+  if (form.icon && form.profile_picture) {
+    iconURL = await uplaodS3(user, "icon", form.icon)
+    ppURL = await uplaodS3(user, "profile_picture", form.profile_picture)
+
+    if (iconURL === "" || ppURL === "") {
+      console.error("Error: Failed to upload image.")
+      setLoading(false)
+      return
+    }
+  }
 
   try {
     await axios
       .post("", {
         variables: {
           ...form,
-          icon: form.icon && (await uplaodS3(user, "icon", form.icon)),
-          profile_picture:
-            form.profile_picture &&
-            (await uplaodS3(user, "profile_picture", form.profile_picture)),
+          icon: iconURL,
+          profile_picture: ppURL,
         },
         query: `
           mutation CreateUser(
