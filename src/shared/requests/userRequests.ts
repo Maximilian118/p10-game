@@ -7,7 +7,6 @@ import { formatGraphQLError, formatGraphQLResponse } from "./requestsUtility"
 
 export const createUser = async (
   form: createFormType,
-  user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<string>>,
@@ -17,8 +16,8 @@ export const createUser = async (
   let ppURL = ""
 
   if (form.icon && form.profile_picture) {
-    iconURL = await uplaodS3(user, "icon", form.icon)
-    ppURL = await uplaodS3(user, "profile_picture", form.profile_picture)
+    iconURL = await uplaodS3(form.name, "icon", form.icon)
+    ppURL = await uplaodS3(form.name, "profile_picture", form.profile_picture)
 
     if (!iconURL || !ppURL) {
       const errorMessage = "Failed to upload image."

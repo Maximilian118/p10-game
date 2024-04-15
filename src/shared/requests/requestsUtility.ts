@@ -6,11 +6,11 @@ const formatString = (str: string) => {
 }
 // Format name of all files to be uploaded to s3.
 export const formatFilename = (
-  name: string,
+  userName: string,
   category: string,
   file: File,
 ): string => {
-  const username = formatString(name)
+  const username = formatString(userName)
   const cat = formatString(category)
   const date = formatString(moment().format())
   const size = Math.floor(file.size)
@@ -50,7 +50,7 @@ export const formatGraphQLError = (
   }
 
   if (log) {
-    console.log(errorObj)
+    console.error(errorObj)
   }
 
   return errorObj

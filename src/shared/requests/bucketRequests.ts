@@ -1,5 +1,4 @@
 import axios from "axios"
-import { userType } from "../localStorage"
 import { formatFilename, formatGraphQLError } from "./requestsUtility"
 
 const putS3 = async (file: File, signedRequest: string): Promise<void> => {
@@ -14,17 +13,21 @@ const putS3 = async (file: File, signedRequest: string): Promise<void> => {
 }
 
 export const uplaodS3 = async (
-  user: userType,
+  userName: string,
   category: string,
-  file: File,
+  file: File | null,
 ): Promise<string> => {
   let url = ""
+
+  if (!file) {
+    return url
+  }
 
   try {
     await axios
       .post("", {
         variables: {
-          filename: formatFilename(user.name, category, file),
+          filename: formatFilename(userName, category, file),
           filetype: file.type,
         },
         query: `
@@ -40,8 +43,8 @@ export const uplaodS3 = async (
         if (res.data.errors) {
           formatGraphQLError("signS3", res.data.errors[0].message, true)
         } else {
+          // await putS3(file, res.data.signedRequest)
           url = res.data.url
-          await putS3(file, res.data.signedRequest)
         }
       })
       .catch((err: any) => {

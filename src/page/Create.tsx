@@ -23,7 +23,7 @@ export interface createFormErrType extends createFormBaseType {
 }
 
 const Create: React.FC = () => {
-  const { user, setUser } = useContext(AppContext)
+  const { setUser } = useContext(AppContext)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ backendErr, setBackendErr ] = useState<string>("")
   const [ form, setForm ] = useState<createFormType>({
@@ -44,7 +44,7 @@ const Create: React.FC = () => {
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    createUser(form, user, setUser, setLoading, setBackendErr)
+    createUser(form, setUser, setLoading, setBackendErr)
   }
 
   return loading ? <Spinner/> : (
