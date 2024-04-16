@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
-import { compressImage, displayError } from "./dropZoneUtility"
+import { compressImage, displayError, formatError } from "./dropZoneUtility"
 import Spinner from "../spinner/Spinner"
 import './_dropZone.scss'
 
@@ -115,7 +115,7 @@ const DropZone = <T extends formType, U extends formErrType>({ setForm, setFormE
     }
 
     if (error) {
-      return <p>{error}</p>
+      return <p>{formatError(error)}</p>
     }
 
     if (backendErr) {
