@@ -48,6 +48,10 @@ export const updateForm = <T extends formStateType, U>(
     }; break
     case "password": if (/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!?_<>"'$£%^&(){};:+=*#]{8,40}$/.test(e.target.value) || e.target.value.trim() === "") {
       handleInput<U>(e.target.name, setFormErr)
+
+      if (e.target.value === form.passConfirm) {
+        handleInput("passConfirm", setFormErr)
+      } 
     } else {
       let passErr = "At least one letter and one number."
       passErr = e.target.value.length <= 8 ? "Minimum 8 characters." : passErr
