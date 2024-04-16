@@ -51,6 +51,7 @@ const Create: React.FC = () => {
     <div className="content-container">
       <form onSubmit={e => onSubmitHandler(e)}>
         <DropZone<createFormType, createFormErrType> 
+          form={form}
           setForm={setForm} 
           setFormErr={setFormErr} 
           backendErr={backendErr}

@@ -5,10 +5,11 @@ import Spinner from "../spinner/Spinner"
 import './_dropZone.scss'
 
 interface dropZoneType<T, U> {
-  setForm: React.Dispatch<React.SetStateAction<T>>,
-  setFormErr: React.Dispatch<React.SetStateAction<U>>,
-  backendErr?: string,
-  setBackendErr?: React.Dispatch<React.SetStateAction<string>>,
+  form: T
+  setForm: React.Dispatch<React.SetStateAction<T>>
+  setFormErr: React.Dispatch<React.SetStateAction<U>>
+  backendErr?: string
+  setBackendErr?: React.Dispatch<React.SetStateAction<string>>
 }
 
 interface formType {
@@ -21,14 +22,21 @@ interface formErrType {
 }
 
 interface compressedImagesType {
-  icon: File,
-  profile_picture: File,
+  icon: File
+  profile_picture: File
 }
 
-const DropZone = <T extends formType, U extends formErrType>({ setForm, setFormErr, backendErr, setBackendErr }: dropZoneType<T, U>) => {
+const DropZone = <T extends formType, U extends formErrType>({ form, setForm, setFormErr, backendErr, setBackendErr }: dropZoneType<T, U>) => {
   const [ thumb, setThumb ] = useState<string>("")
   const [ error, setError ] = useState<string>("")
   const [ loading, setLoading ] = useState<boolean>(false)
+
+  // On component mount, check for a profile_picture File and setThumb if truthy.
+  useEffect(() => {
+    if (form.profile_picture) {
+      setThumb(URL.createObjectURL(form.profile_picture))
+    }
+  }, [form.profile_picture])
 
   // Determine if the window has drag and drop capabilities.
   const canDragDrop = (): boolean => {
