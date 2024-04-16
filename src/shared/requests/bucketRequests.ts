@@ -28,11 +28,10 @@ export const uplaodS3 = async (
       .post("", {
         variables: {
           filename: formatFilename(userName, category, file),
-          filetype: file.type,
         },
         query: `
-          query SignS3($filename: String!, $filetype: String!) {
-            signS3(filename: $filename, filetype: $filetype) {
+          query SignS3($filename: String!) {
+            signS3(filename: $filename) {
               signedRequest
               url
             }
@@ -43,8 +42,8 @@ export const uplaodS3 = async (
         if (res.data.errors) {
           formatGraphQLError("signS3", res.data.errors[0].message, true)
         } else {
-          // await putS3(file, res.data.signedRequest)
-          url = res.data.url
+          await putS3(file, res.data.data.signS3.signedRequest)
+          url = res.data.data.signS3.url
         }
       })
       .catch((err: any) => {
