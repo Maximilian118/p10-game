@@ -43,3 +43,15 @@
     border: 1px solid black;
   }
 }
+
+.dropzone-error {
+  border: 1px solid variables.$error;
+
+  .inside-border {
+    border: 2px dashed variables.$error;
+  }
+
+  &:hover {
+    border: 1px solid variables.$error;
+  }
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
-import { compressImage } from "./dropZoneUtility"
+import { compressImage, displayError } from "./dropZoneUtility"
 import Spinner from "../spinner/Spinner"
 import './_dropZone.scss'
 
@@ -130,7 +130,12 @@ const DropZone = <T extends formType, U extends formErrType>({ setForm, setFormE
   }
 
   return (
-    <div {...getRootProps({className: 'dropzone'})}>
+    <div {...getRootProps({
+      className: `
+        dropzone 
+        ${displayError(error, loading, backendErr) ? "dropzone-error" : ""}
+      `
+    })}>
       <div className={`inside-border ${isDragActive ? "drag-active" : ""}`}>
         <input {...getInputProps()} />
         {dropZoneContent(canDragDrop, thumb, error, loading, backendErr)}

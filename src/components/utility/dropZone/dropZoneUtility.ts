@@ -20,3 +20,19 @@ export const compressImage = async (
 
   return compressedFile
 }
+
+export const displayError = (
+  error: string,
+  loading: boolean,
+  backendErr?: string,
+): boolean => {
+  if (loading) {
+    return false
+  }
+
+  if (error || backendErr) {
+    return true
+  } else {
+    return false
+  }
+}
