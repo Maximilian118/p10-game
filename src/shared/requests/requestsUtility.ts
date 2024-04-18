@@ -1,4 +1,3 @@
-import moment from "moment"
 import { isJSON } from "../utility"
 
 const formatString = (str: string) => {
@@ -8,11 +7,9 @@ const formatString = (str: string) => {
 export const formatFilename = (userName: string, category: string, file: File): string => {
   const username = formatString(userName)
   const cat = formatString(category)
-  const date = formatString(moment().format())
-  const size = Math.floor(file.size)
   const filename = formatString(file.name)
 
-  return `${username}/${cat}/${date}-${size}/${filename}`
+  return `${username}/${cat}/${filename}`
 }
 
 export interface graphQLErrorType {

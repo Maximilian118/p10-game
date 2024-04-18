@@ -20,14 +20,7 @@ export const createUser = async (
     ppURL = await uplaodS3(form.name, "profile_picture", form.profile_picture, setBackendErr)
 
     if (!iconURL || !ppURL) {
-      const errorMessage = "Failed to upload image."
-      console.error(`Error: ${errorMessage}`)
-      setBackendErr((prevErr) => {
-        return {
-          ...prevErr,
-          message: `${errorMessage} Try again!`,
-        }
-      })
+      console.error("Error: Failed to upload image.")
       setLoading(false)
       return
     }

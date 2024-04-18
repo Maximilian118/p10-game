@@ -53,7 +53,6 @@ export const uplaodS3 = async (
       })
       .catch((err: any) => {
         formatGraphQLError("signS3", err.response.data.errors[0], setBackendErr, true)
-        console.log(err)
       })
   } catch (err: any) {
     formatGraphQLError("signS3", err.response.data, setBackendErr, true)
