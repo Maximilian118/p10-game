@@ -5,6 +5,7 @@ import DropZone from "../components/utility/dropZone/DropZone"
 import { createUser } from "../shared/requests/userRequests"
 import Spinner from "../components/utility/spinner/Spinner"
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
+import { NavigateFunction, useNavigate } from "react-router-dom"
 import AppContext from "../context"
 
 interface createFormBaseType {
@@ -44,14 +45,16 @@ const Create: React.FC = () => {
     dropzone: "",
   })
 
-  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate()
+
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>, navigate: NavigateFunction) => {
     e.preventDefault()
-    createUser(form, setUser, setLoading, setBackendErr)
+    createUser(form, setUser, setLoading, setBackendErr, navigate)
   }
 
   return loading ? <Spinner/> : (
     <div className="content-container">
-      <form onSubmit={e => onSubmitHandler(e)}>
+      <form onSubmit={e => onSubmitHandler(e, navigate)}>
         <DropZone<createFormType, createFormErrType> 
           form={form}
           setForm={setForm} 

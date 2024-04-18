@@ -4,12 +4,14 @@ import { userType } from "../localStorage"
 import { populateUser } from "./requestPopulation"
 import { uplaodS3 } from "./bucketRequests"
 import { formatGraphQLError, formatGraphQLResponse, graphQLErrorType } from "./requestsUtility"
+import { NavigateFunction } from "react-router-dom"
 
 export const createUser = async (
   form: createFormType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+  navigate: NavigateFunction,
 ): Promise<void> => {
   setLoading(true)
   let iconURL = ""
@@ -68,6 +70,8 @@ export const createUser = async (
               ...formatGraphQLResponse("createUser", res, true),
             }
           })
+
+          navigate("/")
         }
       })
       .catch((err: any) => {
