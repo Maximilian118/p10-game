@@ -5,11 +5,7 @@ const formatString = (str: string) => {
   return str.toLowerCase().replace(/[^a-z0-9]/g, "-")
 }
 // Format name of all files to be uploaded to s3.
-export const formatFilename = (
-  userName: string,
-  category: string,
-  file: File,
-): string => {
+export const formatFilename = (userName: string, category: string, file: File): string => {
   const username = formatString(userName)
   const cat = formatString(category)
   const date = formatString(moment().format())
@@ -19,26 +15,39 @@ export const formatFilename = (
   return `${username}/${cat}/${date}-${size}/${filename}`
 }
 
-interface graphQLErrorType {
+export interface graphQLErrorType {
   request: string
   type: string
   message: string
-  code: number
+  code: number | null
   value: any
   locations: readonly string[]
   path: readonly (string | number)[]
-  orignalError: object
+  originalError: object
+}
+
+export let initGraphQLError: graphQLErrorType = {
+  request: "",
+  type: "",
+  message: "",
+  code: null,
+  value: null,
+  locations: [],
+  path: [],
+  originalError: {},
 }
 
 // Format and return a GraphQL Error from an Axios request.
 export const formatGraphQLError = (
   request: string,
   error: graphQLErrorType,
+  setBackendErr?: React.Dispatch<React.SetStateAction<graphQLErrorType>> | false,
   log?: boolean,
 ): graphQLErrorType => {
+  let errorObj: graphQLErrorType = initGraphQLError
   const e = error
 
-  const errorObj: graphQLErrorType = {
+  errorObj = {
     request,
     type: e.type ? e.type : "",
     message: e.message ? e.message : "",
@@ -46,7 +55,16 @@ export const formatGraphQLError = (
     value: e.value ? e.value : null,
     locations: e.locations ? e.locations : [],
     path: e.path ? e.path : [],
-    orignalError: error,
+    originalError: error,
+  }
+
+  if (setBackendErr) {
+    setBackendErr((prevErr) => {
+      return {
+        ...prevErr,
+        ...errorObj,
+      }
+    })
   }
 
   if (log) {
@@ -88,4 +106,20 @@ export const formatGraphQLResponse = (
   }
 
   return responseObj
+}
+
+// Loop through an array of strings. If any of those strings matches the current backendErr.type
+// or at least matches a word then return true.
+export const hasBackendErr = (types: string[], backendErr: graphQLErrorType): boolean => {
+  let match = false
+
+  if (backendErr.type && backendErr.message) {
+    types.forEach((type) => {
+      if (backendErr.type.toLowerCase().includes(type.toLowerCase())) {
+        match = true
+      }
+    })
+  }
+
+  return match
 }

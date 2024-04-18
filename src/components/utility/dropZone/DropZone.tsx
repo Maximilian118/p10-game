@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
-import { compressImage, displayError, formatError } from "./dropZoneUtility"
+import { compressImage, displayError, errTypes, formatError } from "./dropZoneUtility"
+import { graphQLErrorType, hasBackendErr, initGraphQLError } from "../../../shared/requests/requestsUtility"
 import Spinner from "../spinner/Spinner"
 import './_dropZone.scss'
 
@@ -8,8 +9,8 @@ interface dropZoneType<T, U> {
   form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
   setFormErr: React.Dispatch<React.SetStateAction<U>>
-  backendErr?: string
-  setBackendErr?: React.Dispatch<React.SetStateAction<string>>
+  backendErr?: graphQLErrorType
+  setBackendErr?: React.Dispatch<React.SetStateAction<graphQLErrorType>>
 }
 
 interface formType {
@@ -60,7 +61,15 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
   useEffect(() => {
     if (acceptedFiles.length > 0 && fileRejections.length === 0) {
       setLoading(true)
-      setBackendErr && setBackendErr("")
+
+      if (backendErr && setBackendErr && hasBackendErr(errTypes, backendErr)) {
+        setBackendErr(prevErr => {
+          return {
+            ...prevErr,
+            ...initGraphQLError,
+          }
+        })
+      }
 
       const acceptedFilesHandler = async (
         setForm: React.Dispatch<React.SetStateAction<T>>,
@@ -109,14 +118,14 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
 
       setLoading(false)
     }
-  }, [acceptedFiles, fileRejections, setForm, setFormErr, setBackendErr])
+  }, [acceptedFiles, fileRejections, setForm, setFormErr, backendErr, setBackendErr])
 
   const dropZoneContent = (
     canDragDrop: () => boolean,
     thumb: string,
     error: string,
     loading: boolean,
-    backendErr?: string,
+    backendErr?: graphQLErrorType,
   ): JSX.Element => {
     if (loading) {
       return <Spinner size={"25%"}/>
@@ -126,8 +135,8 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
       return <p>{formatError(error)}</p>
     }
 
-    if (backendErr) {
-      return <p>{backendErr}</p>
+    if (backendErr && hasBackendErr(errTypes, backendErr)) {
+      return <p>{backendErr.message}</p>
     }
 
     if (thumb) {

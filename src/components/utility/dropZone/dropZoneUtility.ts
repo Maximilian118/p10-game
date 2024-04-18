@@ -1,10 +1,8 @@
 import imageCompression from "browser-image-compression"
+import { graphQLErrorType, hasBackendErr } from "../../../shared/requests/requestsUtility"
 
 // Compress an image as close as possible to the fileSize passed.
-export const compressImage = async (
-  file: File,
-  fileSize: number,
-): Promise<File> => {
+export const compressImage = async (file: File, fileSize: number): Promise<File> => {
   let compressedFile = file
 
   const options = {
@@ -22,17 +20,20 @@ export const compressImage = async (
   return compressedFile
 }
 
+// An array of strings to indicate wheather backendErrs are applicable to dropZone.
+export const errTypes = ["icon", "profile_picture", "signS3", "putS3"]
+
 // Determine if error class should be applied.
 export const displayError = (
   error: string,
   loading: boolean,
-  backendErr?: string,
+  backendErr?: graphQLErrorType,
 ): boolean => {
-  if (loading) {
+  if (loading || !backendErr) {
     return false
   }
 
-  if (error || backendErr) {
+  if (error || hasBackendErr(errTypes, backendErr)) {
     return true
   } else {
     return false

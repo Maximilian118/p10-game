@@ -1,4 +1,5 @@
 import React from "react"
+import { initGraphQLError, graphQLErrorType, hasBackendErr } from "./requests/requestsUtility"
 
 interface formStateType {
   name?: string
@@ -27,13 +28,29 @@ export const updateForm = <T extends formStateType, U>(
   form: T,
   setForm: React.Dispatch<React.SetStateAction<T>>,
   setFormErr: React.Dispatch<React.SetStateAction<U>>,
+  backendErr?: graphQLErrorType,
+  setBackendErr?: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
 ): void => {
+  // On every keystroke mutate form.
   setForm((prevForm): T => {
     return {
       ...prevForm,
       [e.target.name]: e.target.value,
     }
   })
+
+  // If backendErr is passed, check if the current backendErr is applicable to this element.
+  // If it is then setBackendErr to inital state.
+  if (backendErr && setBackendErr && hasBackendErr([e.target.name], backendErr)) {
+    setBackendErr((prevErr) => {
+      return {
+        ...prevErr,
+        ...initGraphQLError,
+      }
+    })
+  }
+
+  // Depending on the current element do some basic validation checks.
   // prettier-ignore
   switch (e.target.name) {
     case "name": if (/^[a-zA-Z\s-']{1,30}$/.test(e.target.value) || e.target.value.trim() === "") {
@@ -69,10 +86,7 @@ export const updateForm = <T extends formStateType, U>(
 }
 
 // Determine whether a form is valid for submission.
-export const formValid = <T extends formStateType, U>(
-  form: T,
-  formErr: U,
-): boolean => {
+export const formValid = <T extends formStateType, U>(form: T, formErr: U): boolean => {
   for (const keys in form) {
     const key = form[keys as keyof T]
 
@@ -89,4 +103,33 @@ export const formValid = <T extends formStateType, U>(
   }
 
   return withErr ? false : true
+}
+
+interface formErrType {
+  [key: string]: string | undefined
+}
+
+// If error or backend error, change the input label to reflect the error.
+export const inputLabel = (
+  type: keyof formErrType,
+  formErr: formErrType,
+  backendErr: graphQLErrorType,
+): string => {
+  const typeString = type.toString().toLowerCase()
+  let label = typeString.charAt(0).toUpperCase() + typeString.slice(1)
+  let errorMessage = formErr[type]
+
+  if (!errorMessage && backendErr.type === type) {
+    errorMessage = backendErr.message
+  }
+
+  switch (type) {
+    case "passConfirm":
+      label = "Password Confirm"
+      break
+    default:
+      break
+  }
+
+  return `${label}${errorMessage && `: ${errorMessage}`}`
 }

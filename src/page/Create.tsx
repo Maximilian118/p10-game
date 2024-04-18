@@ -1,9 +1,10 @@
 import React, { useContext, useState } from "react"
 import { TextField, Button } from "@mui/material"
-import { updateForm, formValid } from '../shared/formValidation'
+import { updateForm, formValid, inputLabel } from '../shared/formValidation'
 import DropZone from "../components/utility/dropZone/DropZone"
 import { createUser } from "../shared/requests/userRequests"
 import Spinner from "../components/utility/spinner/Spinner"
+import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
 import AppContext from "../context"
 
 interface createFormBaseType {
@@ -20,12 +21,13 @@ export interface createFormType extends createFormBaseType {
 
 export interface createFormErrType extends createFormBaseType {
   dropzone: string
+  [key: string]: string | undefined
 }
 
 const Create: React.FC = () => {
   const { setUser } = useContext(AppContext)
   const [ loading, setLoading ] = useState<boolean>(false)
-  const [ backendErr, setBackendErr ] = useState<string>("")
+  const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ form, setForm ] = useState<createFormType>({
     name: "",
     email: "",
@@ -58,46 +60,46 @@ const Create: React.FC = () => {
           setBackendErr={setBackendErr}
         />
         <TextField
-          required={!formErr.name}
+          required={!formErr.name && backendErr.type !== "name"}
           className="mui-form-el"
           name="name"
-          label={`Name${formErr.name && `: ${formErr.name}`}`}
+          label={inputLabel("name", formErr, backendErr)}
           variant="outlined" 
-          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
           value={form.name}
-          error={formErr.name ? true : false}
+          error={formErr.name || backendErr.type === "name" ? true : false}
         />
         <TextField
-          required={!formErr.email}
+          required={!formErr.email && backendErr.type !== "email"}
           className="mui-form-el"
           name="email"
-          label={`Email${formErr.email && `: ${formErr.email}`}`}
+          label={inputLabel("email", formErr, backendErr)}
           variant="outlined" 
-          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
           value={form.email}
-          error={formErr.email ? true : false}
+          error={formErr.email || backendErr.type === "email" ? true : false}
         />
         <TextField 
-          required={!formErr.password}
+          required={!formErr.password && backendErr.type !== "password"}
           type="password"
           className="mui-form-el"
           name="password" 
-          label={`Password${formErr.password && `: ${formErr.password}`}`} 
+          label={inputLabel("password", formErr, backendErr)} 
           variant="outlined"
-          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
           value={form.password}
-          error={formErr.password ? true : false}
+          error={formErr.password || backendErr.type === "password" ? true : false}
         />
         <TextField 
-          required={!formErr.passConfirm}
+          required={!formErr.passConfirm && backendErr.type !== "passConfirm"}
           type="password"
           className="mui-form-el"
           name="passConfirm" 
-          label={`Confirm Password${formErr.passConfirm && `: ${formErr.passConfirm}`}`} 
+          label={inputLabel("passConfirm", formErr, backendErr)} 
           variant="outlined"
-          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr)}
+          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
           value={form.passConfirm}
-          error={formErr.passConfirm ? true : false}
+          error={formErr.passConfirm || backendErr.type === "passConfirm" ? true : false}
         />
         <Button 
           variant="outlined" 
