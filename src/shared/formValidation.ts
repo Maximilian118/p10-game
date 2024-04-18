@@ -124,6 +124,9 @@ export const inputLabel = (
   }
 
   switch (type) {
+    case "name":
+      label = "Username"
+      break
     case "passConfirm":
       label = "Password Confirm"
       break
