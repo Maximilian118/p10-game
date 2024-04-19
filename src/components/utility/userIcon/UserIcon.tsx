@@ -8,9 +8,17 @@ interface userIconType {
 }
 
 const UserIcon: React.FC<userIconType> = ({ user }) => {
+  const iconContent = (user: userType) => {
+    if (user.icon) {
+      return <img alt="Icon" src={user.icon}></img>
+    } else {
+      return <p>{getInitials(user.name)}</p>
+    }
+  }
+
   return (
     <div className="user-icon">
-      <p>{getInitials(user.name)}</p>
+      {iconContent(user)}
     </div>
   )
 }

@@ -13,6 +13,15 @@
   font-size: 10px;
   font-weight: 700;
   margin-right: 15px;
+  overflow: hidden;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+  }
 
   &:hover {
     background-color: variables.$colour-9;
