@@ -6,4 +6,10 @@ export const populateUser = `
   email
   icon
   profile_picture
+  championships
+  permissions {
+    admin
+    adjudicator
+    guest
+  }
 `

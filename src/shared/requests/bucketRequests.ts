@@ -1,5 +1,5 @@
 import axios from "axios"
-import { formatFilename, formatGraphQLError, graphQLErrorType } from "./requestsUtility"
+import { formatFilename, graphQLError, graphQLErrorType } from "./requestsUtility"
 
 const putS3 = async (
   file: File,
@@ -12,7 +12,7 @@ const putS3 = async (
       console.log(res)
     })
     .catch((err: any) => {
-      formatGraphQLError("putS3", err, setBackendErr, true)
+      graphQLError("putS3", err, setBackendErr, true)
     })
 }
 
@@ -45,17 +45,17 @@ export const uplaodS3 = async (
       })
       .then(async (res: any) => {
         if (res.data.errors) {
-          formatGraphQLError("signS3", res.data.errors[0].message, setBackendErr, true)
+          graphQLError("signS3", res.data.errors[0].message, setBackendErr, true)
         } else {
           await putS3(file, res.data.data.signS3.signedRequest, setBackendErr)
           url = res.data.data.signS3.url
         }
       })
       .catch((err: any) => {
-        formatGraphQLError("signS3", err.response.data.errors[0], setBackendErr, true)
+        graphQLError("signS3", err.response.data.errors[0], setBackendErr, true)
       })
   } catch (err: any) {
-    formatGraphQLError("signS3", err.response.data, setBackendErr, true)
+    graphQLError("signS3", err.response.data, setBackendErr, true)
   }
 
   return url

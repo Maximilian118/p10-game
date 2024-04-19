@@ -1,3 +1,5 @@
+import { isJSON } from "./utility"
+
 export interface userType {
   _id: string
   token: string
@@ -34,27 +36,33 @@ const blankUser = {
 // If there are tokens in local storage, retrieve user object.
 // Otherwise, call logout.
 export const checkUserLS = (): userType => {
-  const token = localStorage.getItem("token") || ""
+  const token = localStorage.getItem("access_token") || ""
   const refreshToken = localStorage.getItem("refresh_token") || ""
 
   if (!token && !refreshToken) {
     return logout()
   } else {
-    return {
+    const _id = localStorage.getItem("_id")
+    const name = localStorage.getItem("name")
+    const email = localStorage.getItem("email")
+    const icon = localStorage.getItem("icon")
+    const profile_picture = localStorage.getItem("profile_picture")
+    const championships = localStorage.getItem("championships")
+    const permissions = localStorage.getItem("permissions")
+
+    const user: userType = {
       token,
-      _id: localStorage.getItem("_id") || "",
-      name: localStorage.getItem("name") || "",
-      email: localStorage.getItem("email") || "",
-      icon: localStorage.getItem("icon") || "",
-      profile_picture: localStorage.getItem("profile_picture") || "",
-      championships: JSON.parse(
-        localStorage.getItem("championships") || `${blankUser.championships}`,
-      ),
-      permissions: JSON.parse(
-        localStorage.getItem("permissions") || `${blankUser.permissions}`,
-      ),
+      _id: _id ? _id : "",
+      name: name ? name : "",
+      email: email ? email : "",
+      icon: icon ? icon : "",
+      profile_picture: profile_picture ? profile_picture : "",
+      championships: championships ? JSON.parse(championships) : blankUser.championships,
+      permissions: permissions ? JSON.parse(permissions) : blankUser.permissions,
       localStorage: true,
     }
+
+    return user
   }
 }
 
@@ -62,7 +70,7 @@ export const checkUserLS = (): userType => {
 // If the navigate function is passed, navigate to /login.
 export const logout = (navigate?: Function): userType => {
   localStorage.removeItem("_id")
-  localStorage.removeItem("token")
+  localStorage.removeItem("access_token")
   localStorage.removeItem("refresh_token")
   localStorage.removeItem("name")
   localStorage.removeItem("email")
@@ -76,11 +84,33 @@ export const logout = (navigate?: Function): userType => {
   return blankUser
 }
 
+interface userWithTokensType extends userType {
+  tokens?: string
+}
+
 // Populate local storage and return the populated user object.
-export const logInSuccess = (user: userType): userType => {
+export const logInSuccess = (
+  request: string,
+  res: {
+    data: {
+      data: {
+        [key: string]: userWithTokensType
+      }
+    }
+  },
+  setUser?: React.Dispatch<React.SetStateAction<userType>>,
+  log?: boolean,
+): userType => {
+  let user = res.data.data[request]
+
+  if (user.tokens && isJSON(user.tokens)) {
+    user = tokensHandler(user)
+  } else {
+    console.error(`Error: Failed to parse tokens.`)
+  }
+
   if (!user.localStorage) {
     localStorage.setItem("_id", user._id)
-    localStorage.setItem("token", user.token)
     localStorage.setItem("name", user.name)
     localStorage.setItem("email", user.email)
     localStorage.setItem("icon", user.icon)
@@ -89,6 +119,50 @@ export const logInSuccess = (user: userType): userType => {
     localStorage.setItem("permissions", JSON.stringify(user.permissions))
   }
 
-  // Ensure we remove the tokens object from the backend before we call logInSuccess.
+  if (setUser) {
+    setUser((prevUser) => {
+      return {
+        ...prevUser,
+        ...user,
+      }
+    })
+  }
+
+  if (log) {
+    console.log(user)
+  }
+
   return user
+}
+
+// If req res has tokens JSON, parse them and save them to LS.
+// If setUser is passed, setUser with latest access_token.
+export const tokensHandler = <T extends { tokens?: string }>(
+  res: T,
+  setUser?: React.Dispatch<React.SetStateAction<userType>>,
+) => {
+  if (res.tokens && isJSON(res.tokens)) {
+    const tokens = JSON.parse(res.tokens)
+
+    if (setUser) {
+      setUser((prevUser) => {
+        return {
+          ...prevUser,
+          token: tokens.access_token,
+        }
+      })
+    }
+
+    localStorage.setItem("access_token", tokens.access_token)
+    localStorage.setItem("refresh_token", tokens.refresh_token)
+
+    delete res.tokens
+
+    return {
+      ...res,
+      token: tokens.access_token,
+    }
+  } else {
+    return res
+  }
 }

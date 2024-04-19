@@ -1,3 +1,4 @@
+import { tokensHandler } from "../localStorage"
 import { isJSON } from "../utility"
 
 const formatString = (str: string) => {
@@ -35,7 +36,7 @@ export let initGraphQLError: graphQLErrorType = {
 }
 
 // Format and return a GraphQL Error from an Axios request.
-export const formatGraphQLError = (
+export const graphQLError = (
   request: string,
   error: graphQLErrorType,
   setBackendErr?: React.Dispatch<React.SetStateAction<graphQLErrorType>> | false,
@@ -43,6 +44,10 @@ export const formatGraphQLError = (
 ): graphQLErrorType => {
   let errorObj: graphQLErrorType = initGraphQLError
   const e = error
+
+  if (e.type === "Unknown") {
+    e.message = `Unknown Error: ${e.message}`
+  }
 
   errorObj = {
     request,
@@ -72,37 +77,34 @@ export const formatGraphQLError = (
 }
 
 // Format and return a GraphQL response from an Axios request.
-export const formatGraphQLResponse = (
+export const graphQLResponse = (
   request: string,
   res: {
     data: {
       data: {
-        [key: string]: object
+        [key: string]: { tokens?: string; code?: number }
       }
     }
   },
   log?: boolean,
   code?: number,
 ): object => {
-  let extractedRes: { tokens?: string } = res.data.data[request] || {}
+  let obj = res.data.data[request]
 
-  if (extractedRes.tokens && isJSON(extractedRes.tokens)) {
-    extractedRes = {
-      ...extractedRes,
-      tokens: JSON.parse(extractedRes.tokens),
-    }
+  if (obj.tokens && isJSON(obj.tokens)) {
+    obj = tokensHandler(res.data.data[request])
   }
 
-  const responseObj = {
-    ...extractedRes,
+  obj = {
+    ...obj,
     code: code ? code : 200,
   }
 
   if (log) {
-    console.log(responseObj)
+    console.log(obj)
   }
 
-  return responseObj
+  return obj
 }
 
 // Loop through an array of strings. If any of those strings matches the current backendErr.type

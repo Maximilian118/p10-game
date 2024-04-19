@@ -1,9 +1,9 @@
 import axios from "axios"
 import { createFormType } from "../../page/Create"
-import { userType } from "../localStorage"
+import { userType, logInSuccess } from "../localStorage"
 import { populateUser } from "./requestPopulation"
 import { uplaodS3 } from "./bucketRequests"
-import { formatGraphQLError, formatGraphQLResponse, graphQLErrorType } from "./requestsUtility"
+import { graphQLError, graphQLErrorType } from "./requestsUtility"
 import { NavigateFunction } from "react-router-dom"
 
 export const createUser = async (
@@ -62,23 +62,17 @@ export const createUser = async (
       })
       .then(async (res: any) => {
         if (res.data.errors) {
-          formatGraphQLError("createUser", res.data.errors[0].message, setBackendErr, true)
+          graphQLError("createUser", res.data.errors[0].message, setBackendErr, true)
         } else {
-          setUser((prevUser) => {
-            return {
-              ...prevUser,
-              ...formatGraphQLResponse("createUser", res, true),
-            }
-          })
-
+          logInSuccess("createUser", res, setUser, true)
           navigate("/")
         }
       })
       .catch((err: any) => {
-        formatGraphQLError("createUser", err.response.data.errors[0], setBackendErr, true)
+        graphQLError("createUser", err.response.data.errors[0], setBackendErr, true)
       })
   } catch (err: any) {
-    formatGraphQLError("createUser", err.response.data, setBackendErr, true)
+    graphQLError("createUser", err.response.data, setBackendErr, true)
   }
 
   setLoading(false)
