@@ -107,6 +107,7 @@ const Create: React.FC = () => {
         <Button 
           variant="outlined" 
           type="submit"
+          className="mui-form-btn"
           disabled={!formValid<createFormType, createFormErrType>(form, formErr)}
         >Create</Button>
       </form>
