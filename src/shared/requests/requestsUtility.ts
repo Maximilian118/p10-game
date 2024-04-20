@@ -122,3 +122,19 @@ export const hasBackendErr = (types: string[], backendErr: graphQLErrorType): bo
 
   return match
 }
+
+// Add headers to a request
+// prettier-ignore
+export const headers = (token: string): {
+  "Content-Type": string,
+    accessToken: string,
+    refreshToken: string,
+} => {
+  const refreshToken = localStorage.getItem("refresh_token")
+
+  return {
+    "Content-Type": "application/json",
+    accessToken: `Bearer ${token}`,
+    refreshToken: `Bearer ${refreshToken}`,
+  }
+}

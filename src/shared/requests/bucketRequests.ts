@@ -39,6 +39,7 @@ export const uplaodS3 = async (
             signS3(filename: $filename) {
               signedRequest
               url
+              duplicate
             }
           }
         `,
@@ -47,7 +48,10 @@ export const uplaodS3 = async (
         if (res.data.errors) {
           graphQLError("signS3", res.data.errors[0].message, setBackendErr, true)
         } else {
-          await putS3(file, res.data.data.signS3.signedRequest, setBackendErr)
+          if (!res.data.data.signS3.duplicate) {
+            await putS3(file, res.data.data.signS3.signedRequest, setBackendErr)
+          }
+
           url = res.data.data.signS3.url
         }
       })
