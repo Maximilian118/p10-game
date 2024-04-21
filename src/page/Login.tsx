@@ -1,19 +1,30 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { TextField, Button } from "@mui/material"
 import { useNavigate } from "react-router-dom"
-import { updateForm, formValid } from '../shared/formValidation'
+import { updateForm, formValid, inputLabel } from '../shared/formValidation'
+import { login } from "../shared/requests/userRequests"
+import AppContext from "../context"
+import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
+import Spinner from "../components/utility/spinner/Spinner"
 
-interface loginFormType {
+export interface loginFormType {
   email: string
   password: string
 }
 
+export interface loginFormErrType extends loginFormType {
+  [key: string]: string
+}
+
 const Login: React.FC = () => {
+  const { setUser } = useContext(AppContext)
+  const [ loading, setLoading ] = useState<boolean>(false)
+  const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ form, setForm ] = useState<loginFormType>({
     email: "",
     password: "",
   })
-  const [ formErr, setFormErr ] = useState<loginFormType>({
+  const [ formErr, setFormErr ] = useState<loginFormErrType>({
     email: "",
     password: "",
   })
@@ -22,30 +33,32 @@ const Login: React.FC = () => {
 
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Backend Request...
+    login(form, setUser, setLoading, setBackendErr, navigate)
   }
 
-  return (
+  return loading ? <Spinner/> : (
     <div className="content-container">
       <form onSubmit={e => onSubmitHandler(e)}>
         <TextField
-          required={!formErr.email}
+          required={!formErr.email && backendErr.type !== "email"}
           className="mui-form-el"
           name="email"
-          label={`Email${formErr.email && `: ${formErr.email}`}`}
+          label={inputLabel("email", formErr, backendErr)}
           variant="outlined" 
-          onChange={e => updateForm<loginFormType, loginFormType>(e, form, setForm, setFormErr)}
-          error={formErr.email ? true : false}
+          onChange={e => updateForm<loginFormType, loginFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
+          value={form.email}
+          error={formErr.email || backendErr.type === "email" ? true : false}
         />
         <TextField 
-          required={!formErr.password}
+          required={!formErr.password && backendErr.type !== "password"}
           type="password"
           className="mui-form-el"
           name="password" 
-          label={`Password${formErr.password && `: ${formErr.password}`}`} 
+          label={inputLabel("password", formErr, backendErr)} 
           variant="outlined"
-          onChange={e => updateForm<loginFormType, loginFormType>(e, form, setForm, setFormErr)}
-          error={formErr.password ? true : false}
+          onChange={e => updateForm<loginFormType, loginFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
+          value={form.password}
+          error={formErr.password || backendErr.type === "password" ? true : false}
         />
         <Button 
           variant="outlined" 

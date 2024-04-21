@@ -22,7 +22,7 @@ export interface createFormType extends createFormBaseType {
 
 export interface createFormErrType extends createFormBaseType {
   dropzone: string
-  [key: string]: string | undefined
+  [key: string]: string
 }
 
 const Create: React.FC = () => {

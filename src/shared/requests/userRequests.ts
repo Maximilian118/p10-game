@@ -5,6 +5,7 @@ import { populateUser } from "./requestPopulation"
 import { uplaodS3 } from "./bucketRequests"
 import { graphQLError, graphQLErrorType } from "./requestsUtility"
 import { NavigateFunction } from "react-router-dom"
+import { loginFormType } from "../../page/Login"
 
 export const createUser = async (
   form: createFormType,
@@ -60,7 +61,7 @@ export const createUser = async (
           }
         `,
       })
-      .then(async (res: any) => {
+      .then((res: any) => {
         if (res.data.errors) {
           graphQLError("createUser", res.data.errors[0].message, setBackendErr, true)
         } else {
@@ -73,6 +74,45 @@ export const createUser = async (
       })
   } catch (err: any) {
     graphQLError("createUser", err.response.data, setBackendErr, true)
+  }
+
+  setLoading(false)
+}
+
+export const login = async (
+  form: loginFormType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+  navigate: NavigateFunction,
+): Promise<void> => {
+  setLoading(true)
+
+  try {
+    await axios
+      .post("", {
+        variables: form,
+        query: `
+        query Login($email: String!, $password: String) {
+          login(email: $email, password: $password) {
+            ${populateUser}
+          }
+        }
+      `,
+      })
+      .then((res: any) => {
+        if (res.data.errors) {
+          graphQLError("login", res.data.errors[0].message, setBackendErr, true)
+        } else {
+          logInSuccess("login", res, setUser, true)
+          navigate("/")
+        }
+      })
+      .catch((err: any) => {
+        graphQLError("login", err.response.data.errors[0], setBackendErr, true)
+      })
+  } catch (err: any) {
+    graphQLError("login", err.response.data, setBackendErr, true)
   }
 
   setLoading(false)
