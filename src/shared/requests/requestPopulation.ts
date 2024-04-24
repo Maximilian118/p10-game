@@ -7,6 +7,7 @@ export const populateUser = `
   icon
   profile_picture
   championships
+  created_at
   badges {
     _id
     url

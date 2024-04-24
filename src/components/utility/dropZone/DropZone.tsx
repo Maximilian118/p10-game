@@ -8,9 +8,10 @@ import './_dropZone.scss'
 interface dropZoneType<T, U> {
   form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
-  setFormErr: React.Dispatch<React.SetStateAction<U>>
+  setFormErr?: React.Dispatch<React.SetStateAction<U>>
   backendErr?: graphQLErrorType
   setBackendErr?: React.Dispatch<React.SetStateAction<graphQLErrorType>>
+  style?: object
 }
 
 interface formType {
@@ -27,7 +28,7 @@ interface compressedImagesType {
   profile_picture: File
 }
 
-const DropZone = <T extends formType, U extends formErrType>({ form, setForm, setFormErr, backendErr, setBackendErr }: dropZoneType<T, U>) => {
+const DropZone = <T extends formType, U extends formErrType>({ form, setForm, setFormErr, backendErr, setBackendErr, style }: dropZoneType<T, U>) => {
   const [ thumb, setThumb ] = useState<string>("")
   const [ error, setError ] = useState<string>("")
   const [ loading, setLoading ] = useState<boolean>(false)
@@ -73,8 +74,8 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
 
       const acceptedFilesHandler = async (
         setForm: React.Dispatch<React.SetStateAction<T>>,
-        setFormErr: React.Dispatch<React.SetStateAction<U>>,
         setError: React.Dispatch<React.SetStateAction<string>>,
+        setFormErr?: React.Dispatch<React.SetStateAction<U>>,
       ): Promise<void> => {
         const compressImages = async (file: File): Promise<compressedImagesType> => {
           return {
@@ -87,7 +88,7 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
 
         setThumb(URL.createObjectURL(compressedImages.profile_picture))
         setError("")
-        setFormErr((prevFormErr): U => {
+        setFormErr && setFormErr((prevFormErr): U => {
           return {
             ...prevFormErr,
             dropzone: "",
@@ -103,13 +104,13 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
         setLoading(false)
       }
 
-      acceptedFilesHandler(setForm, setFormErr, setError)
+      acceptedFilesHandler(setForm, setError, setFormErr)
     } else if (fileRejections.length > 0) {
       const err = fileRejections[0].errors[0].message
 
       setThumb("")
       setError(err)
-      setFormErr((prevFormErr): U => {
+      setFormErr && setFormErr((prevFormErr): U => {
         return {
           ...prevFormErr,
           dropzone: err,
@@ -147,7 +148,7 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
   }
 
   return (
-    <div {...getRootProps({
+    <div style={style} {...getRootProps({
       className: `
         dropzone 
         ${displayError(error, loading, backendErr) ? "dropzone-error" : ""}

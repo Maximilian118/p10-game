@@ -9,10 +9,12 @@ export interface userType {
   profile_picture: string
   championships: object[]
   badges: object[]
+  created_at: string
   permissions: {
     admin: boolean
     adjudicator: boolean
     guest: boolean
+    [key: string]: string | boolean
   }
   localStorage: boolean
 }
@@ -27,6 +29,7 @@ const blankUser = {
   profile_picture: "",
   championships: [],
   badges: [],
+  created_at: "",
   permissions: {
     admin: false,
     adjudicator: false,
@@ -51,6 +54,7 @@ export const checkUserLS = (): userType => {
     const profile_picture = localStorage.getItem("profile_picture")
     const championships = localStorage.getItem("championships")
     const badges = localStorage.getItem("badges")
+    const created_at = localStorage.getItem("created_at")
     const permissions = localStorage.getItem("permissions")
 
     const user: userType = {
@@ -62,6 +66,7 @@ export const checkUserLS = (): userType => {
       profile_picture: profile_picture ? profile_picture : "",
       championships: championships ? JSON.parse(championships) : blankUser.championships,
       badges: badges ? JSON.parse(badges) : blankUser.badges,
+      created_at: created_at ? created_at : blankUser.created_at,
       permissions: permissions ? JSON.parse(permissions) : blankUser.permissions,
       localStorage: true,
     }
@@ -82,6 +87,7 @@ export const logout = (navigate?: Function): userType => {
   localStorage.removeItem("profile_picture")
   localStorage.removeItem("championships")
   localStorage.removeItem("badges")
+  localStorage.removeItem("created_at")
   localStorage.removeItem("permissions")
 
   navigate && navigate("/login")
@@ -122,6 +128,7 @@ export const logInSuccess = (
     localStorage.setItem("profile_picture", user.profile_picture)
     localStorage.setItem("championships", JSON.stringify(user.championships))
     localStorage.setItem("badges", JSON.stringify(user.badges))
+    localStorage.setItem("created_at", user.created_at)
     localStorage.setItem("permissions", JSON.stringify(user.permissions))
   }
 

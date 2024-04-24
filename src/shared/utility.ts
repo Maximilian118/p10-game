@@ -1,4 +1,7 @@
 // Get the initials of the user.
+
+import { userType } from "./localStorage"
+
 // If just one word return one initial, if two return two.
 export const getInitials = (userName: string) => {
   if (!userName) {
@@ -25,4 +28,17 @@ export const isJSON = (str: string) => {
   } catch (err) {
     return false
   }
+}
+
+// Return a string reflecting the current permissions level of a user.
+export const getPermLevel = (user: userType): string => {
+  const perms = user.permissions
+  const keys = Object.keys(perms)
+  const res = keys.filter((key) => perms[key] === true)
+
+  if (res.length > 0) {
+    return res[0]
+  }
+
+  return "Competitor"
 }

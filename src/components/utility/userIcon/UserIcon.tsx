@@ -2,6 +2,7 @@ import React from "react"
 import { userType } from "../../../shared/localStorage"
 import { getInitials } from "../../../shared/utility"
 import './_userIcon.scss'
+import { useNavigate } from "react-router-dom"
 
 interface userIconType {
   user: userType,
@@ -16,8 +17,10 @@ const UserIcon: React.FC<userIconType> = ({ user }) => {
     }
   }
 
+  const navigate = useNavigate()
+
   return (
-    <div className="user-icon">
+    <div className="user-icon" onClick={() => navigate("/profile")}>
       {iconContent(user)}
     </div>
   )
