@@ -6,6 +6,7 @@ import { uplaodS3 } from "./bucketRequests"
 import { graphQLError, graphQLErrorType } from "./requestsUtility"
 import { NavigateFunction } from "react-router-dom"
 import { loginFormType } from "../../page/Login"
+import { forgotFormType } from "../../page/Forgot"
 
 export const createUser = async (
   form: createFormType,
@@ -113,6 +114,41 @@ export const login = async (
       })
   } catch (err: any) {
     graphQLError("login", err.response.data, setBackendErr, true)
+  }
+
+  setLoading(false)
+}
+
+export const forgot = async (
+  form: forgotFormType,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+  setSuccess: React.Dispatch<React.SetStateAction<boolean>>,
+): Promise<void> => {
+  setLoading(true)
+
+  try {
+    await axios
+      .post("", {
+        variables: form,
+        query: `
+        mutation Forgot($email: String!) {
+          forgot(email: $email)
+        }
+      `,
+      })
+      .then((res: any) => {
+        if (res.data.errors) {
+          graphQLError("forgot", res.data.errors[0].message, setBackendErr, true)
+        } else {
+          setSuccess(true)
+        }
+      })
+      .catch((err: any) => {
+        graphQLError("forgot", err.response.data.errors[0], setBackendErr, true)
+      })
+  } catch (err: any) {
+    graphQLError("forgot", err.response.data, setBackendErr, true)
   }
 
   setLoading(false)
