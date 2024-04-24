@@ -8,6 +8,7 @@ export interface userType {
   icon: string
   profile_picture: string
   championships: object[]
+  badges: object[]
   permissions: {
     admin: boolean
     adjudicator: boolean
@@ -25,6 +26,7 @@ const blankUser = {
   icon: "",
   profile_picture: "",
   championships: [],
+  badges: [],
   permissions: {
     admin: false,
     adjudicator: false,
@@ -48,6 +50,7 @@ export const checkUserLS = (): userType => {
     const icon = localStorage.getItem("icon")
     const profile_picture = localStorage.getItem("profile_picture")
     const championships = localStorage.getItem("championships")
+    const badges = localStorage.getItem("badges")
     const permissions = localStorage.getItem("permissions")
 
     const user: userType = {
@@ -58,6 +61,7 @@ export const checkUserLS = (): userType => {
       icon: icon ? icon : "",
       profile_picture: profile_picture ? profile_picture : "",
       championships: championships ? JSON.parse(championships) : blankUser.championships,
+      badges: badges ? JSON.parse(badges) : blankUser.badges,
       permissions: permissions ? JSON.parse(permissions) : blankUser.permissions,
       localStorage: true,
     }
@@ -77,6 +81,7 @@ export const logout = (navigate?: Function): userType => {
   localStorage.removeItem("icon")
   localStorage.removeItem("profile_picture")
   localStorage.removeItem("championships")
+  localStorage.removeItem("badges")
   localStorage.removeItem("permissions")
 
   navigate && navigate("/login")
@@ -116,6 +121,7 @@ export const logInSuccess = (
     localStorage.setItem("icon", user.icon)
     localStorage.setItem("profile_picture", user.profile_picture)
     localStorage.setItem("championships", JSON.stringify(user.championships))
+    localStorage.setItem("badges", JSON.stringify(user.badges))
     localStorage.setItem("permissions", JSON.stringify(user.permissions))
   }
 

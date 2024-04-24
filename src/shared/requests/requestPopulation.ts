@@ -7,6 +7,13 @@ export const populateUser = `
   icon
   profile_picture
   championships
+  badges {
+    _id
+    url
+    name
+    rarity
+    created_at
+  }
   permissions {
     admin
     adjudicator
