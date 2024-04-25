@@ -4,8 +4,8 @@ import './scss/base.scss'
 import { userType, checkUserLS } from './shared/localStorage'
 import Footer from './components/footer/Footer'
 import Nav from './components/nav/Nav'
-import Spinner from './components/utility/spinner/Spinner'
 import Router from './Router'
+import { CircularProgress } from '@mui/material'
 
 const App: React.FC = () => {
   const [ user, setUser ] = useState<userType>(checkUserLS())
@@ -15,7 +15,7 @@ const App: React.FC = () => {
     <AppContext.Provider value={{ loading, setLoading, user, setUser }}>
       <main>
         <Nav user={user}/>
-        {loading ? <Spinner/> : <Router user={user}/>}
+        {loading ? <CircularProgress/> : <Router user={user}/>}
       </main>
       <Footer/>
     </AppContext.Provider>

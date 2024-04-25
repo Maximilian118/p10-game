@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { compressImage, displayError, errTypes, formatError } from "./dropZoneUtility"
 import { graphQLErrorType, hasBackendErr, initGraphQLError } from "../../../shared/requests/requestsUtility"
-import Spinner from "../spinner/Spinner"
 import './_dropZone.scss'
+import { CircularProgress } from "@mui/material"
 
 interface dropZoneType<T, U> {
   form: T
@@ -129,7 +129,7 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
     backendErr?: graphQLErrorType,
   ): JSX.Element => {
     if (loading) {
-      return <Spinner size={"25%"}/>
+      return <CircularProgress size={"25%"}/>
     }
 
     if (error) {

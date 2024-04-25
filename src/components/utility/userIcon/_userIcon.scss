@@ -6,7 +6,7 @@
   height: 32px;
   border-radius: 50%;
   background: variables.$colour-1;
-  box-shadow: variables.$shadow;
+  box-shadow: variables.$shadow-surround;
   @include mixins.flexbox;
   cursor: pointer;
   color: variables.$colour-9;

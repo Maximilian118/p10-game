@@ -19,7 +19,7 @@ const Nav: React.FC<navType> = ({ user }) => {
       return (
         <NavItem 
           item={location.pathname === "/login" ? navRight[1] : navRight[0]}
-          style={{ paddingRight: 40 }}
+          style={{ paddingLeft: "7.5%" }}
         />
       )
     }
@@ -27,9 +27,9 @@ const Nav: React.FC<navType> = ({ user }) => {
 
   return (
     <nav>
-      <div className="nav-left">
+      {user.token && <div className="nav-left">
         {navLeft.map((item, i) => (<NavItem key={i} item={item}/>))}
-      </div>
+      </div>}
       {navRightHandler(user)}
     </nav>
   )

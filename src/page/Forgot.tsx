@@ -1,8 +1,7 @@
 import React, { useState } from "react"
-import { TextField, Button } from "@mui/material"
+import { TextField, Button, CircularProgress } from "@mui/material"
 import { formValid, inputLabel, updateForm } from '../shared/formValidation'
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
-import Spinner from "../components/utility/spinner/Spinner"
 import { forgot } from "../shared/requests/userRequests"
 
 export interface forgotFormType {
@@ -26,7 +25,7 @@ const Forgot: React.FC = () => {
     forgot(form, setLoading, setBackendErr, setSuccess)
   }
 
-  return loading ? <Spinner/> : (
+  return (
     <div className="content-container">
       {success ? 
       <p style={{ width: "80%", textAlign: "center" }}>An email has been sent to your email address. Please follow the password reset instructions there. Don't forget to check your Junk folder!</p>
@@ -37,14 +36,15 @@ const Forgot: React.FC = () => {
           className="mui-form-el"
           name="email"
           label={inputLabel("email", formErr, backendErr)}
-          variant="outlined" 
+          variant="filled" 
           onChange={e => updateForm<forgotFormType, forgotFormType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
           value={form.email}
           error={formErr.email || backendErr.type === "email" ? true : false}
         />
         <Button 
-          variant="outlined" 
+          variant="contained" 
           type="submit"
+          startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
           disabled={!formValid<forgotFormType, forgotFormType>(form, formErr)}
         >Submit</Button>
       </form>}

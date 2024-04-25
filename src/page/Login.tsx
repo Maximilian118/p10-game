@@ -1,11 +1,10 @@
 import React, { useContext, useState } from "react"
-import { TextField, Button } from "@mui/material"
+import { TextField, Button, CircularProgress } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { updateForm, formValid, inputLabel } from '../shared/formValidation'
 import { login } from "../shared/requests/userRequests"
 import AppContext from "../context"
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
-import Spinner from "../components/utility/spinner/Spinner"
 
 export interface loginFormType {
   email: string
@@ -36,7 +35,7 @@ const Login: React.FC = () => {
     login(form, setUser, setLoading, setBackendErr, navigate)
   }
 
-  return loading ? <Spinner/> : (
+  return (
     <div className="content-container">
       <form onSubmit={e => onSubmitHandler(e)}>
         <TextField
@@ -44,7 +43,7 @@ const Login: React.FC = () => {
           className="mui-form-el"
           name="email"
           label={inputLabel("email", formErr, backendErr)}
-          variant="outlined" 
+          variant="filled" 
           onChange={e => updateForm<loginFormType, loginFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
           value={form.email}
           error={formErr.email || backendErr.type === "email" ? true : false}
@@ -55,14 +54,16 @@ const Login: React.FC = () => {
           className="mui-form-el"
           name="password" 
           label={inputLabel("password", formErr, backendErr)} 
-          variant="outlined"
+          variant="filled"
           onChange={e => updateForm<loginFormType, loginFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
           value={form.password}
           error={formErr.password || backendErr.type === "password" ? true : false}
         />
         <Button 
-          variant="outlined" 
+          variant="contained" 
           type="submit"
+          className="mui-form-btn"
+          startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
           disabled={!formValid<loginFormType, loginFormType>(form, formErr)}
         >Login</Button>
       </form>

@@ -1,9 +1,8 @@
 import React, { useContext, useState } from "react"
-import { TextField, Button } from "@mui/material"
+import { TextField, Button, CircularProgress } from "@mui/material"
 import { updateForm, formValid, inputLabel } from '../shared/formValidation'
 import DropZone from "../components/utility/dropZone/DropZone"
 import { createUser } from "../shared/requests/userRequests"
-import Spinner from "../components/utility/spinner/Spinner"
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
 import { NavigateFunction, useNavigate } from "react-router-dom"
 import AppContext from "../context"
@@ -52,7 +51,7 @@ const Create: React.FC = () => {
     createUser(form, setUser, setLoading, setBackendErr, navigate)
   }
 
-  return loading ? <Spinner/> : (
+  return (
     <div className="content-container">
       <form onSubmit={e => onSubmitHandler(e, navigate)}>
         <DropZone<createFormType, createFormErrType> 
@@ -67,7 +66,7 @@ const Create: React.FC = () => {
           className="mui-form-el"
           name="name"
           label={inputLabel("name", formErr, backendErr)}
-          variant="outlined" 
+          variant="filled" 
           onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
           value={form.name}
           error={formErr.name || backendErr.type === "name" ? true : false}
@@ -77,7 +76,7 @@ const Create: React.FC = () => {
           className="mui-form-el"
           name="email"
           label={inputLabel("email", formErr, backendErr)}
-          variant="outlined" 
+          variant="filled" 
           onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
           value={form.email}
           error={formErr.email || backendErr.type === "email" ? true : false}
@@ -88,7 +87,7 @@ const Create: React.FC = () => {
           className="mui-form-el"
           name="password" 
           label={inputLabel("password", formErr, backendErr)} 
-          variant="outlined"
+          variant="filled"
           onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
           value={form.password}
           error={formErr.password || backendErr.type === "password" ? true : false}
@@ -99,15 +98,16 @@ const Create: React.FC = () => {
           className="mui-form-el"
           name="passConfirm" 
           label={inputLabel("passConfirm", formErr, backendErr)} 
-          variant="outlined"
+          variant="filled"
           onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
           value={form.passConfirm}
           error={formErr.passConfirm || backendErr.type === "passConfirm" ? true : false}
         />
         <Button 
-          variant="outlined" 
+          variant="contained" 
           type="submit"
           className="mui-form-btn"
+          startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
           disabled={!formValid<createFormType, createFormErrType>(form, formErr)}
         >Create</Button>
       </form>
