@@ -1,4 +1,4 @@
-import { logout } from "./localStorage"
+import { logout, userType } from "./localStorage"
 
 // Add headers to a request
 export const headers = (token: string): object => {
@@ -12,10 +12,14 @@ export const headers = (token: string): object => {
 }
 
 // If no authentication, logout.
-export const checkAuth = (errors: [], setUser: Function, history: Function): void => {
+export const checkAuth = (
+  errors: [],
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  navigate: Function,
+): void => {
   errors.forEach((err: { message: string }) => {
     if (err.message === "Not Authenticated!") {
-      setUser(logout(history))
+      logout(setUser, navigate)
     }
   })
 }

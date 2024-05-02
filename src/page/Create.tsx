@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react"
 import { TextField, Button, CircularProgress } from "@mui/material"
-import { updateForm, formValid, inputLabel } from '../shared/formValidation'
+import { updateForm, inputLabel } from '../shared/formValidation'
 import DropZone from "../components/utility/dropZone/DropZone"
 import { createUser } from "../shared/requests/userRequests"
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
 import { NavigateFunction, useNavigate } from "react-router-dom"
+import formBackground from '../assets/forms/f1-engine1.jpeg'
 import AppContext from "../context"
 
 interface createFormBaseType {
@@ -53,64 +54,75 @@ const Create: React.FC = () => {
 
   return (
     <div className="content-container">
-      <form onSubmit={e => onSubmitHandler(e, navigate)}>
-        <DropZone<createFormType, createFormErrType> 
-          form={form}
-          setForm={setForm} 
-          setFormErr={setFormErr} 
-          backendErr={backendErr}
-          setBackendErr={setBackendErr}
+      <div className="form-container">
+        <img 
+          src={formBackground} 
+          alt="An old Formula 1 car." 
+          className="form-background" 
+          style={{ width: "250%", top: 50, left: "-35%" }}
         />
-        <TextField
-          required={!formErr.name && backendErr.type !== "name"}
-          className="mui-form-el"
-          name="name"
-          label={inputLabel("name", formErr, backendErr)}
-          variant="filled" 
-          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
-          value={form.name}
-          error={formErr.name || backendErr.type === "name" ? true : false}
-        />
-        <TextField
-          required={!formErr.email && backendErr.type !== "email"}
-          className="mui-form-el"
-          name="email"
-          label={inputLabel("email", formErr, backendErr)}
-          variant="filled" 
-          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
-          value={form.email}
-          error={formErr.email || backendErr.type === "email" ? true : false}
-        />
-        <TextField 
-          required={!formErr.password && backendErr.type !== "password"}
-          type="password"
-          className="mui-form-el"
-          name="password" 
-          label={inputLabel("password", formErr, backendErr)} 
-          variant="filled"
-          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
-          value={form.password}
-          error={formErr.password || backendErr.type === "password" ? true : false}
-        />
-        <TextField 
-          required={!formErr.passConfirm && backendErr.type !== "passConfirm"}
-          type="password"
-          className="mui-form-el"
-          name="passConfirm" 
-          label={inputLabel("passConfirm", formErr, backendErr)} 
-          variant="filled"
-          onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
-          value={form.passConfirm}
-          error={formErr.passConfirm || backendErr.type === "passConfirm" ? true : false}
-        />
-        <Button 
-          variant="contained" 
-          type="submit"
-          className="mui-form-btn"
-          startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
-          disabled={!formValid<createFormType, createFormErrType>(form, formErr)}
-        >Create</Button>
-      </form>
+        <div className="form-title" style={{ marginBottom: 20 }}>
+          <h2 style={{ marginBottom: 10 }}>Create Account</h2>
+          <h2 className="clickable" onClick={() => navigate(-1)}>Back</h2>
+        </div>
+        <form onSubmit={e => onSubmitHandler(e, navigate)}>
+          <DropZone<createFormType, createFormErrType> 
+            form={form}
+            setForm={setForm} 
+            setFormErr={setFormErr} 
+            backendErr={backendErr}
+            setBackendErr={setBackendErr}
+          />
+          <TextField
+            required={!formErr.name && backendErr.type !== "name"}
+            className="mui-form-el"
+            name="name"
+            label={inputLabel("name", formErr, backendErr)}
+            variant="filled" 
+            onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
+            value={form.name}
+            error={formErr.name || backendErr.type === "name" ? true : false}
+          />
+          <TextField
+            required={!formErr.email && backendErr.type !== "email"}
+            className="mui-form-el"
+            name="email"
+            label={inputLabel("email", formErr, backendErr)}
+            variant="filled" 
+            onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
+            value={form.email}
+            error={formErr.email || backendErr.type === "email" ? true : false}
+          />
+          <TextField 
+            required={!formErr.password && backendErr.type !== "password"}
+            type="password"
+            className="mui-form-el"
+            name="password" 
+            label={inputLabel("password", formErr, backendErr)} 
+            variant="filled"
+            onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
+            value={form.password}
+            error={formErr.password || backendErr.type === "password" ? true : false}
+          />
+          <TextField 
+            required={!formErr.passConfirm && backendErr.type !== "passConfirm"}
+            type="password"
+            className="mui-form-el"
+            name="passConfirm" 
+            label={inputLabel("passConfirm", formErr, backendErr)} 
+            variant="filled"
+            onChange={e => updateForm<createFormType, createFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
+            value={form.passConfirm}
+            error={formErr.passConfirm || backendErr.type === "passConfirm" ? true : false}
+          />
+          <Button 
+            variant="contained" 
+            type="submit"
+            className="mui-form-btn"
+            startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
+          >Create</Button>
+        </form>
+      </div>
     </div>
   )
 }

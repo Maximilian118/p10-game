@@ -8,14 +8,3 @@ export const navLeft = [
     url: "/championships",
   },
 ]
-
-export const navRight = [
-  {
-    text: "Login",
-    url: "/login",
-  },
-  {
-    text: "Create Account",
-    url: "/create",
-  },
-]

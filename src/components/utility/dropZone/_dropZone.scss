@@ -13,6 +13,7 @@
   box-sizing: border-box;
   overflow: hidden;
   position: relative;
+  background: white;
   box-shadow: variables.$shadow-surround;
   font-size: 14px;
 
@@ -22,6 +23,7 @@
     border: 1px dashed variables.$mui-border;
     @include mixins.flexbox;
     border-radius: 50%;
+    transition: variables.$trans-speed;
 
     p {
       width: 90%;
@@ -45,10 +47,6 @@
       border: 1px dashed black;
     }
   }
-
-  @media screen and ( max-width: 700px ) {
-    width: 65%;
-  }
 }
 
 .dropzone-error {
@@ -60,5 +58,11 @@
 
   &:hover {
     border: 1px solid variables.$error;
+  }
+}
+
+@media screen and ( max-width: 550px ) {
+  .dropzone {
+    width: 60%;
   }
 }

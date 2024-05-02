@@ -77,7 +77,10 @@ export const checkUserLS = (): userType => {
 
 // Log the user out removing all local storage and return a blank user object.
 // If the navigate function is passed, navigate to /login.
-export const logout = (navigate?: Function): userType => {
+export const logout = (
+  setUser?: React.Dispatch<React.SetStateAction<userType>>,
+  navigate?: Function,
+): userType => {
   localStorage.removeItem("_id")
   localStorage.removeItem("access_token")
   localStorage.removeItem("refresh_token")
@@ -89,6 +92,14 @@ export const logout = (navigate?: Function): userType => {
   localStorage.removeItem("badges")
   localStorage.removeItem("created_at")
   localStorage.removeItem("permissions")
+
+  setUser &&
+    setUser((prevUser) => {
+      return {
+        ...prevUser,
+        ...blankUser,
+      }
+    })
 
   navigate && navigate("/login")
 

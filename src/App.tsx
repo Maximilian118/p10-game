@@ -14,7 +14,7 @@ const App: React.FC = () => {
   return (
     <AppContext.Provider value={{ loading, setLoading, user, setUser }}>
       <main>
-        <Nav user={user}/>
+        {user.token && <Nav user={user}/>}
         {loading ? <CircularProgress/> : <Router user={user}/>}
       </main>
       <Footer/>
