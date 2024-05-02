@@ -144,7 +144,7 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
       return <img alt="Thumbnail" src={thumb}/>
     }
 
-    return <p>{`${canDragDrop() ? `Drag and drop` : `Select`} an image...`}</p>
+    return <p>{`${canDragDrop() ? `Drag and drop` : `Select`} a Profile Picture...`}</p>
   }
 
   return (
