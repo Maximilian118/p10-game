@@ -1,5 +1,4 @@
 // Get the initials of the user.
-
 import { userType } from "./localStorage"
 
 // If just one word return one initial, if two return two.

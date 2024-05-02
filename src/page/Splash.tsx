@@ -1,5 +1,4 @@
 import React from "react"
-import formBackground from '../assets/forms/f1-car2.jpeg'
 import { useNavigate } from "react-router-dom"
 
 const Splash: React.FC = () => {
@@ -9,7 +8,7 @@ const Splash: React.FC = () => {
     <div className="content-container">
       <div className="form-container">
         <img 
-          src={formBackground} 
+          src="https://p10-game.s3.eu-west-2.amazonaws.com/assets/f1-car2.jpeg"
           alt="An old Formula 1 car." 
           className="form-background"
           style={{ top: 40, left: 0 }}

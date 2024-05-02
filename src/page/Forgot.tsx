@@ -3,7 +3,6 @@ import { TextField, Button, CircularProgress } from "@mui/material"
 import { inputLabel, updateForm } from '../shared/formValidation'
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
 import { forgot } from "../shared/requests/userRequests"
-import formBackground from '../assets/forms/f1-engine3.jpeg'
 import { useNavigate } from "react-router-dom"
 
 export interface forgotFormType {
@@ -33,7 +32,7 @@ const Forgot: React.FC = () => {
     <div className="content-container">
       <div className="form-container">
         <img 
-          src={formBackground} 
+          src="https://p10-game.s3.eu-west-2.amazonaws.com/assets/f1-engine3.jpeg"
           alt="An old Formula 1 car." 
           className="form-background"
           style={{ 

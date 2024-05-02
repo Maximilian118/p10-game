@@ -5,7 +5,6 @@ import DropZone from "../components/utility/dropZone/DropZone"
 import { createUser } from "../shared/requests/userRequests"
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
 import { NavigateFunction, useNavigate } from "react-router-dom"
-import formBackground from '../assets/forms/f1-engine1.jpeg'
 import AppContext from "../context"
 
 interface createFormBaseType {
@@ -56,7 +55,7 @@ const Create: React.FC = () => {
     <div className="content-container">
       <div className="form-container">
         <img 
-          src={formBackground} 
+          src="https://p10-game.s3.eu-west-2.amazonaws.com/assets/f1-engine1.jpeg" 
           alt="An old Formula 1 car." 
           className="form-background" 
           style={{ width: "250%", top: 50, left: "-35%" }}
