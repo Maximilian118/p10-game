@@ -39,7 +39,7 @@ const Login: React.FC = () => {
   return (
     <div className="content-container">
       <div className="form-container">
-        <img src={formBackground} alt="An old Formula 1 car." className="form-background"/>
+        <img src={formBackground} alt="An old Formula 1 car." className="form-background" style={{ width: "140%", left: -90 }}/>
         <div className="form-title" style={{ marginBottom: 200 }}>
           <h2>Login</h2>
         </div>
