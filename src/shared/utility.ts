@@ -42,3 +42,8 @@ export const getPermLevel = (user: userType): string => {
 
   return "Competitor"
 }
+
+// Make the window size inclusive of mobile browser ui.
+export const resizeOps = () => {
+  document.documentElement.style.setProperty("--vh", window.innerHeight * 0.01 + "px")
+}

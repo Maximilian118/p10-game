@@ -13,11 +13,15 @@ a {
   color: black;
 }
 
+html, body {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+}
+
 body {
   margin: 0;
   padding: 0;
   width: 100vw;
-  height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: 'formula1-regular', sans-serif;
