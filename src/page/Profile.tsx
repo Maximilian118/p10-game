@@ -3,7 +3,7 @@ import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsU
 import AppContext from "../context"
 import ProfileCard from "../components/cards/profileCard/ProfileCard"
 import { formErrType, formType } from "../shared/types"
-import AuthButtons from "../components/cards/authButtons/AuthButtons"
+import AuthButtons from "../components/cards/authButtonsCard/AuthButtonsCard"
 
 const Profile: React.FC = () => {
   const { user, setUser } = useContext(AppContext)

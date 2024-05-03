@@ -1,5 +1,5 @@
 import React from "react"
-import "./_authBottons.scss"
+import "./_authBottonsCard.scss"
 import { logout, userType } from "../../../shared/localStorage"
 import { Button } from "@mui/material"
 import { useNavigate } from "react-router-dom"
