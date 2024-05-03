@@ -1,5 +1,6 @@
 // Get the initials of the user.
 import { userType } from "./localStorage"
+import { Location } from "react-router-dom"
 
 // If just one word return one initial, if two return two.
 export const getInitials = (userName: string) => {
@@ -45,4 +46,36 @@ export const getPermLevel = (user: userType): string => {
 // Make the window size inclusive of mobile browser ui.
 export const resizeOps = () => {
   document.documentElement.style.setProperty("--vh", window.innerHeight * 0.01 + "px")
+}
+
+// Preload form images.
+// load the img for the current enpoint first and then preload the rest.
+export const preloadFormImgs = (location: Location<any>): void => {
+  const imgs = [
+    {
+      url: "https://p10-game.s3.eu-west-2.amazonaws.com/assets/f1-car1.jpg",
+      endpoint: "/login",
+    },
+    {
+      url: "https://p10-game.s3.eu-west-2.amazonaws.com/assets/f1-car2.jpeg",
+      endpoint: "/",
+    },
+    {
+      url: "https://p10-game.s3.eu-west-2.amazonaws.com/assets/f1-engine1.jpeg",
+      endpoint: "/create",
+    },
+    {
+      url: "https://p10-game.s3.eu-west-2.amazonaws.com/assets/f1-engine3.jpeg",
+      endpoint: "/forgot",
+    },
+  ]
+
+  const img = imgs.find((img) => img.endpoint === location.pathname)
+
+  if (img) {
+    new Image().src = img.url
+  }
+
+  const newImgs = imgs.filter((obj) => obj.endpoint !== location.pathname)
+  newImgs.forEach((img) => (new Image().src = img.url))
 }
