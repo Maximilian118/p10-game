@@ -1,0 +1,10 @@
+@use '../../../scss/mixins';
+@use '../../../scss/variables';
+
+.auth-buttons {
+  width: 100%;
+  background: white;
+  @include mixins.flexbox;
+  margin-bottom: 2px;
+  padding: 20px;
+}

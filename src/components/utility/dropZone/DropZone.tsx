@@ -4,6 +4,8 @@ import { compressImage, displayError, errTypes, formatError } from "./dropZoneUt
 import { graphQLErrorType, hasBackendErr, initGraphQLError } from "../../../shared/requests/requestsUtility"
 import './_dropZone.scss'
 import { CircularProgress } from "@mui/material"
+import { formErrType, formType } from "../../../shared/types"
+import { userType } from "../../../shared/localStorage"
 
 interface dropZoneType<T, U> {
   form: T
@@ -11,16 +13,8 @@ interface dropZoneType<T, U> {
   setFormErr?: React.Dispatch<React.SetStateAction<U>>
   backendErr?: graphQLErrorType
   setBackendErr?: React.Dispatch<React.SetStateAction<graphQLErrorType>>
+  user?: userType,
   style?: object
-}
-
-interface formType {
-  icon: File | null
-  profile_picture: File | null
-}
-
-interface formErrType {
-  dropzone: string
 }
 
 interface compressedImagesType {
@@ -28,7 +22,7 @@ interface compressedImagesType {
   profile_picture: File
 }
 
-const DropZone = <T extends formType, U extends formErrType>({ form, setForm, setFormErr, backendErr, setBackendErr, style }: dropZoneType<T, U>) => {
+const DropZone = <T extends formType, U extends formErrType>({ form, setForm, setFormErr, backendErr, setBackendErr, user, style }: dropZoneType<T, U>) => {
   const [ thumb, setThumb ] = useState<string>("")
   const [ error, setError ] = useState<string>("")
   const [ loading, setLoading ] = useState<boolean>(false)
@@ -38,7 +32,11 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
     if (form.profile_picture) {
       setThumb(URL.createObjectURL(form.profile_picture))
     }
-  }, [form.profile_picture])
+
+    if (user?.token && user?.profile_picture) {
+      setThumb(user.profile_picture)
+    }
+  }, [form.profile_picture, user])
 
   // Determine if the window has drag and drop capabilities.
   const canDragDrop = (): boolean => {

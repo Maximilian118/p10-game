@@ -69,6 +69,10 @@ body {
         overflow-y: scroll;
         padding: 20px 0;
 
+        :last-child {
+          margin: 0;
+        }
+
         .mui-form-el {
           width: 85%;
           margin-bottom: 20px;
@@ -177,6 +181,10 @@ body {
 
     .main-logged-in {
       background: variables.$background;
+      
+      .content-container {
+        padding: 0;
+      }
     }
 
     footer {
