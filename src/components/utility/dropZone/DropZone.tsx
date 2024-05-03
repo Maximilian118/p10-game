@@ -147,15 +147,15 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
 
   return (
     <div style={style} {...getRootProps({
-      className: `
-        dropzone 
-        ${displayError(error, loading, backendErr) ? "dropzone-error" : ""}
-      `
+      className: `dropzone ${displayError(error, loading, backendErr) ? "dropzone-error" : ""}`
     })}>
       <div className={`inside-border ${isDragActive ? "drag-active" : ""}`}>
         <input {...getInputProps()} />
         {dropZoneContent(canDragDrop, thumb, error, loading, backendErr)}
       </div>
+      {user && <div className="change">
+        <p>Change</p>
+      </div>}
     </div>
   )
 }
