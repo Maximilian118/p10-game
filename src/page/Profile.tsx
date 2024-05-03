@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
 import AppContext from "../context"
 import ProfileCard from "../components/cards/profileCard/ProfileCard"
@@ -12,6 +12,12 @@ const Profile: React.FC = () => {
     icon: null,
     profile_picture: null,
   })
+
+  useEffect(() => {
+    if (form.profile_picture && form.icon) {
+      console.log(form)
+    }
+  }, [form])
 
   return (
     <div className="content-container">

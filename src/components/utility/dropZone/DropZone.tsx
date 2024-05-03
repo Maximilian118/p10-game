@@ -29,12 +29,12 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
 
   // On component mount, check for a profile_picture File and setThumb if truthy.
   useEffect(() => {
-    if (form.profile_picture) {
-      setThumb(URL.createObjectURL(form.profile_picture))
-    }
-
     if (user?.token && user?.profile_picture) {
       setThumb(user.profile_picture)
+    }
+
+    if (form.profile_picture) {
+      setThumb(URL.createObjectURL(form.profile_picture))
     }
   }, [form.profile_picture, user])
 
