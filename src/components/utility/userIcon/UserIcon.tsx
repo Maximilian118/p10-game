@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { userType } from "../../../shared/localStorage"
 import { getInitials } from "../../../shared/utility"
 import './_userIcon.scss'
@@ -9,9 +9,11 @@ interface userIconType {
 }
 
 const UserIcon: React.FC<userIconType> = ({ user }) => {
+  const [ error, setError ] = useState<boolean>(false)
+
   const iconContent = (user: userType) => {
-    if (user.icon) {
-      return <img alt="Icon" src={user.icon}></img>
+    if (user.icon && !error) {
+      return <img alt="Icon" onError={() => setError(true)} src={user.icon}></img>
     } else {
       return <p>{getInitials(user.name)}</p>
     }

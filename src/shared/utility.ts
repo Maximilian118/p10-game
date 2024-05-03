@@ -79,3 +79,13 @@ export const preloadFormImgs = (location: Location<any>): void => {
   const newImgs = imgs.filter((obj) => obj.endpoint !== location.pathname)
   newImgs.forEach((img) => (new Image().src = img.url))
 }
+
+// // Check if an image exists for provided URL.
+// export const imageExists = (image_url: string) => {
+//   const http = new XMLHttpRequest()
+
+//   http.open("HEAD", image_url, false)
+//   http.send()
+
+//   return Number(http.status) !== 404
+// }
