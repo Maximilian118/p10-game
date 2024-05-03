@@ -51,6 +51,8 @@ body {
         box-sizing: border-box;
         position: relative;
         z-index: 1000;
+        background: white;
+        margin-bottom: 2px;
 
         .nav-left {
           height: 100%;
@@ -171,6 +173,10 @@ body {
           }
         }
       }
+    }
+
+    .main-logged-in {
+      background: variables.$background;
     }
 
     footer {
