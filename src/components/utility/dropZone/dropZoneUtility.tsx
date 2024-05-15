@@ -1,5 +1,7 @@
 import imageCompression from "browser-image-compression"
 import { graphQLErrorType, hasBackendErr } from "../../../shared/requests/requestsUtility"
+import { getInitials } from "../../../shared/utility"
+import { userType } from "../../../shared/localStorage"
 
 // Compress an image as close as possible to the fileSize passed.
 export const compressImage = async (file: File, fileSize: number): Promise<File> => {
@@ -51,5 +53,23 @@ export const formatError = (error: string): string => {
       return "Woah there! Only one file buster."
     default:
       return error
+  }
+}
+
+// Return thumbnail JSX
+export const dropZoneThumb = (
+  thumb: string,
+  imgErr: boolean,
+  setImgErr: React.Dispatch<React.SetStateAction<boolean>>,
+  user?: userType,
+): JSX.Element => {
+  if (imgErr && user) {
+    return (
+      <div className="dropzone-user-icon">
+        <p>{getInitials(user.name)}</p>
+      </div>
+    )
+  } else {
+    return <img alt="Thumbnail"  onError={() => setImgErr(true)} src={thumb}/> 
   }
 }

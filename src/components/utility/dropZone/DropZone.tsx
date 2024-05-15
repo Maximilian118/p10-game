@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
-import { compressImage, displayError, errTypes, formatError } from "./dropZoneUtility"
+import { compressImage, displayError, dropZoneThumb, errTypes, formatError } from "./dropZoneUtility"
 import { graphQLErrorType, hasBackendErr, initGraphQLError } from "../../../shared/requests/requestsUtility"
 import './_dropZone.scss'
 import { CircularProgress } from "@mui/material"
@@ -25,6 +25,7 @@ interface compressedImagesType {
 const DropZone = <T extends formType, U extends formErrType>({ form, setForm, setFormErr, backendErr, setBackendErr, user, style }: dropZoneType<T, U>) => {
   const [ thumb, setThumb ] = useState<string>("")
   const [ error, setError ] = useState<string>("")
+  const [ imgErr, setImgErr ] = useState<boolean>(false)
   const [ loading, setLoading ] = useState<boolean>(false)
 
   // On component mount, check for a profile_picture File and setThumb if truthy.
@@ -84,6 +85,7 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
 
         const compressedImages = await compressImages(acceptedFiles[0])
 
+        setImgErr(false)
         setThumb(URL.createObjectURL(compressedImages.profile_picture))
         setError("")
         setFormErr && setFormErr((prevFormErr): U => {
@@ -139,7 +141,7 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
     }
 
     if (thumb) {
-      return <img alt="Thumbnail" src={thumb}/>
+      return dropZoneThumb(thumb, imgErr, setImgErr, user)
     }
 
     return <p>{`${canDragDrop() ? `Drag and drop` : `Select`} a Profile Picture...`}</p>
@@ -153,7 +155,7 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
         <input {...getInputProps()} />
         {dropZoneContent(canDragDrop, thumb, error, loading, backendErr)}
       </div>
-      {user && <div className="change">
+      {!loading && thumb && <div className="change">
         <p>Change</p>
       </div>}
     </div>
