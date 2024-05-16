@@ -12,7 +12,7 @@ const Profile: React.FC = () => {
   const [ form, setForm ] = useState<formType>({
     icon: null,
     profile_picture: null,
-    email: "",
+    email: user.email,
   })
   const [ formErr, setFormErr ] = useState<formErrType>({
     email: "",
@@ -31,13 +31,14 @@ const Profile: React.FC = () => {
         setBackendErr={setBackendErr}
       />
       <ChangeEmailCard
+        user={user}
+        setUser={setUser}
         form={form}
         setForm={setForm}
         formErr={formErr}
         setFormErr={setFormErr}
         backendErr={backendErr}
         setBackendErr={setBackendErr}
-        user={user}
       />
       <AuthButtons setUser={setUser}/>
     </div>

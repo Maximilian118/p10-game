@@ -75,7 +75,7 @@ export const createUser = async (
         graphQLError("createUser", err.response.data.errors[0], setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("createUser", err.response.data, setBackendErr, true)
+    graphQLError("createUser", err, setBackendErr, true)
   }
 
   setLoading(false)
@@ -114,7 +114,7 @@ export const login = async (
         graphQLError("login", err.response.data.errors[0], setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("login", err.response.data, setBackendErr, true)
+    graphQLError("login", err, setBackendErr, true)
   }
 
   setLoading(false)
@@ -149,7 +149,7 @@ export const forgot = async (
         graphQLError("forgot", err.response.data.errors[0], setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("forgot", err.response.data, setBackendErr, true)
+    graphQLError("forgot", err, setBackendErr, true)
   }
 
   setLoading(false)
@@ -227,7 +227,69 @@ export const updatePP = async <T extends formType>(
         graphQLError("updatePP", err.response.data.errors[0], setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("updatePP", err.response.data, setBackendErr, true)
+    graphQLError("updatePP", err, setBackendErr, true)
+  }
+
+  setLoading(false)
+}
+
+export const updateEmail = async <T extends formType>(
+  form: T,
+  setForm: React.Dispatch<React.SetStateAction<T>>,
+  user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+  setSuccess: React.Dispatch<React.SetStateAction<boolean>>,
+): Promise<void> => {
+  setLoading(true)
+
+  try {
+    await axios
+      .post(
+        "",
+        {
+          variables: form,
+          query: `
+            mutation UpdateEmail($email: String!) {
+              updateEmail(email: $email) {
+                email
+                tokens
+              }
+            }
+          `,
+        },
+        { headers: headers(user.token) },
+      )
+      .then((res: any) => {
+        if (res.data.errors) {
+          graphQLError("updateEmail", res.data.errors[0].message, setBackendErr, true)
+        } else {
+          const response = graphQLResponse("updateEmail", res) as userType
+
+          setUser((prevUser) => {
+            return {
+              ...prevUser,
+              email: response.email,
+            }
+          })
+
+          setForm((prevForm) => {
+            return {
+              ...prevForm,
+              email: response.email,
+            }
+          })
+
+          localStorage.setItem("email", response.email)
+          setSuccess(true)
+        }
+      })
+      .catch((err: any) => {
+        graphQLError("updateEmail", err.response.data.errors[0], setBackendErr, true)
+      })
+  } catch (err: any) {
+    graphQLError("updateEmail", err, setBackendErr, true)
   }
 
   setLoading(false)

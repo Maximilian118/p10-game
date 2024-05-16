@@ -45,8 +45,17 @@ export const graphQLError = (
   let errorObj: graphQLErrorType = initGraphQLError
   const e = error
 
-  if (e.type === "Unknown") {
+  if (!error.type || e.type === "Unknown") {
     e.message = `Unknown Error: ${e.message}`
+    e.code = 500
+
+    switch (request) {
+      case "updateEmail":
+        e.type = "email"
+        break
+      default:
+        break
+    }
   }
 
   errorObj = {
