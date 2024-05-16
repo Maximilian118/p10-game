@@ -4,7 +4,7 @@ import AppContext from "../context"
 import ProfileCard from "../components/cards/profileCard/ProfileCard"
 import { formErrType, formType } from "../shared/types"
 import AuthButtons from "../components/cards/authButtonsCard/AuthButtonsCard"
-import ChangeEmailCard from "../components/cards/changeEmailCard/changeEmailCard"
+import UpdateEmailCard from "../components/cards/updateEmailCard/updateEmailCard"
 
 const Profile: React.FC = () => {
   const { user, setUser } = useContext(AppContext)
@@ -30,7 +30,7 @@ const Profile: React.FC = () => {
         backendErr={backendErr}
         setBackendErr={setBackendErr}
       />
-      <ChangeEmailCard
+      <UpdateEmailCard
         user={user}
         setUser={setUser}
         form={form}

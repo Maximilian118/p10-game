@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import "./_changeEmailCard.scss"
+import "./_updateEmailCard.scss"
 import { userType } from "../../../shared/localStorage"
 import { Button, CircularProgress, TextField } from "@mui/material"
 import { formErrType, formType } from "../../../shared/types"
@@ -7,7 +7,7 @@ import { inputLabel, updateForm } from "../../../shared/formValidation"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import { updateEmail } from "../../../shared/requests/userRequests"
 
-interface changeEmailCardType<T, U> {
+interface updateEmailCardType<T, U> {
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
   form: T,
@@ -18,7 +18,7 @@ interface changeEmailCardType<T, U> {
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
 }
 
-const ChangeEmailCard = <T extends formType, U extends formErrType>({ user, setUser, form, setForm, formErr, setFormErr, backendErr, setBackendErr}: changeEmailCardType<T, U>) => {
+const UpdateEmailCard = <T extends formType, U extends formErrType>({ user, setUser, form, setForm, formErr, setFormErr, backendErr, setBackendErr}: updateEmailCardType<T, U>) => {
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ success, setSuccess ] = useState<boolean>(false)
 
@@ -58,4 +58,4 @@ const ChangeEmailCard = <T extends formType, U extends formErrType>({ user, setU
   )
 }
 
-export default ChangeEmailCard
+export default UpdateEmailCard
