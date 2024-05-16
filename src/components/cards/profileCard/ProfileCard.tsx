@@ -9,16 +9,17 @@ import { formErrType, formType } from "../../../shared/types"
 import { Button, CircularProgress } from "@mui/material"
 import { updatePP } from "../../../shared/requests/userRequests"
 
-interface profileCardType<T> {
+interface profileCardType<T, U> {
   user: userType,
-  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  setUser: React.Dispatch<React.SetStateAction<userType>>
   form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
+  setFormErr: React.Dispatch<React.SetStateAction<U>>
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
 }
 
-const ProfileCard = <T extends formType, U extends formErrType>({ user, setUser, form, setForm, backendErr, setBackendErr }: profileCardType<T>) => {
+const ProfileCard = <T extends formType, U extends formErrType>({ user, setUser, form, setForm, setFormErr, backendErr, setBackendErr }: profileCardType<T, U>) => {
   const [ loading, setLoading ] = useState<boolean>(false)
 
   const uploadPPHandler = async (
@@ -65,7 +66,8 @@ const ProfileCard = <T extends formType, U extends formErrType>({ user, setUser,
     <div className="profile-card">
       <DropZone<T, U> 
         form={form} 
-        setForm={setForm} 
+        setForm={setForm}
+        setFormErr={setFormErr}
         backendErr={backendErr} 
         setBackendErr={setBackendErr}
         user={user}
