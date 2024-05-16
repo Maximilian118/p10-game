@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { userType } from "../../../shared/localStorage"
 import { getInitials } from "../../../shared/utility"
 import './_userIcon.scss'
@@ -10,6 +10,7 @@ interface userIconType {
 
 const UserIcon: React.FC<userIconType> = ({ user }) => {
   const [ error, setError ] = useState<boolean>(false)
+  const [ userIcon, setUserIcon ] = useState<string>(user.icon)
 
   const iconContent = (user: userType) => {
     if (user.icon && !error) {
@@ -18,6 +19,13 @@ const UserIcon: React.FC<userIconType> = ({ user }) => {
       return <p>{getInitials(user.name)}</p>
     }
   }
+
+  useEffect(() => {
+    if (error && user.icon !== userIcon) {
+      setError(false)
+      setUserIcon(user.icon)
+    }
+  }, [user, userIcon, error])
 
   const navigate = useNavigate()
 

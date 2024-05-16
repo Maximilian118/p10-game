@@ -204,7 +204,6 @@ export const updatePP = async <T extends formType>(
         if (res.data.errors) {
           graphQLError("updatePP", res.data.errors[0].message, setBackendErr, true)
         } else {
-          console.log(res.data.data.updatePP)
           const response = graphQLResponse("updatePP", res) as userType
 
           setUser((prevUser) => {
