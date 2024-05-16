@@ -1,4 +1,4 @@
-import { tokensHandler } from "../localStorage"
+import { logout, tokensHandler, userType } from "../localStorage"
 import { isJSON } from "../utility"
 
 const formatString = (str: string) => {
@@ -92,7 +92,7 @@ export const graphQLResponse = (
   let obj = res.data.data[request]
 
   if (obj.tokens && isJSON(obj.tokens)) {
-    obj = tokensHandler(res.data.data[request])
+    obj = tokensHandler(obj)
   }
 
   obj = {
@@ -137,4 +137,17 @@ export const headers = (token: string): {
     accessToken: `Bearer ${token}`,
     refreshToken: `Bearer ${refreshToken}`,
   }
+}
+
+// If no authentication, logout.
+export const checkAuth = (
+  errors: [],
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  navigate: Function,
+): void => {
+  errors.forEach((err: { message: string }) => {
+    if (err.message === "Not Authenticated!") {
+      logout(setUser, navigate)
+    }
+  })
 }

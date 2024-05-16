@@ -17,6 +17,7 @@ const Profile: React.FC = () => {
     <div className="content-container">
       <ProfileCard<formType, formErrType>
         user={user}
+        setUser={setUser}
         form={form}
         setForm={setForm}
         backendErr={backendErr}

@@ -3,10 +3,11 @@ import { createFormType } from "../../page/Create"
 import { userType, logInSuccess } from "../localStorage"
 import { populateUser } from "./requestPopulation"
 import { uplaodS3 } from "./bucketRequests"
-import { graphQLError, graphQLErrorType } from "./requestsUtility"
+import { graphQLError, graphQLErrorType, graphQLResponse, headers } from "./requestsUtility"
 import { NavigateFunction } from "react-router-dom"
 import { loginFormType } from "../../page/Login"
 import { forgotFormType } from "../../page/Forgot"
+import { formType } from "../types"
 
 export const createUser = async (
   form: createFormType,
@@ -149,6 +150,85 @@ export const forgot = async (
       })
   } catch (err: any) {
     graphQLError("forgot", err.response.data, setBackendErr, true)
+  }
+
+  setLoading(false)
+}
+
+export const updatePP = async <T extends formType>(
+  form: T,
+  setForm: React.Dispatch<React.SetStateAction<T>>,
+  user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+): Promise<void> => {
+  setLoading(true)
+  let iconURL = ""
+  let ppURL = ""
+
+  if (form.icon && form.profile_picture) {
+    iconURL = await uplaodS3(user.name, "icon", form.icon, setBackendErr)
+    ppURL = await uplaodS3(user.name, "profile_picture", form.profile_picture, setBackendErr)
+
+    if (!iconURL || !ppURL) {
+      console.error("Error: Failed to upload image.")
+      setLoading(false)
+      return
+    }
+  }
+
+  try {
+    await axios
+      .post(
+        "",
+        {
+          variables: {
+            ...form,
+            icon: iconURL,
+            profile_picture: ppURL,
+          },
+          query: `
+          mutation UpdatePP($icon: String!, $profile_picture: String!) {
+            updatePP(icon: $icon, profile_picture: $profile_picture) {
+              icon
+              profile_picture
+              tokens
+            }
+          }
+        `,
+        },
+        { headers: headers(user.token) },
+      )
+      .then((res: any) => {
+        if (res.data.errors) {
+          graphQLError("updatePP", res.data.errors[0].message, setBackendErr, true)
+        } else {
+          console.log(res.data.data.updatePP)
+          const response = graphQLResponse("updatePP", res) as userType
+
+          setUser((prevUser) => {
+            return {
+              ...prevUser,
+              icon: response.icon,
+              profile_picture: response.profile_picture,
+            }
+          })
+
+          setForm((prevForm) => {
+            return {
+              ...prevForm,
+              icon: null,
+              profile_picture: null,
+            }
+          })
+        }
+      })
+      .catch((err: any) => {
+        graphQLError("updatePP", err.response.data.errors[0], setBackendErr, true)
+      })
+  } catch (err: any) {
+    graphQLError("updatePP", err.response.data, setBackendErr, true)
   }
 
   setLoading(false)
