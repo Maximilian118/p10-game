@@ -294,3 +294,65 @@ export const updateEmail = async <T extends formType>(
 
   setLoading(false)
 }
+
+export const updateName = async <T extends formType>(
+  form: T,
+  setForm: React.Dispatch<React.SetStateAction<T>>,
+  user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+  setSuccess: React.Dispatch<React.SetStateAction<boolean>>,
+): Promise<void> => {
+  setLoading(true)
+
+  try {
+    await axios
+      .post(
+        "",
+        {
+          variables: form,
+          query: `
+            mutation UpdateName($name: String!) {
+              updateName(name: $name) {
+                name
+                tokens
+              }
+            }
+          `,
+        },
+        { headers: headers(user.token) },
+      )
+      .then((res: any) => {
+        if (res.data.errors) {
+          graphQLError("updateName", res.data.errors[0].message, setBackendErr, true)
+        } else {
+          const response = graphQLResponse("updateName", res) as userType
+
+          setUser((prevUser) => {
+            return {
+              ...prevUser,
+              name: response.name,
+            }
+          })
+
+          setForm((prevForm) => {
+            return {
+              ...prevForm,
+              name: response.name,
+            }
+          })
+
+          localStorage.setItem("name", response.name)
+          setSuccess(true)
+        }
+      })
+      .catch((err: any) => {
+        graphQLError("updateName", err.response.data.errors[0], setBackendErr, true)
+      })
+  } catch (err: any) {
+    graphQLError("updateName", err, setBackendErr, true)
+  }
+
+  setLoading(false)
+}

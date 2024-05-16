@@ -5,6 +5,7 @@ import ProfileCard from "../components/cards/profileCard/ProfileCard"
 import { formErrType, formType } from "../shared/types"
 import AuthButtons from "../components/cards/authButtonsCard/AuthButtonsCard"
 import UpdateEmailCard from "../components/cards/updateEmailCard/updateEmailCard"
+import UpdateNameCard from "../components/cards/updateNameCard/updateNameCard"
 
 const Profile: React.FC = () => {
   const { user, setUser } = useContext(AppContext)
@@ -12,9 +13,11 @@ const Profile: React.FC = () => {
   const [ form, setForm ] = useState<formType>({
     icon: null,
     profile_picture: null,
+    name: user.name,
     email: user.email,
   })
   const [ formErr, setFormErr ] = useState<formErrType>({
+    name: "",
     email: "",
     dropzone: "",
   })
@@ -26,6 +29,16 @@ const Profile: React.FC = () => {
         setUser={setUser}
         form={form}
         setForm={setForm}
+        setFormErr={setFormErr}
+        backendErr={backendErr}
+        setBackendErr={setBackendErr}
+      />
+      <UpdateNameCard
+        user={user}
+        setUser={setUser}
+        form={form}
+        setForm={setForm}
+        formErr={formErr}
         setFormErr={setFormErr}
         backendErr={backendErr}
         setBackendErr={setBackendErr}
