@@ -53,6 +53,9 @@ export const graphQLError = (
       case "updateEmail":
         e.type = "email"
         break
+      case "updateName":
+        e.type = "name"
+        break
       default:
         break
     }
