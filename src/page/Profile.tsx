@@ -6,6 +6,7 @@ import { formErrType, formType } from "../shared/types"
 import LogoutCard from "../components/cards/logoutCard/LogoutCard"
 import UpdateEmailCard from "../components/cards/updateEmailCard/updateEmailCard"
 import UpdateNameCard from "../components/cards/updateNameCard/updateNameCard"
+import UpdatePPCard from "../components/cards/updatePPCard/UpdatePPCard"
 
 const Profile: React.FC = () => {
   const { user, setUser } = useContext(AppContext)
@@ -53,6 +54,7 @@ const Profile: React.FC = () => {
         backendErr={backendErr}
         setBackendErr={setBackendErr}
       />
+      <UpdatePPCard/>
       <LogoutCard setUser={setUser}/>
     </div>
   )
