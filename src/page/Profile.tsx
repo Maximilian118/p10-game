@@ -3,7 +3,7 @@ import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsU
 import AppContext from "../context"
 import ProfileCard from "../components/cards/profileCard/ProfileCard"
 import { formErrType, formType } from "../shared/types"
-import AuthButtons from "../components/cards/authButtonsCard/AuthButtonsCard"
+import LogoutCard from "../components/cards/logoutCard/LogoutCard"
 import UpdateEmailCard from "../components/cards/updateEmailCard/updateEmailCard"
 import UpdateNameCard from "../components/cards/updateNameCard/updateNameCard"
 
@@ -53,7 +53,7 @@ const Profile: React.FC = () => {
         backendErr={backendErr}
         setBackendErr={setBackendErr}
       />
-      <AuthButtons setUser={setUser}/>
+      <LogoutCard setUser={setUser}/>
     </div>
   )
 }

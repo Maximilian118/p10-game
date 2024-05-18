@@ -1,7 +1,7 @@
 @use '../../../scss/mixins';
 @use '../../../scss/variables';
 
-.auth-buttons {
+.logout-card {
   width: 100%;
   background: white;
   @include mixins.flexbox;

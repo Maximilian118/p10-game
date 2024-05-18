@@ -1,18 +1,18 @@
 import React from "react"
-import "./_authBottonsCard.scss"
+import "./_logoutCard.scss"
 import { logout, userType } from "../../../shared/localStorage"
 import { Button } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 
-interface authButtonsType {
+interface logoutCardType {
   setUser: React.Dispatch<React.SetStateAction<userType>>
 }
 
-const AuthButtons: React.FC<authButtonsType> = ({ setUser }) => {
+const LogoutCard: React.FC<logoutCardType> = ({ setUser }) => {
   const navigate = useNavigate()
   
   return (
-    <div className="auth-buttons">
+    <div className="logout-card">
       <Button
         variant="contained" 
         type="submit"
@@ -24,4 +24,4 @@ const AuthButtons: React.FC<authButtonsType> = ({ setUser }) => {
   )
 }
 
-export default AuthButtons
+export default LogoutCard
