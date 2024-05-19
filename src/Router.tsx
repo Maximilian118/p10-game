@@ -9,6 +9,7 @@ import Login from './page/Login'
 import Forgot from "./page/Forgot"
 import Create from "./page/Create"
 import Profile from "./page/Profile"
+import Password from "./page/Password"
 
 interface routerType {
   user: userType,
@@ -19,6 +20,7 @@ const Router: React.FC<routerType> = ({ user }) => user.token ? (
     <Route path="*" Component={Notfound}/>
     <Route path="/" Component={Home}/>
     <Route path="/profile" Component={Profile}/>
+    <Route path="/password" Component={Password}/>
   </Routes>
 ) : (
   <Routes>

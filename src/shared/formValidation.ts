@@ -6,6 +6,9 @@ interface formStateType {
   email?: string
   password?: string
   passConfirm?: string
+  currentPass?: string
+  newPass?: string
+  newPassConfirm?: string
 }
 
 // setFormErr with an error for eTargetName if err passed.
@@ -50,6 +53,25 @@ export const updateForm = <T extends formStateType, U>(
     })
   }
 
+  const passwordCase = (): void => {
+    if (
+      /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!?_<>"'$£%^&(){};:+=*#]{8,40}$/.test(e.target.value) ||
+      e.target.value.trim() === ""
+    ) {
+      handleInput<U>(e.target.name, setFormErr)
+
+      if (e.target.value === form.passConfirm) {
+        handleInput("passConfirm", setFormErr)
+      }
+    } else {
+      let passErr = "At least one letter and one number."
+      passErr = e.target.value.length <= 8 ? "Minimum 8 characters." : passErr
+      passErr = e.target.value.length >= 40 ? "Maximum 40 characters." : passErr
+
+      handleInput<U>(e.target.name, setFormErr, passErr)
+    }
+  }
+
   // Depending on the current element do some basic validation checks.
   // prettier-ignore
   switch (e.target.name) {
@@ -63,19 +85,8 @@ export const updateForm = <T extends formStateType, U>(
     } else {
       handleInput<U>(e.target.name, setFormErr, "Please enter a valid email address.")
     }; break
-    case "password": if (/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!?_<>"'$£%^&(){};:+=*#]{8,40}$/.test(e.target.value) || e.target.value.trim() === "") {
-      handleInput<U>(e.target.name, setFormErr)
-
-      if (e.target.value === form.passConfirm) {
-        handleInput("passConfirm", setFormErr)
-      } 
-    } else {
-      let passErr = "At least one letter and one number."
-      passErr = e.target.value.length <= 8 ? "Minimum 8 characters." : passErr
-      passErr = e.target.value.length >= 40 ? "Maximum 40 characters." : passErr
-
-      handleInput<U>(e.target.name, setFormErr, passErr)
-    }; break
+    case "password": passwordCase(); break
+    case "currentPass": passwordCase(); break
     case "passConfirm": if (e.target.value === form.password || e.target.value.trim() === "") {
       handleInput<U>(e.target.name, setFormErr)
     } else {
@@ -129,6 +140,15 @@ export const inputLabel = (
       break
     case "passConfirm":
       label = "Password Confirm"
+      break
+    case "currentPass":
+      label = "Old Password"
+      break
+    case "newPass":
+      label = "New Password"
+      break
+    case "newPassConfirm":
+      label = "Confirm New Password"
       break
     default:
       break

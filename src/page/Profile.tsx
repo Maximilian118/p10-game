@@ -7,6 +7,7 @@ import LogoutCard from "../components/cards/logoutCard/LogoutCard"
 import UpdateEmailCard from "../components/cards/updateEmailCard/updateEmailCard"
 import UpdateNameCard from "../components/cards/updateNameCard/updateNameCard"
 import UpdatePPCard from "../components/cards/updatePPCard/UpdatePPCard"
+import UpdatePassCard from "../components/cards/updatePassCard/UpdatePassCard"
 
 const Profile: React.FC = () => {
   const { user, setUser } = useContext(AppContext)
@@ -55,6 +56,7 @@ const Profile: React.FC = () => {
         setBackendErr={setBackendErr}
       />
       <UpdatePPCard/>
+      <UpdatePassCard/>
       <LogoutCard setUser={setUser}/>
     </div>
   )
