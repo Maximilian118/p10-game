@@ -8,6 +8,7 @@ import { NavigateFunction } from "react-router-dom"
 import { loginFormType } from "../../page/Login"
 import { forgotFormType } from "../../page/Forgot"
 import { formType } from "../types"
+import { passFormType } from "../../page/Password"
 
 export const createUser = async (
   form: createFormType,
@@ -352,6 +353,49 @@ export const updateName = async <T extends formType>(
       })
   } catch (err: any) {
     graphQLError("updateName", err, setBackendErr, true)
+  }
+
+  setLoading(false)
+}
+
+export const updatePassword = async <T extends passFormType>(
+  form: T,
+  user: userType,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+  setSuccess: React.Dispatch<React.SetStateAction<boolean>>,
+): Promise<void> => {
+  setLoading(true)
+
+  try {
+    await axios
+      .post(
+        "",
+        {
+          variables: form,
+          query: `
+            mutation UpdatePassword($currentPass: String!, $password: String!, $passConfirm: String!) {
+              updatePassword(currentPass: $currentPass, password: $password, passConfirm: $passConfirm) {
+                tokens
+              }
+            }
+          `,
+        },
+        { headers: headers(user.token) },
+      )
+      .then((res: any) => {
+        if (res.data.errors) {
+          graphQLError("updatePassword", res.data.errors[0].message, setBackendErr, true)
+        } else {
+          graphQLResponse("updatePassword", res) as userType
+          setSuccess(true)
+        }
+      })
+      .catch((err: any) => {
+        graphQLError("updatePassword", err.response.data.errors[0], setBackendErr, true)
+      })
+  } catch (err: any) {
+    graphQLError("updatePassword", err, setBackendErr, true)
   }
 
   setLoading(false)

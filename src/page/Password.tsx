@@ -1,32 +1,35 @@
 import { Button, CircularProgress, TextField } from "@mui/material"
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { inputLabel, updateForm } from "../shared/formValidation"
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
+import { updatePassword } from "../shared/requests/userRequests"
+import AppContext from "../context"
 
-interface passFormType {
+export interface passFormType {
   currentPass: string
   password: string
   passConfirm: string
   [key: string]: string
 }
 
-const Password: React.FC = () => {
-  const [ loading, setLoading ] = useState<boolean>(false)
-  const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
-  const [ form, setForm ] = useState<passFormType>({
-    currentPass: "",
-    password: "",
-    passConfirm: "",
-  })
-  const [ formErr, setFormErr ] = useState<passFormType>({
-    currentPass: "",
-    password: "",
-    passConfirm: "",
-  })
+const initPassForm = {
+  currentPass: "",
+  password: "",
+  passConfirm: "",
+}
 
-  const updatePassHandler = (e: React.FormEvent<HTMLFormElement>) => {
+const Password: React.FC = () => {
+  const { user } = useContext(AppContext)
+  const [ loading, setLoading ] = useState<boolean>(false)
+  const [ success, setSuccess ] = useState<boolean>(false)
+  const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
+  const [ form, setForm ] = useState<passFormType>(initPassForm)
+  const [ formErr, setFormErr ] = useState<passFormType>(initPassForm)
+
+  const updatePassHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    
+    setSuccess(false)
+    await updatePassword(form, user, setLoading, setBackendErr, setSuccess)
   }
 
   return (
@@ -74,7 +77,8 @@ const Password: React.FC = () => {
         type="submit"
         style={{ margin: "20px 0 40px 0" }}
         startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
-      >Change Password</Button>
+        color={success ? "success" : "primary"}
+      >{success? "Password Changed" : "Change Password"}</Button>
     </form>
   )
 }
