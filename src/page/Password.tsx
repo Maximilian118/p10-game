@@ -4,6 +4,7 @@ import { inputLabel, updateForm } from "../shared/formValidation"
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
 import { updatePassword } from "../shared/requests/userRequests"
 import AppContext from "../context"
+import { useNavigate } from "react-router-dom"
 
 export interface passFormType {
   currentPass: string
@@ -19,17 +20,19 @@ const initPassForm = {
 }
 
 const Password: React.FC = () => {
-  const { user } = useContext(AppContext)
+  const { user, setUser } = useContext(AppContext)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ success, setSuccess ] = useState<boolean>(false)
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ form, setForm ] = useState<passFormType>(initPassForm)
   const [ formErr, setFormErr ] = useState<passFormType>(initPassForm)
 
+  const navigate = useNavigate()
+
   const updatePassHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSuccess(false)
-    await updatePassword(form, user, setLoading, setBackendErr, setSuccess)
+    await updatePassword(form, user, setUser, setLoading, setBackendErr, setSuccess, navigate)
   }
 
   return (

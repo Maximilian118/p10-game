@@ -10,6 +10,7 @@ import Forgot from "./page/Forgot"
 import Create from "./page/Create"
 import Profile from "./page/Profile"
 import Password from "./page/Password"
+import PassSuccess from "./page/PassSuccess"
 
 interface routerType {
   user: userType,
@@ -29,6 +30,7 @@ const Router: React.FC<routerType> = ({ user }) => user.token ? (
     <Route path="/login" Component={Login}/>
     <Route path="/forgot" Component={Forgot}/>
     <Route path="/create" Component={Create}/>
+    <Route path="/pass-success" Component={PassSuccess}/>
   </Routes>
 )
 

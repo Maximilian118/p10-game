@@ -1,6 +1,6 @@
 import axios from "axios"
 import { createFormType } from "../../page/Create"
-import { userType, logInSuccess } from "../localStorage"
+import { userType, logInSuccess, logout } from "../localStorage"
 import { populateUser } from "./requestPopulation"
 import { uplaodS3 } from "./bucketRequests"
 import { graphQLError, graphQLErrorType, graphQLResponse, headers } from "./requestsUtility"
@@ -361,9 +361,11 @@ export const updateName = async <T extends formType>(
 export const updatePassword = async <T extends passFormType>(
   form: T,
   user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>,
+  navigate: NavigateFunction,
 ): Promise<void> => {
   setLoading(true)
 
@@ -389,6 +391,8 @@ export const updatePassword = async <T extends passFormType>(
         } else {
           graphQLResponse("updatePassword", res) as userType
           setSuccess(true)
+          logout(setUser)
+          navigate("/pass-success")
         }
       })
       .catch((err: any) => {
