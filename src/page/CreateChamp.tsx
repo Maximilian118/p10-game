@@ -59,6 +59,7 @@ const CreateChamp: React.FC = props => {
             setFormErr={setFormErr} 
             backendErr={backendErr}
             setBackendErr={setBackendErr}
+            purposeText="Championship Icon"
           />
           <TextField
               required={!formErr.name && backendErr.type !== "champName"}

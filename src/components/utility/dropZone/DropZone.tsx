@@ -13,8 +13,9 @@ interface dropZoneType<T, U> {
   setFormErr?: React.Dispatch<React.SetStateAction<U>>
   backendErr?: graphQLErrorType
   setBackendErr?: React.Dispatch<React.SetStateAction<graphQLErrorType>>
-  user?: userType,
+  user?: userType
   style?: object
+  purposeText?: string
 }
 
 interface compressedImagesType {
@@ -22,7 +23,7 @@ interface compressedImagesType {
   profile_picture: File
 }
 
-const DropZone = <T extends formType, U extends formErrType>({ form, setForm, setFormErr, backendErr, setBackendErr, user, style }: dropZoneType<T, U>) => {
+const DropZone = <T extends formType, U extends formErrType>({ form, setForm, setFormErr, backendErr, setBackendErr, user, style, purposeText }: dropZoneType<T, U>) => {
   const [ thumb, setThumb ] = useState<string>("")
   const [ error, setError ] = useState<string>("")
   const [ imgErr, setImgErr ] = useState<boolean>(false)
@@ -144,7 +145,7 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
       return dropZoneThumb(thumb, imgErr, setImgErr, user)
     }
 
-    return <p>{`${canDragDrop() ? `Drag and drop` : `Select`} a Profile Picture...`}</p>
+    return <p>{`${canDragDrop() ? `Drag and drop` : `Select`} a ${purposeText ? purposeText : "Profile Picture"}...`}</p>
   }
 
   return (
