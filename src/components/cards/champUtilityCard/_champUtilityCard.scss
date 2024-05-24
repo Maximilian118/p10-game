@@ -1,0 +1,23 @@
+@use '../../../scss/mixins';
+@use '../../../scss/variables';
+
+.champ-utility-card {
+  width: 100%;
+  background: white;
+  @include mixins.flexbox-space-between;
+  margin-bottom: 2px;
+  padding: 20px;
+  box-sizing: border-box;
+
+  .add-button {
+    margin: 0;
+    background: variables.$mui-success;
+    color: white;
+    width: 32px;
+    height: 32px;
+
+    &:hover {
+      background: variables.$mui-success-hover;
+    }
+  }
+}

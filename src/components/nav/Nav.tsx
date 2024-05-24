@@ -13,7 +13,7 @@ const Nav: React.FC<navType> = ({ user }) => (
     <div className="nav-left">
       {navLeft.map((item, i) => (<NavItem key={i} item={item}/>))}
     </div>
-    <UserIcon user={user}/>
+    <UserIcon user={user} style={{ marginRight: 20 }}/>
   </nav>
 )
 

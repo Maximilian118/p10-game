@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom"
 
 interface userIconType {
   user: userType,
+  style?: object
 }
 
-const UserIcon: React.FC<userIconType> = ({ user }) => {
+const UserIcon: React.FC<userIconType> = ({ user, style }) => {
   const [ error, setError ] = useState<boolean>(false)
   const [ userIcon, setUserIcon ] = useState<string>(user.icon)
 
@@ -30,7 +31,7 @@ const UserIcon: React.FC<userIconType> = ({ user }) => {
   const navigate = useNavigate()
 
   return (
-    <div className="user-icon" onClick={() => navigate("/profile")}>
+    <div className="user-icon" style={style} onClick={() => navigate("/profile")}>
       {iconContent(user)}
     </div>
   )

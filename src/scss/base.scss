@@ -57,7 +57,10 @@ body {
         .nav-left {
           height: 100%;
           @include mixins.flexbox;
-          padding-left: 7.5%;
+
+          .nav-item:first-child {
+            padding-left: 20px;
+          }
         }
       }
 
