@@ -12,6 +12,7 @@ import Profile from "./page/Profile"
 import Password from "./page/Password"
 import PassSuccess from "./page/PassSuccess"
 import Championships from "./page/Championships"
+import CreateChamp from "./page/CreateChamp"
 
 interface routerType {
   user: userType,
@@ -24,6 +25,7 @@ const Router: React.FC<routerType> = ({ user }) => user.token ? (
     <Route path="/profile" Component={Profile}/>
     <Route path="/password" Component={Password}/>
     <Route path="/championships" Component={Championships}/>
+    <Route path="/create-championship" Component={CreateChamp}/>
   </Routes>
 ) : (
   <Routes>

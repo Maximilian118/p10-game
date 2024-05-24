@@ -4,6 +4,7 @@ import Search from "../../utility/search/Search"
 import { champType } from '../../../shared/types'
 import { IconButton } from "@mui/material"
 import { Add } from "@mui/icons-material"
+import { useNavigate } from "react-router-dom"
 
 interface champUtilityCardType {
   champs: champType[],
@@ -12,6 +13,8 @@ interface champUtilityCardType {
 }
 
 const ChampUtilityCard = ({ champs, search, setSearch }: champUtilityCardType) => {
+  const navigate = useNavigate()
+
   return (
     <div className="champ-utility-card">
       <Search<champType>
@@ -21,6 +24,7 @@ const ChampUtilityCard = ({ champs, search, setSearch }: champUtilityCardType) =
       />
       <IconButton
         className="add-button"
+        onClick={() => navigate("/create-championship")}
       >
         <Add/>
       </IconButton>
