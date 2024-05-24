@@ -3,6 +3,7 @@ import { initGraphQLError, graphQLErrorType, hasBackendErr } from "./requests/re
 
 interface formStateType {
   name?: string
+  champName?: string
   email?: string
   password?: string
   passConfirm?: string
@@ -72,14 +73,19 @@ export const updateForm = <T extends formStateType, U>(
     }
   }
 
-  // Depending on the current element do some basic validation checks.
-  // prettier-ignore
-  switch (e.target.name) {
-    case "name": if (/^[a-zA-Z\s-']{1,30}$/.test(e.target.value) || e.target.value.trim() === "") {
+  const nameCase = (): void => {
+    if (/^[a-zA-Z\s-']{1,30}$/.test(e.target.value) || e.target.value.trim() === "") {
       handleInput<U>(e.target.name, setFormErr)
     } else {
       handleInput<U>(e.target.name, setFormErr, "No numbers or special characters.")
-    }; break
+    }
+  }
+
+  // Depending on the current element do some basic validation checks.
+  // prettier-ignore
+  switch (e.target.name) {
+    case "name": nameCase(); break
+    case "champName": nameCase(); break
     case "email": if (/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(e.target.value) || e.target.value.trim() === "") { // eslint-disable-line
       handleInput<U>(e.target.name, setFormErr)
     } else {
@@ -137,6 +143,9 @@ export const inputLabel = (
   switch (type) {
     case "name":
       label = "Username"
+      break
+    case "champName":
+      label = "Championship Name"
       break
     case "passConfirm":
       label = "Password Confirm"

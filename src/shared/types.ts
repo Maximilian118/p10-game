@@ -3,15 +3,16 @@ import { userType } from "./localStorage"
 export interface formType {
   icon: File | null
   profile_picture: File | null
-  name: string
-  email: string
+  name?: string
+  champName?: string
+  email?: string
 }
 
 export interface formErrType {
-  name: string
-  email: string
+  name?: string
+  champName?: string
   dropzone: string
-  [key: string]: string
+  [key: string]: string | undefined
 }
 
 export interface champType {
