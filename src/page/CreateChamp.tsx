@@ -1,12 +1,14 @@
 import React, { useState } from "react"
 import DropZone from "../components/utility/dropZone/DropZone"
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
-import { Button, CircularProgress, TextField } from "@mui/material"
+import { Button, CircularProgress, Pagination, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../shared/formValidation"
 import { NavigateFunction, useNavigate } from "react-router-dom"
+import FormElContainer from "../components/utility/formElContainer/FormElContainer"
 
 interface createChampFormBaseType {
   champName: string
+  rounds: number | string
 }
 
 export interface createChampFormType extends createChampFormBaseType {
@@ -16,7 +18,7 @@ export interface createChampFormType extends createChampFormBaseType {
 
 export interface createChampFormErrType extends createChampFormBaseType {
   dropzone: string
-  [key: string]: string
+  [key: string]: string | number
 }
 
 const CreateChamp: React.FC = props => {
@@ -24,11 +26,13 @@ const CreateChamp: React.FC = props => {
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ form, setForm ] = useState<createChampFormType>({
     champName: "",
+    rounds: 24,
     icon: null,
     profile_picture: null,
   })
   const [ formErr, setFormErr ] = useState<createChampFormErrType>({
     champName: "",
+    rounds: "",
     dropzone: "",
   })
 
@@ -36,7 +40,17 @@ const CreateChamp: React.FC = props => {
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>, navigate: NavigateFunction) => {
     e.preventDefault()
+    console.log(form)
     // create a champ
+  }
+
+  const paginationHandler = (e: React.ChangeEvent<unknown>, value: number) => {
+    setForm(prevForm => {
+      return {
+        ...prevForm,
+        rounds: value
+      }
+    })
   }
 
   return (
@@ -62,21 +76,35 @@ const CreateChamp: React.FC = props => {
             purposeText="Championship Icon"
           />
           <TextField
-              required={!formErr.name && backendErr.type !== "champName"}
-              className="mui-form-el"
-              name="champName"
-              label={inputLabel("champName", formErr, backendErr)}
-              variant="filled" 
-              onChange={e => updateForm<createChampFormType, createChampFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
-              value={form.champName}
-              error={formErr.champName || backendErr.type === "champName" ? true : false}
-            />
-            <Button 
-              variant="contained" 
-              type="submit"
-              style={{ margin: "20px 0" }}
-              startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
-            >Create Championship</Button>
+            required={!formErr.name && backendErr.type !== "champName"}
+            className="mui-form-el"
+            name="champName"
+            label={inputLabel("champName", formErr, backendErr)}
+            variant="filled" 
+            onChange={e => updateForm<createChampFormType, createChampFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
+            value={form.champName}
+            error={formErr.champName || backendErr.type === "champName" ? true : false}
+          />
+          <FormElContainer
+            name="rounds"
+            content={
+              <Pagination 
+                count={30}
+                defaultPage={24}
+                className="mui-form-pagination"
+                color="primary"
+                onChange={paginationHandler}
+              />
+            }
+            formErr={formErr}
+            backendErr={backendErr}
+          />
+          <Button 
+            variant="contained" 
+            type="submit"
+            style={{ margin: "20px 0" }}
+            startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
+          >Create Championship</Button>
         </form>
       </div>
     </div>

@@ -123,7 +123,7 @@ export const formValid = <T extends formStateType, U>(form: T, formErr: U): bool
 }
 
 interface formErrType {
-  [key: string]: string | undefined
+  [key: string]: string | undefined | number
 }
 
 // If error or backend error, change the input label to reflect the error.
@@ -158,6 +158,9 @@ export const inputLabel = (
       break
     case "newPassConfirm":
       label = "Confirm New Password"
+      break
+    case "rounds":
+      label = "Rounds in a season *"
       break
     default:
       break

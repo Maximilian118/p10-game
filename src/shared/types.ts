@@ -12,7 +12,7 @@ export interface formErrType {
   name?: string
   champName?: string
   dropzone: string
-  [key: string]: string | undefined
+  [key: string]: string | undefined | number
 }
 
 export interface champType {
@@ -20,7 +20,18 @@ export interface champType {
   name: string
   icon: string
   season: string
-  nextRound: string
+  rounds: {
+    round: number
+    completed: boolean
+    standings: {
+      player: userType
+      points: number
+      history: {
+        round: string
+        points: number
+      }[]
+    }[]
+  }[]
   adjudicator: {
     current: userType
     since: string
@@ -36,14 +47,6 @@ export interface champType {
   pointsStructure: {
     result: number
     points: number
-  }[]
-  points: {
-    player: userType
-    points: number
-    history: {
-      round: string
-      points: number
-    }[]
   }[]
   rulesAndRegs: {
     default: boolean
