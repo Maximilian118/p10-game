@@ -14,10 +14,15 @@ interface createChampFormBaseType {
 export interface createChampFormType extends createChampFormBaseType {
   icon: File | null
   profile_picture: File | null
+  pointsStructure: {
+    result: number
+    points: number
+  }[]
 }
 
 export interface createChampFormErrType extends createChampFormBaseType {
   dropzone: string
+  pointsStructure: string
   [key: string]: string | number
 }
 
@@ -29,11 +34,13 @@ const CreateChamp: React.FC = props => {
     rounds: 24,
     icon: null,
     profile_picture: null,
+    pointsStructure: [],
   })
   const [ formErr, setFormErr ] = useState<createChampFormErrType>({
     champName: "",
     rounds: "",
     dropzone: "",
+    pointsStructure: "",
   })
 
   const navigate = useNavigate()
@@ -90,7 +97,7 @@ const CreateChamp: React.FC = props => {
             content={
               <Pagination 
                 count={30}
-                defaultPage={24}
+                page={form.rounds as number}
                 className="mui-form-pagination"
                 color="primary"
                 onChange={paginationHandler}
