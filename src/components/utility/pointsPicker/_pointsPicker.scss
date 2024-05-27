@@ -1,0 +1,9 @@
+@use '../../../scss/mixins';
+@use '../../../scss/variables';
+
+.points-picker {
+  width: 100%;
+  @include mixins.flexbox;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}

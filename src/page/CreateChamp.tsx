@@ -5,6 +5,7 @@ import { Button, CircularProgress, Pagination, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../shared/formValidation"
 import { NavigateFunction, useNavigate } from "react-router-dom"
 import FormElContainer from "../components/utility/formElContainer/FormElContainer"
+import PointsPicker from "../components/utility/pointsPicker/PointsPicker"
 
 interface createChampFormBaseType {
   champName: string
@@ -101,6 +102,19 @@ const CreateChamp: React.FC = props => {
                 className="mui-form-pagination"
                 color="primary"
                 onChange={paginationHandler}
+              />
+            }
+            formErr={formErr}
+            backendErr={backendErr}
+          />
+          <FormElContainer
+            name="pointsStructure"
+            content={
+              <PointsPicker
+                form={form}
+                setForm={setForm}
+                formErr={formErr}
+                backendErr={backendErr}
               />
             }
             formErr={formErr}

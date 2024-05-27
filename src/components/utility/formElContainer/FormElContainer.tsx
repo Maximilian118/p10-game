@@ -17,16 +17,18 @@ const FormElContainer = ({ name, content, formErr, backendErr }: formElContainer
 
   return (
     <div className={`form-el-container ${error ? "mui-error" : ""}`}>
-      <TextField
-        className="mui-background"
-        focused={true}
-        name={name}
-        label={inputLabel(name, formErr, backendErr)}
-        variant="filled"
-        multiline={true}
-        rows={10}
-        error={error}
-      />
+      <div className="mui-background-wrapper">
+        <TextField
+          className="mui-background"
+          focused={true}
+          name={name}
+          label={inputLabel(name, formErr, backendErr)}
+          variant="filled"
+          multiline={true}
+          rows={10}
+          error={error}
+        /> 
+      </div>
       {content}
     </div>
   )

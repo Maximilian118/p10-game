@@ -162,6 +162,9 @@ export const inputLabel = (
     case "rounds":
       label = "Rounds in a season *"
       break
+    case "pointsStructure":
+      label = "Create a points structure *"
+      break
     default:
       break
   }
