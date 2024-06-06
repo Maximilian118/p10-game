@@ -1,10 +1,14 @@
 export const presetNames: string[] = ["Tight Arse", "Default", "F1", "Moto GP", "Abundant"]
 
-export const nivoColours = (fillAmount: number): string[] => {
-  const scheme = ["#FFE800", "#C0C0C0", "#CD7F32"]
+export const nivoColours = (fillAmount: number, error?: boolean): string[] => {
+  const scheme = ["#FFD700", "#C0C0C0", "#CD7F32"]
 
   for (let i = 0; i < fillAmount; i++) {
     scheme.push("#bbcedf")
+  }
+
+  if (error) {
+    return ["#d32f2f"]
   }
 
   return scheme

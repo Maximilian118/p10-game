@@ -29,6 +29,8 @@ const PointsPicker: React.FC<pointsPickerType> = ({ setForm, formErr, backendErr
     })
   }
 
+  const error = formErr.pointsStructure || backendErr.type === "pointsStructure" ? true : false
+
   return (
     <div className="points-picker">
       <MUISelect
@@ -37,6 +39,7 @@ const PointsPicker: React.FC<pointsPickerType> = ({ setForm, formErr, backendErr
         setState={setPreset}
         handleSelectChange={handleSelectChange}
         style={{ position: "absolute", zIndex: 1 }}
+        error={error}
       />
       <ResponsivePie
         data={presetArrays(preset)}
@@ -46,7 +49,7 @@ const PointsPicker: React.FC<pointsPickerType> = ({ setForm, formErr, backendErr
         padAngle={1}
         cornerRadius={5}
         activeOuterRadiusOffset={8}
-        colors={nivoColours(30)}
+        colors={nivoColours(30, error)}
         borderWidth={1}
         borderColor={{
             from: 'color',

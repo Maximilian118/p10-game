@@ -9,9 +9,10 @@ interface MUISelectStyle {
   setState: React.Dispatch<React.SetStateAction<number>>
   handleSelectChange: (i: number) => void
   style?: {}
+  error?: boolean
 }
 
-export const MUISelect: React.FC<MUISelectStyle> = ({ label, items, setState, handleSelectChange, style }) => {
+export const MUISelect: React.FC<MUISelectStyle> = ({ label, items, setState, handleSelectChange, style, error }) => {
   const [ item, setItem ] = React.useState('1')
 
   const handleChange = (e: SelectChangeEvent) => {
@@ -21,13 +22,14 @@ export const MUISelect: React.FC<MUISelectStyle> = ({ label, items, setState, ha
   }
 
   return (
-      <FormControl variant='standard' style={{ ...style, minWidth: 110 }}>
+      <FormControl variant='standard' style={{ ...style, minWidth: 110 }} error={error}>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={item}
           label={label}
           onChange={handleChange}
+          error={error}
         >
           {items.map((item, i) => <MenuItem key={i} value={i}>{item}</MenuItem>)}
         </Select>
