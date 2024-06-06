@@ -6,6 +6,12 @@ import { inputLabel, updateForm } from "../shared/formValidation"
 import { NavigateFunction, useNavigate } from "react-router-dom"
 import FormElContainer from "../components/utility/formElContainer/FormElContainer"
 import PointsPicker from "../components/utility/pointsPicker/PointsPicker"
+import { presetArrays } from "../components/utility/pointsPicker/ppPresets"
+
+export type pointsStructure = {
+  result: number
+  points: number
+}[]
 
 interface createChampFormBaseType {
   champName: string
@@ -15,10 +21,7 @@ interface createChampFormBaseType {
 export interface createChampFormType extends createChampFormBaseType {
   icon: File | null
   profile_picture: File | null
-  pointsStructure: {
-    result: number
-    points: number
-  }[]
+  pointsStructure: pointsStructure
 }
 
 export interface createChampFormErrType extends createChampFormBaseType {
@@ -35,7 +38,12 @@ const CreateChamp: React.FC = props => {
     rounds: 24,
     icon: null,
     profile_picture: null,
-    pointsStructure: [],
+    pointsStructure: presetArrays(1).map(item => {
+      return {
+        result: item.result,
+        points: item.value,
+      }
+    }),
   })
   const [ formErr, setFormErr ] = useState<createChampFormErrType>({
     champName: "",
@@ -111,7 +119,6 @@ const CreateChamp: React.FC = props => {
             name="pointsStructure"
             content={
               <PointsPicker
-                form={form}
                 setForm={setForm}
                 formErr={formErr}
                 backendErr={backendErr}

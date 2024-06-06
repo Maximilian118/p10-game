@@ -25,7 +25,7 @@ const FormElContainer = ({ name, content, formErr, backendErr }: formElContainer
           label={inputLabel(name, formErr, backendErr)}
           variant="filled"
           multiline={true}
-          rows={10}
+          rows={40}
           error={error}
         /> 
       </div>

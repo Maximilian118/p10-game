@@ -1,39 +1,78 @@
-import React from "react"
+import React, { useState } from "react"
 import './_pointsPicker.scss'
 import { createChampFormErrType, createChampFormType } from "../../../page/CreateChamp"
-import { Slider } from "@mui/material"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
+import { ResponsivePie } from '@nivo/pie'
+import {nivoColours, presetArrays, presetNames} from "./ppPresets"
+import { MUISelect } from "../muiselect/MUISelect"
 
 interface pointsPickerType {
-  form: createChampFormType
   setForm: React.Dispatch<React.SetStateAction<createChampFormType>>
   formErr: createChampFormErrType
   backendErr: graphQLErrorType
 }
 
-const PointsPicker: React.FC<pointsPickerType> = ({ form, setForm, formErr, backendErr }) => {
-  const valueLabelFormat = (value: number): string => {
-    switch (value) {
-      case 0: return "Tight Arse"
-      case 1: return "Normal"
-      case 2: return "Abundant"
-      case 3: return "Custom"
-      default: return "Normal"
-    }
+const PointsPicker: React.FC<pointsPickerType> = ({ setForm, formErr, backendErr }) => {
+  const [ preset, setPreset ] = useState(1)
+
+  const handleSelectChange = (i: number) => {
+    setForm(prevForm => {
+      return {
+        ...prevForm,
+        pointsStructure: presetArrays(i).map(item => {
+          return {
+            result: item.result,
+            points: item.value,
+          }
+        })
+      }
+    })
   }
 
   return (
     <div className="points-picker">
-      <Slider
-        aria-label="Preset"
-        valueLabelDisplay="auto"
-        valueLabelFormat={valueLabelFormat}
-        marks
-        defaultValue={1}
-        min={0}
-        max={3}
-        color={formErr.pointsStructure || backendErr.type === "pointsStructure" ? "error" : "primary" }
+      <MUISelect
+        label="Preset"
+        items={presetNames}
+        setState={setPreset}
+        handleSelectChange={handleSelectChange}
+        style={{ position: "absolute", zIndex: 1 }}
       />
+      <ResponsivePie
+        data={presetArrays(preset)}
+        margin={{ top: 25, left: 60, bottom: 25, right: 60 }}
+        sortByValue={true}
+        innerRadius={0.8}
+        padAngle={1}
+        cornerRadius={5}
+        activeOuterRadiusOffset={8}
+        colors={nivoColours(30)}
+        borderWidth={1}
+        borderColor={{
+            from: 'color',
+            modifiers: [
+                [
+                    'darker',
+                    0.2
+                ]
+            ]
+        }}
+        arcLinkLabelsSkipAngle={10}
+        arcLinkLabelsTextColor="#333333"
+        arcLinkLabelsThickness={2}
+        arcLinkLabelsColor={{ from: 'color' }}
+        arcLabelsSkipAngle={10}
+        arcLabelsTextColor={{
+            from: 'color',
+            modifiers: [
+                [
+                    'darker',
+                    2
+                ]
+            ]
+        }}
+        legends={[]}
+      />  
     </div>
   )
 }
