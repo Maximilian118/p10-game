@@ -20,6 +20,25 @@ export type pointsStructureType = {
   points: number
 }[]
 
+export type ruleOrRegType = {
+  text: string
+  createdBy: userType
+  created_at: string
+  histroy: {
+    text: string
+    updatedBy: userType
+    updated_at: string
+  }[]
+  subsections?: ruleOrRegType[]
+}
+
+export type rulesAndRegsListType = ruleOrRegType[]
+
+export type rulesAndRegsType = {
+  default: boolean
+  list: rulesAndRegsListType
+}
+
 export interface champType {
   _id: string
   name: string
@@ -50,29 +69,7 @@ export interface champType {
   }
   players: userType[]
   pointsStructure: pointsStructureType
-  rulesAndRegs: {
-    default: boolean
-    list: {
-      text: string
-      createdBy: userType
-      created_at: string
-      histroy: {
-        text: string
-        updatedBy: userType
-        updated_at: string
-      }
-      subsections: {
-        text: string
-        createdBy: userType
-        created_at: string
-        histroy: {
-          text: string
-          updatedBy: userType
-          updated_at: string
-        }
-      }[]
-    }[]
-  }
+  rulesAndRegs: rulesAndRegsType
   protests: protestType[] // Protest model
   ruleChanges: ruleChangeType[] // RuleChange model
   settings: {

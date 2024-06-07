@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import DropZone from "../components/utility/dropZone/DropZone"
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
 import { Button, CircularProgress, Pagination, TextField } from "@mui/material"
@@ -7,7 +7,9 @@ import { NavigateFunction, useNavigate } from "react-router-dom"
 import FormElContainer from "../components/utility/formElContainer/FormElContainer"
 import PointsPicker from "../components/utility/pointsPicker/PointsPicker"
 import { presetArrays } from "../components/utility/pointsPicker/ppPresets"
-import { pointsStructureType } from "../shared/types"
+import { pointsStructureType, rulesAndRegsType } from "../shared/types"
+import { defaultRulesAndRegs } from "../shared/rulesAndRegs"
+import AppContext from "../context"
 
 interface createChampFormBaseType {
   champName: string
@@ -18,15 +20,18 @@ export interface createChampFormType extends createChampFormBaseType {
   icon: File | null
   profile_picture: File | null
   pointsStructure: pointsStructureType
+  rulesAndRegs: rulesAndRegsType
 }
 
 export interface createChampFormErrType extends createChampFormBaseType {
   dropzone: string
   pointsStructure: string
+  rulesAndRegs: string
   [key: string]: string | number
 }
 
 const CreateChamp: React.FC = props => {
+  const { user } = useContext(AppContext)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ form, setForm ] = useState<createChampFormType>({
@@ -40,12 +45,17 @@ const CreateChamp: React.FC = props => {
         points: item.value,
       }
     }),
+    rulesAndRegs: {
+      default: true,
+      list: defaultRulesAndRegs(user),
+    },
   })
   const [ formErr, setFormErr ] = useState<createChampFormErrType>({
     champName: "",
     rounds: "",
     dropzone: "",
     pointsStructure: "",
+    rulesAndRegs: "",
   })
 
   const navigate = useNavigate()

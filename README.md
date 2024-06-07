@@ -46,21 +46,21 @@
 5. The betting window will open upon announcement from the adjudicator up to 10 minuets before the first qualifying
    session and closes 5 minutes after the start of the first qualifying sesssion.
 
-6. The adjudicator can only bet after at least 1 bets have already been declared.
+6. The adjudicator can only bet after at least 2 bets have already been declared.
 
 7. Any changes to the rules and regulations can be requested via the application and will be accepted or denied via
    a voting process.
 
-   8a. The adjudicator must accept any rules & regulations change requests before the voting process begins.
+   7a. The adjudicator must accept any rules & regulations change requests before the voting process begins.
 
-   8b. All current competitors can vote.
+   7b. All current competitors can vote.
 
-   8c. If the vote reaches a determination then the voting process will automatically close. However, if there are
+   7c. If the vote reaches a determination then the voting process will automatically close. However, if there are
    not enough votes then the process will expire after 5 days and there will be no change.
 
 8. Bets are handled on a first come first serve basis.
 
-   9a. If two or more competitors communicate their bets verbally and it's unclear as to who placed their bet first
+   8a. If two or more competitors communicate their bets verbally and it's unclear as to who placed their bet first
    the adjudicator will reach a detemination at their discretion.
 
 ## Notes:
