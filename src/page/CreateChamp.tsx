@@ -7,11 +7,7 @@ import { NavigateFunction, useNavigate } from "react-router-dom"
 import FormElContainer from "../components/utility/formElContainer/FormElContainer"
 import PointsPicker from "../components/utility/pointsPicker/PointsPicker"
 import { presetArrays } from "../components/utility/pointsPicker/ppPresets"
-
-export type pointsStructure = {
-  result: number
-  points: number
-}[]
+import { pointsStructureType } from "../shared/types"
 
 interface createChampFormBaseType {
   champName: string
@@ -21,7 +17,7 @@ interface createChampFormBaseType {
 export interface createChampFormType extends createChampFormBaseType {
   icon: File | null
   profile_picture: File | null
-  pointsStructure: pointsStructure
+  pointsStructure: pointsStructureType
 }
 
 export interface createChampFormErrType extends createChampFormBaseType {

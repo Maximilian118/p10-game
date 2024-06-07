@@ -15,6 +15,11 @@ export interface formErrType {
   [key: string]: string | undefined | number
 }
 
+export type pointsStructureType = {
+  result: number
+  points: number
+}[]
+
 export interface champType {
   _id: string
   name: string
@@ -44,10 +49,7 @@ export interface champType {
     }[]
   }
   players: userType[]
-  pointsStructure: {
-    result: number
-    points: number
-  }[]
+  pointsStructure: pointsStructureType
   rulesAndRegs: {
     default: boolean
     list: {
