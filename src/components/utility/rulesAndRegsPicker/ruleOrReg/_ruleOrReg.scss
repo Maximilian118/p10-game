@@ -1,0 +1,40 @@
+@use '../../../../scss/mixins';
+@use '../../../../scss/variables';
+
+.rule-or-reg {
+  width: 100%;
+  min-height: 40px;
+  @include mixins.flexbox-start-column;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  margin-bottom: 20px;
+
+  h4, p {
+    color: variables.$colour-6;
+  }
+
+  h4 {
+    font-weight: 300;
+    font-size: 15px;
+  }
+
+  p {
+    font-size: 13px;
+  }
+
+  .main, .subsection {
+    @include mixins.flexbox-start;
+    align-items: start;
+
+    .title {
+      width: 20px;
+      flex-shrink: 0;
+      @include mixins.flexbox-end;
+      margin-right: 10px;
+    }
+  }
+
+  .subsection {
+    margin-top: 10px !important;
+  }
+}

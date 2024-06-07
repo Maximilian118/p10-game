@@ -10,6 +10,7 @@ import { presetArrays } from "../components/utility/pointsPicker/ppPresets"
 import { pointsStructureType, rulesAndRegsType } from "../shared/types"
 import { defaultRulesAndRegs } from "../shared/rulesAndRegs"
 import AppContext from "../context"
+import RulesAndRegsPicker from "../components/utility/rulesAndRegsPicker/RulesAndRegsPicker"
 
 interface createChampFormBaseType {
   champName: string
@@ -128,6 +129,16 @@ const CreateChamp: React.FC = props => {
                 setForm={setForm}
                 formErr={formErr}
                 backendErr={backendErr}
+              />
+            }
+            formErr={formErr}
+            backendErr={backendErr}
+          />
+          <FormElContainer
+            name="rulesAndRegs"
+            content={
+              <RulesAndRegsPicker
+                rulesAndRegs={form.rulesAndRegs}
               />
             }
             formErr={formErr}

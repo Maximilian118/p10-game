@@ -1,0 +1,13 @@
+@use '../../../scss/mixins';
+
+.rules-and-regs-picker {
+  width: 100%;
+  max-height: 240px;
+  @include mixins.flexbox-start-column;
+  overflow-y: scroll;
+  position: relative;
+  z-index: 1;
+  margin-top: 10px !important;
+  padding: 0 10px;
+  box-sizing: border-box;
+}

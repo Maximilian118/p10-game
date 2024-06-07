@@ -160,10 +160,13 @@ export const inputLabel = (
       label = "Confirm New Password"
       break
     case "rounds":
-      label = "Rounds in a season"
+      label = "Rounds in a Season"
       break
     case "pointsStructure":
-      label = "Points structure"
+      label = "Points Structure"
+      break
+    case "rulesAndRegs":
+      label = "Rules and Regulations"
       break
     default:
       break

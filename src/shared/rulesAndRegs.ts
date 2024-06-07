@@ -75,7 +75,7 @@ export const defaultRulesAndRegs = (user: userType): rulesAndRegsListType => {
       "There must be no more competitors then there are Formula 1 drivers on any given race event.",
       [
         "Guest competitors are allowed. However, competitors competing for a championship take precedence.",
-        "If a guest competitor is attending more than 12 race events he/she may apply to the adjudicator to become acompetitor verbally or via the application. The adjudicator can then decide to accept, deny or start a voting process. The voting process adheres to the same process as seen in section 8c.",
+        "If a guest competitor is attending more than 12 race events he/she may apply to the adjudicator to become acompetitor verbally or via the application. The adjudicator can then decide to accept, deny or start a voting process.",
       ],
     ),
     newRuleOrReg(
