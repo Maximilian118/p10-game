@@ -1,13 +1,42 @@
 import React from "react"
 import './_ruleOrReg.scss'
 import { ruleOrRegType } from "../../../../shared/types"
+import { Button, IconButton } from "@mui/material"
+import { Clear, Edit } from "@mui/icons-material"
 
 interface rOrrType {
   index: number
   item: ruleOrRegType
+  global?: boolean
+  def?: boolean
 }
 
-const RuleOrReg: React.FC<rOrrType> = ({ index, item }) => {
+const RuleOrReg: React.FC<rOrrType> = ({ index, item, global, def }) => {
+  const toolbarContent = (global?: boolean): JSX.Element => {
+    if (global) {
+      return (
+        <Button className="text-button global">
+          <p>Global</p>
+        </Button>
+      )
+    }
+
+    return ( 
+      <>
+        {def && 
+        <Button className="text-button default">
+          <p>Default</p>
+        </Button>}
+        <IconButton className="button edit">
+          <Edit/>
+        </IconButton>
+        <IconButton className="button delete">
+          <Clear/>
+        </IconButton> 
+      </>
+    )
+  }
+
   return (
     <div className="rule-or-reg">
       <div className="main">
@@ -26,6 +55,9 @@ const RuleOrReg: React.FC<rOrrType> = ({ index, item }) => {
           </div>
         )
       })}
+      <div className="toolbar">
+        {toolbarContent(global)}
+      </div>
     </div>
   )
 }

@@ -138,6 +138,7 @@ const CreateChamp: React.FC = props => {
             name="rulesAndRegs"
             content={
               <RulesAndRegsPicker
+                user={user}
                 rulesAndRegs={form.rulesAndRegs}
               />
             }

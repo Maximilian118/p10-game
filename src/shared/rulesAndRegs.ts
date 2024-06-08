@@ -93,3 +93,26 @@ export const defaultRulesAndRegs = (user: userType): rulesAndRegsListType => {
 
   return rulesAndRegs
 }
+
+// Checks if given rule or reg is a default.
+export const isDefaultRorR = (user: userType, rOrr: ruleOrRegType): boolean => {
+  let isDefault = false
+
+  const toStrings = (item: ruleOrRegType): string[] => {
+    const subs = item.subsections?.map((r) => r.text)
+
+    if (subs) {
+      return [item.text, ...subs]
+    } else {
+      return [item.text]
+    }
+  }
+
+  defaultRulesAndRegs(user).forEach((item) => {
+    if (JSON.stringify(toStrings(item)) === JSON.stringify(toStrings(rOrr))) {
+      isDefault = true
+    }
+  })
+
+  return isDefault
+}
