@@ -1,17 +1,18 @@
 import React from "react"
 import './_ruleOrReg.scss'
-import { ruleOrRegType } from "../../../../shared/types"
+import { ruleOrRegType, rulesAndRegsType } from "../../../../shared/types"
 import { Button, IconButton } from "@mui/material"
 import { Clear, Edit } from "@mui/icons-material"
 
-interface rOrrType {
+interface rOrrType<T> {
   index: number
   item: ruleOrRegType
+  setForm: React.Dispatch<React.SetStateAction<T>>
   global?: boolean
   def?: boolean
 }
 
-const RuleOrReg: React.FC<rOrrType> = ({ index, item, global, def }) => {
+const RuleOrReg = <T extends { rulesAndRegs: rulesAndRegsType }>({ index, item, setForm, global, def }: rOrrType<T>) => {
   const toolbarContent = (global?: boolean): JSX.Element => {
     if (global) {
       return (
@@ -19,6 +20,18 @@ const RuleOrReg: React.FC<rOrrType> = ({ index, item, global, def }) => {
           <p>Global</p>
         </Button>
       )
+    }
+
+    const deleteRRHandler = (i: number) => {
+      setForm(prevForm => {
+        return {
+          ...prevForm,
+          rulesAndRegs: {
+            ...prevForm.rulesAndRegs,
+            list: prevForm.rulesAndRegs.list.filter((item, index) => index !== i - 1)
+          }
+        }
+      })
     }
 
     return ( 
@@ -30,7 +43,7 @@ const RuleOrReg: React.FC<rOrrType> = ({ index, item, global, def }) => {
         <IconButton className="button edit">
           <Edit/>
         </IconButton>
-        <IconButton className="button delete">
+        <IconButton className="button delete" onClick={e => deleteRRHandler(index)}>
           <Clear/>
         </IconButton> 
       </>

@@ -137,9 +137,10 @@ const CreateChamp: React.FC = props => {
           <FormElContainer
             name="rulesAndRegs"
             content={
-              <RulesAndRegsPicker
+              <RulesAndRegsPicker<createChampFormType>
                 user={user}
-                rulesAndRegs={form.rulesAndRegs}
+                form={form}
+                setForm={setForm}
               />
             }
             formErr={formErr}
