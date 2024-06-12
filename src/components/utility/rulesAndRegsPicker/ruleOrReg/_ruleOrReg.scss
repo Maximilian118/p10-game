@@ -77,15 +77,6 @@
       }
     }
 
-    .delete {
-      background: variables.$delete;
-      color: white;
-
-      &:hover {
-        background: variables.$delete-hover;
-      }
-    }
-
     .global, .default {
       p {
         color: white;

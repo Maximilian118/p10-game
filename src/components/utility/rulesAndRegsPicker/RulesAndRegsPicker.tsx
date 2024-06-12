@@ -4,6 +4,8 @@ import RuleOrReg from "./ruleOrReg/RuleOrReg"
 import { globalRulesAndRegs, isDefaultRorR } from "../../../shared/rulesAndRegs"
 import { userType } from "../../../shared/localStorage"
 import { rulesAndRegsType } from "../../../shared/types"
+import { IconButton } from "@mui/material"
+import { Add } from "@mui/icons-material"
 
 interface rulesAndRegsPickerType<T> {
   user: userType
@@ -16,22 +18,26 @@ const RulesAndRegsPicker = <T extends { rulesAndRegs: rulesAndRegsType }>({ user
 
   return (
     <div className="rules-and-regs-picker">
-      {global && globalRulesAndRegs(user).map((item, i) => 
-        <RuleOrReg<T>
-          key={i} 
-          index={i + 1}
-          item={item}
-          setForm={setForm}
-          global={global}
-        />)}
-      {form.rulesAndRegs.list.map((item, i) => 
-        <RuleOrReg<T>
-          key={i} 
-          index={i + 1}
-          item={item}
-          setForm={setForm}
-          def={isDefaultRorR(user, item)}
-        />)}
+      <div className="rules-and-regs-list">
+        {global && globalRulesAndRegs(user).map((item, i) => 
+          <RuleOrReg
+            key={i} 
+            index={i + 1}
+            item={item}
+            global={global}
+          />)}
+        {form.rulesAndRegs.list.map((item, i) => 
+          <RuleOrReg
+            key={i} 
+            index={i + 1}
+            item={item}
+            def={isDefaultRorR(user, item)}
+          />)
+        }
+      </div>
+      <IconButton className="add-button">
+        <Add/>
+      </IconButton>
     </div>
   )
 }
