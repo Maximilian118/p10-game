@@ -5,6 +5,7 @@
   width: 100%;
   min-height: 40px;
   @include mixins.flexbox-start-column;
+  align-items: start;
   box-sizing: border-box;
   flex-shrink: 0;
   margin-bottom: 10px;

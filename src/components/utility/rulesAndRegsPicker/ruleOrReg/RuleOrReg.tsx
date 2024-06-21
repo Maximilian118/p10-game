@@ -3,15 +3,17 @@ import './_ruleOrReg.scss'
 import { ruleOrRegType } from "../../../../shared/types"
 import { Button, IconButton } from "@mui/material"
 import { Edit } from "@mui/icons-material"
+import { editStateType } from "../RulesAndRegsPicker"
 
 interface rOrrType {
   index: number
   item: ruleOrRegType
+  setEdit: React.Dispatch<React.SetStateAction<editStateType>>
   global?: boolean
   def?: boolean
 }
 
-const RuleOrReg: React.FC<rOrrType> = ({ index, item, global, def }) => {
+const RuleOrReg: React.FC<rOrrType> = ({ index, item, setEdit, global, def }) => {
   const toolbarContent = (global?: boolean): JSX.Element => {
     if (global) {
       return (
@@ -27,7 +29,13 @@ const RuleOrReg: React.FC<rOrrType> = ({ index, item, global, def }) => {
         <Button className="text-button default">
           <p>Default</p>
         </Button>}
-        <IconButton className="button edit">
+        <IconButton className="button edit" onClick={e => setEdit(prevEdit => {
+          return {
+            ...prevEdit,
+            index,
+            ruleReg: item,
+          }
+        })}>
           <Edit/>
         </IconButton>
       </>

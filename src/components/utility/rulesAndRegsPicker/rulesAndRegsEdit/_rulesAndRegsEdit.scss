@@ -1,0 +1,84 @@
+@use '../../../../scss/mixins';
+@use '../../../../scss/variables';
+
+.rules-and-regs-edit {
+  width: 100%;
+  height: 285px;
+  @include mixins.flexbox-start-column;
+  align-items: start;
+  overflow-y: scroll;
+  position: relative;
+  z-index: 1;
+  margin-top: 10px !important;
+
+  h4 {
+    color: variables.$colour-6;
+    margin-bottom: 20px;
+  }
+  
+  .rule-or-reg-edit {
+    width: 100%;
+    padding: 0 0 20px;
+    box-sizing: border-box;
+    position: relative;
+
+    .mui-multiline {
+      width: 100%;
+      
+      textarea {
+        font-size: 13px;
+        margin-top: 10px;
+      }
+    }
+
+    .subsection-delete {
+      width: 22px;
+      height: 22px;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: variables.$delete-hover;
+      color: white;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  .button-bar {
+    width: 100%;
+    @include mixins.flexbox;
+    justify-content: space-evenly;
+    margin-bottom: 20px !important;
+    position: relative;
+    z-index: 99;
+
+    .mui-button-back {
+      background: variables.$colour-4;
+      color: white;
+    }
+
+    .add-button {
+      background: variables.$mui-success;
+      color: white;
+  
+      &:hover {
+        background: variables.$mui-success-hover;
+      }
+    }
+  }
+
+  .delete-confirm {
+    width: 100%;
+    @include mixins.flexbox;
+    justify-content: space-evenly;
+    color: variables.$colour-6;
+
+    .delete-confirm-buttons {
+      @include mixins.flexbox;
+      flex-wrap: nowrap;
+    }
+  }
+}
