@@ -24,9 +24,20 @@ const initruleReg = (user: userType, ruleReg?: ruleOrRegType | null) => {
   }
 }
 
+type errorType = {
+  msg: string,
+  index: number | null
+}
+
+const initError = {
+  msg: "",
+  index: null
+}
+
 const RulesAndRegsEdit = <T extends { rulesAndRegs: rulesAndRegsType }>({ user, edit, setEdit, setForm }: regsAndRulesEditType<T>) => {
   const [ delConfirm, SetDelConfirm ] = useState<boolean>(false)
   const [ ruleReg, setRuleReg ] = useState<ruleOrRegType>(initruleReg(user, edit.ruleReg))
+  const [ error, setError ] = useState<errorType>(initError)
 
   // Delete the entire ruleReg.
   const deleteRRHandler = (setForm: React.Dispatch<React.SetStateAction<T>>): void => {
@@ -99,6 +110,33 @@ const RulesAndRegsEdit = <T extends { rulesAndRegs: rulesAndRegsType }>({ user, 
     setForm: React.Dispatch<React.SetStateAction<T>>, 
     setEdit: React.Dispatch<React.SetStateAction<editStateType>>
   ): void => {
+    if (ruleReg.subsections) {
+      let hasErr: boolean = false
+
+      if (ruleReg.text.trim() === "") {
+        setError({
+          msg: "Please enter text.",
+          index: null
+        })
+
+        return
+      }
+
+      ruleReg.subsections.forEach((r: ruleOrRegType, i: number) => {
+        if (r.text.trim() === "") {
+          setError({
+            msg: "Please enter text.",
+            index: i
+          })
+          hasErr = true
+        }
+      })
+
+      if (hasErr) {
+        return
+      }
+    }
+
     if (edit.index) {
       setForm(prevForm => {
         return {
@@ -157,12 +195,35 @@ const RulesAndRegsEdit = <T extends { rulesAndRegs: rulesAndRegsType }>({ user, 
   // JSX for a section.
   const section = (ruleReg: ruleOrRegType, index?: number): JSX.Element => {
     const isSub = typeof index === "number"
+    const hasErr = (): boolean => {
+      if (!isSub && error.msg && !error.index && ruleReg.text.trim() === "") {
+        return true
+      }
+
+      if (index === error.index) {
+        return true
+      }
+
+      return false
+    }
+
+    const label = (isSub: boolean, error: errorType, i?: number): string => {
+      let ident = ""
+
+      if (isSub) {
+        ident = `Subsection ${i! + 1}`
+      } else {
+        ident = "Section"
+      }
+
+      return `${ident}${hasErr() ? `: ${error.msg}` : ""}`
+    }
 
     return (
       <div key={index} className="rule-or-reg-edit">
         <TextField
           className="mui-multiline"
-          label={isSub ? `Subsection ${index + 1}` : "Description"}
+          label={label(isSub, error, index)}
           multiline
           rows={3}
           onChange={e => setRuleReg((prevRuleReg: ruleOrRegType) => {
@@ -171,6 +232,10 @@ const RulesAndRegsEdit = <T extends { rulesAndRegs: rulesAndRegsType }>({ user, 
                 ...prevRuleReg,
                 subsections: prevRuleReg.subsections.map((sub, i) => {
                   if (index === i) {
+                    if (error.index === index) {
+                      setError(initError)
+                    }
+
                     return {
                       ...sub,
                       text: e.target.value,
@@ -189,6 +254,7 @@ const RulesAndRegsEdit = <T extends { rulesAndRegs: rulesAndRegsType }>({ user, 
           })}
           value={isSub ? ruleReg.subsections![index].text : ruleReg.text}
           variant="filled"
+          error={hasErr() ? true : false}
         />
         {isSub && 
         <IconButton 
