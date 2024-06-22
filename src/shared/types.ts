@@ -39,6 +39,18 @@ export type rulesAndRegsType = {
   list: rulesAndRegsListType
 }
 
+export interface badgeType {
+  _id: string
+  championship: champType
+  url: string
+  name: string
+  rarity: number
+  awardedTo: userType[]
+  created_at: string
+  updated_at: string
+  tokens: string
+}
+
 export interface champType {
   _id: string
   name: string
@@ -211,18 +223,6 @@ export interface ruleChangeType {
     approve: boolean
   }[]
   voteExipiry: string
-  created_at: string
-  updated_at: string
-  tokens: string
-}
-
-export interface badgeType {
-  _id: string
-  championship: champType
-  url: string
-  name: string
-  rarity: number
-  awardedTo: userType[]
   created_at: string
   updated_at: string
   tokens: string

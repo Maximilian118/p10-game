@@ -168,6 +168,9 @@ export const inputLabel = (
     case "rulesAndRegs":
       label = "Rules and Regulations"
       break
+    case "champBadges":
+      label = "Badges"
+      break
     default:
       break
   }

@@ -7,7 +7,7 @@ import { NavigateFunction, useNavigate } from "react-router-dom"
 import FormElContainer from "../components/utility/formElContainer/FormElContainer"
 import PointsPicker from "../components/utility/pointsPicker/PointsPicker"
 import { presetArrays } from "../components/utility/pointsPicker/ppPresets"
-import { pointsStructureType, rulesAndRegsType } from "../shared/types"
+import { badgeType, pointsStructureType, rulesAndRegsType } from "../shared/types"
 import { defaultRulesAndRegs } from "../shared/rulesAndRegs"
 import AppContext from "../context"
 import RulesAndRegsPicker from "../components/utility/rulesAndRegsPicker/RulesAndRegsPicker"
@@ -22,12 +22,14 @@ export interface createChampFormType extends createChampFormBaseType {
   profile_picture: File | null
   pointsStructure: pointsStructureType
   rulesAndRegs: rulesAndRegsType
+  champBadges: badgeType[]
 }
 
 export interface createChampFormErrType extends createChampFormBaseType {
   dropzone: string
   pointsStructure: string
   rulesAndRegs: string
+  champBadges: string
   [key: string]: string | number
 }
 
@@ -50,6 +52,7 @@ const CreateChamp: React.FC = props => {
       default: true,
       list: defaultRulesAndRegs(user),
     },
+    champBadges: [],
   })
   const [ formErr, setFormErr ] = useState<createChampFormErrType>({
     champName: "",
@@ -57,6 +60,7 @@ const CreateChamp: React.FC = props => {
     dropzone: "",
     pointsStructure: "",
     rulesAndRegs: "",
+    champBadges: "",
   })
 
   const navigate = useNavigate()
@@ -143,6 +147,12 @@ const CreateChamp: React.FC = props => {
                 setForm={setForm}
               />
             }
+            formErr={formErr}
+            backendErr={backendErr}
+          />
+          <FormElContainer
+            name="champBadges"
+            content={<div></div>}
             formErr={formErr}
             backendErr={backendErr}
           />

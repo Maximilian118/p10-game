@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import './_rulesAndRegsPicker.scss'
 import RuleOrReg from "./ruleOrReg/RuleOrReg"
-import { globalRulesAndRegs, isDefaultRorR } from "../../../shared/rulesAndRegs"
+import { isDefaultRorR } from "../../../shared/rulesAndRegs"
 import { userType } from "../../../shared/localStorage"
 import { ruleOrRegType, rulesAndRegsType } from "../../../shared/types"
 import { IconButton } from "@mui/material"
@@ -27,7 +27,6 @@ export const initEditState = {
 }
 
 const RulesAndRegsPicker = <T extends { rulesAndRegs: rulesAndRegsType }>({ user, form, setForm }: rulesAndRegsPickerType<T>) => {
-  const [ global, setGlobal ] = useState<boolean>(false)
   const [ edit, setEdit ] = useState<editStateType>(initEditState)
 
   const isEdit = edit.newRuleReg || edit.ruleReg
@@ -41,14 +40,6 @@ const RulesAndRegsPicker = <T extends { rulesAndRegs: rulesAndRegsType }>({ user
     /> : (
     <div className="rules-and-regs-picker">
       <div className="rules-and-regs-list">
-        {global && globalRulesAndRegs(user).map((item: ruleOrRegType, i: number) => 
-          <RuleOrReg
-            key={i} 
-            index={i + 1}
-            item={item}
-            setEdit={setEdit}
-            global={global}
-          />)}
         {form.rulesAndRegs.list.map((item: ruleOrRegType, i: number) => 
           <RuleOrReg
             key={i} 
