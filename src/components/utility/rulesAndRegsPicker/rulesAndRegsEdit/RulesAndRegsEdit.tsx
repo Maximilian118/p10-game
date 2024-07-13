@@ -274,7 +274,7 @@ const RulesAndRegsEdit = <T extends { rulesAndRegs: rulesAndRegsType }>({ user, 
       {ruleReg.subsections?.map((rr: ruleOrRegType, i: number) => section(ruleReg, i))}
       <div className="button-bar">
         <Button
-          className="add-button"
+          className="sub-add-button"
           variant="contained"
           onClick={e => newSubsection(user, setRuleReg)}
         >New Subsection</Button>

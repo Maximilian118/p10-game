@@ -4,7 +4,7 @@ import { createChampFormErrType, createChampFormType } from "../../../page/Creat
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import { ResponsivePie } from '@nivo/pie'
 import {nivoColours, presetArrays, presetNames} from "./ppPresets"
-import { MUISelect } from "../muiselect/MUISelect"
+import { MUISelect } from "../../utility/muiSelect/MUISelect"
 
 interface pointsPickerType {
   setForm: React.Dispatch<React.SetStateAction<createChampFormType>>

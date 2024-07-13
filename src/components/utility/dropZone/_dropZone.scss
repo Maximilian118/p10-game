@@ -16,6 +16,7 @@
   background: white;
   box-shadow: variables.$shadow-surround;
   font-size: 14px;
+  flex-shrink: 0;
 
   .inside-border {
     width: 100%;

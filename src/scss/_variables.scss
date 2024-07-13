@@ -24,5 +24,13 @@ $gold: #FFD700;
 $silver: #C0C0C0;
 $bronze: #CD7F32;
 
+// Badge rarity
+$rarity-common: #9d9d9d; // Common
+$rarity-uncommon: #967969; // Uncomon
+$rarity-rare: #66bb6a; // Rare
+$rarity-epic: #3080d0; // Epic
+$rarity-legendary: #DA70D6; // Legendary
+$rarity-mythic: #FFC000; // Mythic
+
 // transitions
 $trans-speed: 0.2s ease;

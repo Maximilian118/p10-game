@@ -94,7 +94,7 @@ export const graphQLResponse = (
   res: {
     data: {
       data: {
-        [key: string]: { tokens?: string; code?: number }
+        [key: string]: { tokens?: string; code?: number; array?: [] }
       }
     }
   },

@@ -40,15 +40,17 @@ export type rulesAndRegsType = {
 }
 
 export interface badgeType {
-  _id: string
-  championship: champType
+  _id?: string
+  championship?: champType
   url: string
   name: string
   rarity: number
-  awardedTo: userType[]
-  created_at: string
-  updated_at: string
-  tokens: string
+  awardedTo?: userType[]
+  awardedHow: string
+  awardedDesc: string
+  zoom: number
+  created_at?: string
+  updated_at?: string
 }
 
 export interface champType {

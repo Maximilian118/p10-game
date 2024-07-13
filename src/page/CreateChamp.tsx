@@ -11,6 +11,7 @@ import { badgeType, pointsStructureType, rulesAndRegsType } from "../shared/type
 import { defaultRulesAndRegs } from "../shared/rulesAndRegs"
 import AppContext from "../context"
 import RulesAndRegsPicker from "../components/utility/rulesAndRegsPicker/RulesAndRegsPicker"
+import BadgePicker from "../components/utility/badgePicker/BadgePicker"
 
 interface createChampFormBaseType {
   champName: string
@@ -67,7 +68,6 @@ const CreateChamp: React.FC = props => {
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>, navigate: NavigateFunction) => {
     e.preventDefault()
-    console.log(form)
     // create a champ
   }
 
@@ -152,7 +152,14 @@ const CreateChamp: React.FC = props => {
           />
           <FormElContainer
             name="champBadges"
-            content={<div></div>}
+            content={
+              <BadgePicker<createChampFormType>
+                form={form}
+                setForm={setForm}
+                user={user}
+                setBackendErr={setBackendErr}
+              />
+            }
             formErr={formErr}
             backendErr={backendErr}
           />

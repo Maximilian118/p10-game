@@ -3,6 +3,7 @@ import { initGraphQLError, graphQLErrorType, hasBackendErr } from "./requests/re
 
 interface formStateType {
   name?: string
+  badgeName?: string
   champName?: string
   email?: string
   password?: string
@@ -170,6 +171,9 @@ export const inputLabel = (
       break
     case "champBadges":
       label = "Badges"
+      break
+    case "badgeName":
+      label = "Name"
       break
     default:
       break

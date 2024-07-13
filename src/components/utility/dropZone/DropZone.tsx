@@ -16,6 +16,8 @@ interface dropZoneType<T, U> {
   user?: userType
   style?: object
   purposeText?: string
+  zoom?: number
+  thumbImg?: string | false
 }
 
 interface compressedImagesType {
@@ -23,7 +25,18 @@ interface compressedImagesType {
   profile_picture: File
 }
 
-const DropZone = <T extends formType, U extends formErrType>({ form, setForm, setFormErr, backendErr, setBackendErr, user, style, purposeText }: dropZoneType<T, U>) => {
+const DropZone = <T extends formType, U extends formErrType>({ 
+  form, 
+  setForm, 
+  setFormErr, 
+  backendErr, 
+  setBackendErr, 
+  user, 
+  style, 
+  purposeText, 
+  zoom, 
+  thumbImg 
+}: dropZoneType<T, U>) => {
   const [ thumb, setThumb ] = useState<string>("")
   const [ error, setError ] = useState<string>("")
   const [ imgErr, setImgErr ] = useState<boolean>(false)
@@ -37,8 +50,10 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
 
     if (form.profile_picture) {
       setThumb(URL.createObjectURL(form.profile_picture))
+    } else if (thumbImg) {
+      setThumb(thumbImg)
     }
-  }, [form.profile_picture, user])
+  }, [form.profile_picture, user, thumbImg])
 
   // Determine if the window has drag and drop capabilities.
   const canDragDrop = (): boolean => {
@@ -142,7 +157,7 @@ const DropZone = <T extends formType, U extends formErrType>({ form, setForm, se
     }
 
     if (thumb) {
-      return dropZoneThumb(thumb, imgErr, setImgErr, user)
+      return dropZoneThumb(thumb, imgErr, setImgErr, user, zoom)
     }
 
     return <p>{`${canDragDrop() ? `Drag and drop` : `Select`} a ${purposeText ? purposeText : "Profile Picture"}...`}</p>

@@ -18,17 +18,8 @@
   }
 
   .add-button {
-    margin: 0;
-    background: variables.$mui-success;
-    color: white;
-    width: 32px;
-    height: 32px;
     position: absolute;
     bottom: 10px;
     right: 10px;
-
-    &:hover {
-      background: variables.$mui-success-hover;
-    }
   }
 }

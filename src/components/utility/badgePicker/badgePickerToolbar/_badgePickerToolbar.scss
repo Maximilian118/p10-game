@@ -1,0 +1,21 @@
+@use '../../../../scss/mixins';
+
+.badge-picker-toolbar {
+  width: 100%;
+  @include mixins.flexbox-end;
+  padding: 18px 22px;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  z-index: 3;
+  pointer-events: none;
+
+  * {
+    pointer-events: all;
+  }
+
+  .add-button {
+    margin-left: 10px !important;
+    z-index: 4;
+  }
+}

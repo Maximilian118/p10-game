@@ -4,16 +4,17 @@
 .rules-and-regs-edit {
   width: 100%;
   height: 285px;
+  margin-top: 10px !important;
   @include mixins.flexbox-start-column;
-  align-items: start;
   overflow-y: scroll;
   position: relative;
   z-index: 1;
-  margin-top: 10px !important;
 
   h4 {
+    width: 100%;
     color: variables.$colour-6;
     margin-bottom: 20px;
+    text-align: left;
   }
   
   .rule-or-reg-edit {
@@ -21,9 +22,10 @@
     padding: 0 0 20px;
     box-sizing: border-box;
     position: relative;
+    @include mixins.flexbox-start-column;
 
     .mui-multiline {
-      width: 100%;
+      width: calc(100% - 20px);
       
       textarea {
         font-size: 13px;
@@ -36,7 +38,7 @@
       height: 22px;
       position: absolute;
       top: 5px;
-      right: 5px;
+      right: 15px;
       background: variables.$delete-hover;
       color: white;
 
@@ -60,7 +62,7 @@
       color: white;
     }
 
-    .add-button {
+    .sub-add-button {
       background: variables.$mui-success;
       color: white;
   

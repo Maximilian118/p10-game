@@ -62,6 +62,7 @@ export const dropZoneThumb = (
   imgErr: boolean,
   setImgErr: React.Dispatch<React.SetStateAction<boolean>>,
   user?: userType,
+  zoom?: number,
 ): JSX.Element => {
   if (imgErr && user) {
     return (
@@ -70,6 +71,16 @@ export const dropZoneThumb = (
       </div>
     )
   } else {
-    return <img alt="Thumbnail"  onError={() => setImgErr(true)} src={thumb}/> 
+    return (
+      <img 
+        alt="Thumbnail"
+        src={thumb}
+        onError={() => setImgErr(true)}
+        style={{ 
+          width: zoom ? `${zoom}%` : "100%",
+          height: zoom ? `${zoom}%` : "100%",
+        }}
+      />
+    )
   }
 }
