@@ -8,7 +8,7 @@ import BadgeOverlay, { getBadgeColour } from "../../badge/badgeOverlay/BadgeOver
 import { Button, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
 import MUIAutocomplete from "../../muiAutocomplete/muiAutocomplete"
-import { badgeLogic } from "../../../../shared/badges"
+import { badgeRewardOutcomes } from "../../../../shared/badges"
 import { badgeType } from "../../../../shared/types"
 
 interface badgePickerEditType<T> {
@@ -55,6 +55,10 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
 
   const displayOverlay = !isNewBadge || editForm.icon
 
+  const findDesc = (badgeRewardOutcomes: { awardedHow: string; awardedDesc: string }[], how: string | null): string => {
+    return badgeRewardOutcomes.filter((outcome: { awardedHow: string; awardedDesc: string }) => outcome.awardedHow === how)[0].awardedDesc
+  }
+
   const onSubmitHandler = () => {
     if (!isNewBadge) {
       setForm(prevForm => {
@@ -69,7 +73,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
                 zoom,
                 rarity,
                 awardedHow: how ? how : badge.awardedHow,
-                // awardedDesc:
+                awardedDesc: findDesc(badgeRewardOutcomes, how),
                 file: editForm.icon,
               }
             } else {
@@ -90,7 +94,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
               zoom,
               rarity,
               awardedHow: how,
-              // awardedDesc:
+              awardedDesc: findDesc(badgeRewardOutcomes, how),
               file: editForm.icon,
             },
             ...prevForm.champBadges,
@@ -168,7 +172,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
       />
       <MUIAutocomplete
         label="awarded for"
-        options={badgeLogic()}
+        options={badgeRewardOutcomes.map((outcome: { awardedHow: string }) => outcome.awardedHow)}
         className="mui-el"
         value={how}
         setValue={setHow}
