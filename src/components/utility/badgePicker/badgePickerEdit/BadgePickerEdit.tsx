@@ -69,6 +69,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
                 zoom,
                 rarity,
                 awardedHow: how ? how : badge.awardedHow,
+                // awardedDesc:
                 file: editForm.icon,
               }
             } else {
@@ -77,7 +78,26 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
           })
         }
       })
-    } // NEED TO WRITE "NEW" BADGE CODE. WOULD NEED TO UPLOAD IMAGE TO REFERENCE FOR THE BADGE COMPONENT.
+    } else {
+      setForm(prevForm => {
+        return {
+          ...prevForm,
+          champBadges: [
+            {
+              _id: `TEMP: ${Math.random()}`,
+              url: editForm.icon ? URL.createObjectURL(editForm.icon) : null,
+              name: editForm.badgeName,
+              zoom,
+              rarity,
+              awardedHow: how,
+              // awardedDesc:
+              file: editForm.icon,
+            },
+            ...prevForm.champBadges,
+          ]
+        }
+      })
+    }
 
     setIsEdit(false)
   }
