@@ -2,7 +2,9 @@
 // There may be more outcomes than there are badges in the DB.
 // Therefore, we must do it this way rather than just pulling awardedHow and awardedDesc from all of the badges in the DB.
 // If people create enough badges down the line to populate all of the below then we'll just pull from the DB.
-export const badgeRewardOutcomes: { awardedHow: string; awardedDesc: string }[] = [
+export type badgeOutcomeType = { awardedHow: string; awardedDesc: string }
+
+export const badgeRewardOutcomes: badgeOutcomeType[] = [
   {
     awardedHow: "Adj removed a competitior.",
     awardedDesc: "As an adjudicator you removed someone from a championship. Oh damn...",

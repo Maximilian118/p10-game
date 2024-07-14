@@ -30,6 +30,7 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({ form, setForm, us
     <BadgePickerEdit 
       isEdit={isEdit} 
       setIsEdit={setIsEdit}
+      form={form}
       setForm={setForm}
     /> : (
     <div className="badge-picker">

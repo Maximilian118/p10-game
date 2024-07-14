@@ -8,12 +8,13 @@ import BadgeOverlay, { getBadgeColour } from "../../badge/badgeOverlay/BadgeOver
 import { Button, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
 import MUIAutocomplete from "../../muiAutocomplete/muiAutocomplete"
-import { badgeRewardOutcomes } from "../../../../shared/badges"
+import { badgeOutcomeType, badgeRewardOutcomes } from "../../../../shared/badges"
 import { badgeType } from "../../../../shared/types"
 
 interface badgePickerEditType<T> {
   isEdit: boolean | badgeType
   setIsEdit: React.Dispatch<React.SetStateAction<boolean | badgeType>>
+  form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
 }
 
@@ -37,7 +38,7 @@ const initIcon = (isEdit: boolean | badgeType): File | null => {
   }
 }
 
-const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIsEdit, setForm }: badgePickerEditType<T>) => {
+const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIsEdit, form, setForm }: badgePickerEditType<T>) => {
   const isNewBadge = typeof isEdit === "boolean"
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ editForm, setEditForm ] = useState<editFormType>({
@@ -55,10 +56,27 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
 
   const displayOverlay = !isNewBadge || editForm.icon
 
-  const findDesc = (badgeRewardOutcomes: { awardedHow: string; awardedDesc: string }[], how: string | null): string => {
-    return badgeRewardOutcomes.filter((outcome: { awardedHow: string; awardedDesc: string }) => outcome.awardedHow === how)[0].awardedDesc
+  // Find the object that contains the awardedHow currently in how state and return the relevant awardedDesc string.
+  const findDesc = (badgeRewardOutcomes: badgeOutcomeType[], how: string | null): string => {
+    return badgeRewardOutcomes.filter((outcome: badgeOutcomeType) => outcome.awardedHow === how)[0].awardedDesc
   }
 
+  // Remove all of the reward outcomes that currently exist in form.champBadges.
+  // Also, ensure to include the current awardedHow for this badge.
+  const isAvailable = () => {
+    const getHows = badgeRewardOutcomes.filter((outcome: badgeOutcomeType) => 
+      !form.champBadges.some((badge: badgeType) => badge.awardedHow === outcome.awardedHow)
+    ).map((outcome: badgeOutcomeType) => outcome.awardedHow)
+
+    if (typeof isEdit !== "boolean") {
+      getHows.push(isEdit.awardedHow)
+    }
+
+    return getHows
+  }
+
+  // Depending on wheather we're editing or creating a new badge, setForm accordingly.
+  // If a new image has been uploaded, store the file under the file key and create a URL for render.
   const onSubmitHandler = () => {
     if (!isNewBadge) {
       setForm(prevForm => {
@@ -106,6 +124,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
     setIsEdit(false)
   }
 
+  // Remove/delete a badge from form.champBadges.
   const deleteBadgeHandler = () => {
     if (!isNewBadge) {
       setForm(prevForm => {
@@ -172,7 +191,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
       />
       <MUIAutocomplete
         label="awarded for"
-        options={badgeRewardOutcomes.map((outcome: { awardedHow: string }) => outcome.awardedHow)}
+        options={isAvailable()}
         className="mui-el"
         value={how}
         setValue={setHow}
