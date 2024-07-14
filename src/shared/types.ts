@@ -51,6 +51,7 @@ export interface badgeType {
   zoom: number
   created_at?: string
   updated_at?: string
+  file?: File | null
 }
 
 export interface champType {

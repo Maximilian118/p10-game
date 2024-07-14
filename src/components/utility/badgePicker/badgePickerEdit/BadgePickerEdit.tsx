@@ -28,12 +28,21 @@ interface editFormErrType {
   [key: string]: string
 }
 
+// If badge has a populated file key, init editForm.icon with that file.
+const initIcon = (isEdit: boolean | badgeType): File | null => {
+  if (typeof isEdit !== "boolean") {
+    return isEdit.file ? isEdit.file : null
+  } else {
+    return null
+  }
+}
+
 const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIsEdit, setForm }: badgePickerEditType<T>) => {
   const isNewBadge = typeof isEdit === "boolean"
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ editForm, setEditForm ] = useState<editFormType>({
     badgeName: isNewBadge ? "" : isEdit.name,
-    icon: null,
+    icon: initIcon(isEdit),
     profile_picture: null,
   })
   const [ editFormErr, setEditFormErr ] = useState<editFormErrType>({
@@ -51,14 +60,16 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
       setForm(prevForm => {
         return {
           ...prevForm,
-          champBadges: prevForm.champBadges.map((badge: badgeType, i: number): badgeType => {
+          champBadges: prevForm.champBadges.map((badge: badgeType): badgeType => {
             if (badge._id === isEdit._id) {
               return {
                 ...badge,
+                url: editForm.icon ? URL.createObjectURL(editForm.icon) : isEdit.url,
                 name: editForm.badgeName,
                 zoom,
                 rarity,
                 awardedHow: how ? how : badge.awardedHow,
+                file: editForm.icon,
               }
             } else {
               return badge
