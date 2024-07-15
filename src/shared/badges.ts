@@ -31,15 +31,35 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
     awardedDesc: "Be promoted from guest to competitor of a championship.",
   },
   {
+    awardedHow: "Be demoted to guest.",
+    awardedDesc: "Be demoted from competitor to a guest of a championship.",
+  },
+  {
     awardedHow: "Be runner up 3 times.",
-    awardedDesc: "Get runner up three times in a season. You'll get there one day.",
+    awardedDesc: "Get runner up three times in a championship. You'll get there one day.",
+  },
+  {
+    awardedHow: "Be runner up 5 times.",
+    awardedDesc: "Get runner up five times in a championship.",
+  },
+  {
+    awardedHow: "Be runner up 7 times.",
+    awardedDesc: "Get runner up five times in a championship. Consistency is everything!",
   },
   {
     awardedHow: "Bet on driver Q1 finish.",
     awardedDesc: "You bet on a driver that didn't leave Q1. How embarrassing.",
   },
   {
-    awardedHow: "Bet on Podium Finish.",
+    awardedHow: "Bet on driver Q2 finish.",
+    awardedDesc: "You bet on a driver that didn't leave Q2.",
+  },
+  {
+    awardedHow: "Bet on a podium finish.",
+    awardedDesc: "Bet on a driver that lands on the podium. Eeesh.",
+  },
+  {
+    awardedHow: "Bet on a winning driver.",
     awardedDesc: "Bet on a driver that lands on the podium. You muppet.",
   },
   {
@@ -49,6 +69,10 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
   {
     awardedHow: "Champ Finish top 3.",
     awardedDesc: "Finish in the top three of a championship! Congratulations!",
+  },
+  {
+    awardedHow: "Champ Finish top 5.",
+    awardedDesc: "Finish in the top five of a championship. Good effort.",
   },
   {
     awardedHow: "Championship Win!",
@@ -76,7 +100,8 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
   },
   {
     awardedHow: "Driver No Points Win.",
-    awardedDesc: "After half way through a season, win with a driver that hasn't scored a point.",
+    awardedDesc:
+      "After half way through a championship, win with a driver that hasn't scored a point.",
   },
   {
     awardedHow: "Even points streak 4.",
@@ -87,13 +112,13 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
     awardedDesc: "Win the first round of a championship.",
   },
   {
-    awardedHow: "First Win ever.",
+    awardedHow: "First win ever.",
     awardedDesc: "Win your first ever round.",
   },
   {
     awardedHow: "Have same points as 2 others.",
     awardedDesc:
-      "When you have more than ten points, have the same mount of points as two other competitiors.",
+      "When you have more than 10 points, have the same mount of points as two other competitiors.",
   },
   {
     awardedHow: "Have same points as 3 others.",
@@ -101,12 +126,17 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
       "When you have more than 2 points, have the same mount of points as three other competitiors.",
   },
   {
+    awardedHow: "Have same points as 5 others.",
+    awardedDesc:
+      "When you have more than 2 points, have the same mount of points as five other competitiors.",
+  },
+  {
     awardedHow: "Jakob win and top 5.",
     awardedDesc: "Score within the top 5 in a round that Jakob won.",
   },
   {
-    awardedHow: "Joined championship.",
-    awardedDesc: "Join a championship.",
+    awardedHow: "Championship joined.",
+    awardedDesc: "You joined a championship. Good Luck!",
   },
   {
     awardedHow: "Last 3 with no points.",
@@ -121,13 +151,45 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
     awardedDesc: "Max has beaten you 8 times in a row.",
   },
   {
+    awardedHow: "Lose with a Red Bull.",
+    awardedDesc: "Bet on a Red Bull and don't score any points. Fair one.",
+  },
+  {
     awardedHow: "Lose with a Ferrari.",
     awardedDesc: "Bet on a Ferrari and don't score any points. Mamma mia!",
+  },
+  {
+    awardedHow: "Lose with a Mclaren.",
+    awardedDesc: "Bet on a Mclaren and don't score any points. Shame. Cup'a tea?",
+  },
+  {
+    awardedHow: "Lose with a Aston Martin.",
+    awardedDesc: "Bet on a Aston Martin and don't score any points.",
   },
   {
     awardedHow: "Lose with a Mercedes.",
     awardedDesc:
       "Bet on a Mercedes driver and don't score any points. You should have listened to Jorge.",
+  },
+  {
+    awardedHow: "Lose with a VCarb",
+    awardedDesc: "Bet on a VCarb and don't score any points.",
+  },
+  {
+    awardedHow: "Lose with a Hass",
+    awardedDesc: "Bet on a Hass and don't score any points.",
+  },
+  {
+    awardedHow: "Lose with an Alpine",
+    awardedDesc: "Bet on an Alpine and don't score any points.",
+  },
+  {
+    awardedHow: "Lose with a Williams",
+    awardedDesc: "Bet on an Williams and don't score any points.",
+  },
+  {
+    awardedHow: "Lose with a Sauber",
+    awardedDesc: "Bet on an Sauber and don't score any points.",
   },
   {
     awardedHow: "No Points after 10 rounds.",
@@ -174,16 +236,16 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
     awardedDesc: "Be 6 points ahead of anyone else.",
   },
   {
-    awardedHow: "Point scored every round.",
-    awardedDesc: "Score a point every round in the championship. Points nom nom.",
+    awardedHow: "Point Lead 12.",
+    awardedDesc: "Be 12 points ahead of anyone else.",
   },
   {
-    awardedHow: "Points 20 when max points 2.",
-    awardedDesc: "Score over 20 points when the maximum points you can win per round is 2.",
+    awardedHow: "Point Lead 24.",
+    awardedDesc: "Be 24 points ahead of anyone else.",
   },
   {
-    awardedHow: "Points in a row 2.",
-    awardedDesc: "Score points on the same driver twice in a row.",
+    awardedHow: "Points streak championship.",
+    awardedDesc: "Win a point every round in the championship. Points nom nom.",
   },
   {
     awardedHow: "Points streak 10.",
@@ -194,41 +256,130 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
     awardedDesc: "Win a point every round for 6 rounds.",
   },
   {
+    awardedHow: "Points 20 when max points 2.",
+    awardedDesc: "Score over 20 points when the maximum points you can win per round is 2.",
+  },
+  {
+    awardedHow: "Same driver Points in a row 2.",
+    awardedDesc: "Score points on the same driver twice in a row.",
+  },
+  {
     awardedHow: "Q length shorter than 2:15h.",
     awardedDesc:
       "Score points in a qualifying round that lasted no more than an hour and a quater.",
+  },
+  {
+    awardedHow: "Q length longer than 2:30h.",
+    awardedDesc:
+      "Score points in a qualifying round that lasted no more than an hour and a quater.",
+  },
+  {
+    awardedHow: "Runner up with a Mercedes.",
+    awardedDesc: "Win runner up with a Mercedes driver.",
+  },
+  {
+    awardedHow: "Runner up with a Red Bull.",
+    awardedDesc: "Win runner up with a Red Bull driver.",
   },
   {
     awardedHow: "Runner up with a Ferrari.",
     awardedDesc: "Win runner up with a Ferrari driver.",
   },
   {
-    awardedHow: "Same bet twice no points.",
+    awardedHow: "Runner up with a Mclaren.",
+    awardedDesc: "Win runner up with a Mclaren driver.",
+  },
+  {
+    awardedHow: "Runner up with a Aston Martin.",
+    awardedDesc: "Win runner up with a Aston Martin driver.",
+  },
+  {
+    awardedHow: "Runner up with a VCarb.",
+    awardedDesc: "Win runner up with a VCarb driver.",
+  },
+  {
+    awardedHow: "Runner up with a Hass.",
+    awardedDesc: "Win runner up with a Hass driver.",
+  },
+  {
+    awardedHow: "Runner up with an Alpine.",
+    awardedDesc: "Win runner up with an Alpine driver.",
+  },
+  {
+    awardedHow: "Runner up with a Williams.",
+    awardedDesc: "Win runner up with a Williams driver.",
+  },
+  {
+    awardedHow: "Runner up with a Sauber.",
+    awardedDesc: "Win runner up with a Sauber driver.",
+  },
+  {
+    awardedHow: "Same bet x2 no points.",
     awardedDesc: "Bet on the same driver twice in a row and both times scored no points.",
+  },
+  {
+    awardedHow: "Same bet x4 no points.",
+    awardedDesc: "Bet on the same driver four times in a row and both times scored no points.",
+  },
+  {
+    awardedHow: "Same bet x2 points.",
+    awardedDesc: "Bet on the same driver twice in a row and both times score points.",
+  },
+  {
+    awardedHow: "Same bet x4 points.",
+    awardedDesc: "Bet on the same driver four times in a row and both times score points.",
+  },
+  {
+    awardedHow: "Same bet x2 win.",
+    awardedDesc: "Bet on the same driver twice in a row and both times win!",
+  },
+  {
+    awardedHow: "Same bet x4 win.",
+    awardedDesc: "Bet on the same driver four times in a row and win every time!",
   },
   {
     awardedHow: "Tallest driver win.",
     awardedDesc: "Win with the tallest driver on the grid.",
   },
   {
-    awardedHow: "Two Championship Win streak!",
-    awardedDesc: "Win two championships in a row. (╯°□°)╯︵ ┻━┻ You magnificent being!",
+    awardedHow: "Shortest driver win.",
+    awardedDesc: "Win with the shortest driver on the grid.",
   },
   {
-    awardedHow: "Wet Runner Up.",
-    awardedDesc: "Come runner up in a wet round.",
+    awardedHow: "Two Championship Win streak!",
+    awardedDesc: "Win two championships in a row. (╯°□°)╯︵ ┻━┻ You magnificent being!",
   },
   {
     awardedHow: "Wet Win.",
     awardedDesc: "Win a wet round.",
   },
   {
-    awardedHow: "Win 10 dry rounds.",
-    awardedDesc: "Win 10 dry rounds.",
+    awardedHow: "Wet Runner Up.",
+    awardedDesc: "Come runner up in a wet round.",
+  },
+  {
+    awardedHow: "Wet podium.",
+    awardedDesc: "Get on the podium in a wet round.",
+  },
+  {
+    awardedHow: "Win 10 dry rounds all time.",
+    awardedDesc: "Win 10 dry rounds for all of the time you've been in this championship.",
+  },
+  {
+    awardedHow: "Win 50 dry rounds all time.",
+    awardedDesc: "Win 50 dry rounds for all of the time you've been in this championship.",
+  },
+  {
+    awardedHow: "Win 100 dry rounds all time.",
+    awardedDesc: "Win 100 dry rounds for all of the time you've been in this championship.",
+  },
+  {
+    awardedHow: "Win 6 rounds in a champ.",
+    awardedDesc: "Win six rounds over the course of a championship.",
   },
   {
     awardedHow: "Win 12 rounds in a champ.",
-    awardedDesc: "Win twelve rounds in a championship. 'OH Lavly'",
+    awardedDesc: "Win twelve rounds over the course of a championship. 'OH Lavly'",
   },
   {
     awardedHow: "Win 2 times in a row.",
@@ -243,10 +394,6 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
     awardedDesc: "Win points five times in a row. Stop it you thug!",
   },
   {
-    awardedHow: "Win 6 rounds in a champ.",
-    awardedDesc: "Win 6 rounds in a championship.",
-  },
-  {
     awardedHow: "Win After 3 week break.",
     awardedDesc: "Win the first race after a 3 week break.",
   },
@@ -259,7 +406,11 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
     awardedDesc: "Win the first round after Korea's Independence Movement Day.",
   },
   {
-    awardedHow: "Win after Jurr Park release.",
+    awardedHow: "Win after Star Wars first aired.",
+    awardedDesc: "Win the first round after May the 4th.",
+  },
+  {
+    awardedHow: "Win after Jurrassic Park release.",
     awardedDesc:
       "Win the first round after June the 11th, the date that Jurrasic Park first aired.",
   },
@@ -290,12 +441,20 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
     awardedDesc: "Be runner up in the first round after the Grand National.",
   },
   {
-    awardedHow: "Win first of Tripple Header.",
+    awardedHow: "Win last round of tripple header.",
     awardedDesc: "Win the last round of a tripple header.",
+  },
+  {
+    awardedHow: "Win first round of tripple header.",
+    awardedDesc: "Win the first round of a tripple header.",
   },
   {
     awardedHow: "Win heaviest driver.",
     awardedDesc: "Win with the heaviest driver on the grid.",
+  },
+  {
+    awardedHow: "Win lightest driver.",
+    awardedDesc: "Win with the lightest driver on the grid.",
   },
   {
     awardedHow: "Win last round of champ.",
@@ -310,12 +469,44 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
     awardedDesc: "Win no points for 5 rounds after winning a round.",
   },
   {
-    awardedHow: "Win when Aston Martin P1.",
-    awardedDesc: "Win when an Aston Martin has placed P1",
+    awardedHow: "Win when Red Bull Pole",
+    awardedDesc: "Win when a Red Bull has finished on Pole.",
   },
   {
-    awardedHow: "Win when NOR P1.",
-    awardedDesc: "Win when a driver with Norris in his name has placed P1",
+    awardedHow: "Win when Ferrari Pole",
+    awardedDesc: "Win when a Ferrari has finished on Pole.",
+  },
+  {
+    awardedHow: "Win when Aston Martin Pole.",
+    awardedDesc: "Win when an Aston Martin has finished on Pole.",
+  },
+  {
+    awardedHow: "Win when Mclaren Pole.",
+    awardedDesc: "Win when a Mclaren has finished on Pole.",
+  },
+  {
+    awardedHow: "Win when Mercedes Pole.",
+    awardedDesc: "Win when a Mercedes has finished on Pole.",
+  },
+  {
+    awardedHow: "Win when VCarb Pole.",
+    awardedDesc: "Win when a VCarb has finished on Pole.",
+  },
+  {
+    awardedHow: "Win when Hass Pole.",
+    awardedDesc: "Win when a Hass has finished on Pole.",
+  },
+  {
+    awardedHow: "Win when Alpine Pole.",
+    awardedDesc: "Win when an Alpine has finished on Pole.",
+  },
+  {
+    awardedHow: "Win when Williams Pole.",
+    awardedDesc: "Win when a Williams has finished on Pole.",
+  },
+  {
+    awardedHow: "Win when Sauber Pole.",
+    awardedDesc: "Win when a Sauber has finished on Pole.",
   },
   {
     awardedHow: "Win when RIC in Q3.",
@@ -326,28 +517,57 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
     awardedDesc: "Win a round when Thomas came last.",
   },
   {
-    awardedHow: "Win when VER P1",
-    awardedDesc: "Win when VER has placed P1.",
-  },
-  {
     awardedHow: "Win with 10 players.",
     awardedDesc: "Win a round when 10 or more competitors have placed a bet.",
   },
   {
+    awardedHow: "Win with 20 players/full.",
+    awardedDesc:
+      "Win a round when a championship is full of competitors and everyone has placed a bet.",
+  },
+  {
+    awardedHow: "Win with a Red Bull.",
+    awardedDesc: "Win a round with with a Red Bull.",
+  },
+  {
+    awardedHow: "Win with a Ferrari.",
+    awardedDesc: "Win a round with with a Ferrari.",
+  },
+  {
+    awardedHow: "Win with a Mercedes.",
+    awardedDesc: "Win a round with with a Mercedes.",
+  },
+  {
     awardedHow: "Win with a McLaren.",
-    awardedDesc: "Win with a McLaren driver.",
+    awardedDesc: "Win a round with with a McLaren.",
+  },
+  {
+    awardedHow: "Win with a VCarb.",
+    awardedDesc: "Win a round with with a VCarb.",
+  },
+  {
+    awardedHow: "Win with a Hass.",
+    awardedDesc: "Win a round with with a Hass.",
+  },
+  {
+    awardedHow: "Win with a Williams.",
+    awardedDesc: "Win a round with with a Williams.",
+  },
+  {
+    awardedHow: "Win with a Sauber.",
+    awardedDesc: "Win a round with with a Sauber.",
+  },
+  {
+    awardedHow: "Win with Alpine.",
+    awardedDesc: "Win a round with with an Alpine.",
+  },
+  {
+    awardedHow: "Win with an Aston Martin.",
+    awardedDesc: "Win a round with with an Aston Martin.",
   },
   {
     awardedHow: "Win with a Mexican driver.",
     awardedDesc: "Win with a Mexican driver.",
-  },
-  {
-    awardedHow: "Win with Alpine.",
-    awardedDesc: "Win with an Alpine driver.",
-  },
-  {
-    awardedHow: "Win with an Aston Martin.",
-    awardedDesc: "Win with an Aston Martin driver.",
   },
   {
     awardedHow: "Win with Aston Podium.",
