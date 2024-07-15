@@ -7,20 +7,25 @@ interface muiAutocompleteType {
   options: string[]
   value: string | null
   setValue: React.Dispatch<React.SetStateAction<string | null>>
+  error: boolean
+  onChange: () => void
   variant?: "standard" | "filled"
   className?: string
   style?: {}
 }
 
-const MUIAutocomplete: React.FC<muiAutocompleteType> = ({ label, options, value, setValue, variant, className, style }) => (
+const MUIAutocomplete: React.FC<muiAutocompleteType> = ({ label, options, value, setValue, error, onChange, variant, className, style }) => (
   <Autocomplete
     id="combo-box-demo"
     className={`mui-autocomplete ${className}`}
     style={style}
     value={value}
-    onChange={(e: SyntheticEvent<Element, Event>, value: string | null) => setValue(value)}
+    onChange={(e: SyntheticEvent<Element, Event>, value: string | null) => {
+      setValue(value)
+      onChange()
+    }}
     options={options as readonly string[]}
-    renderInput={(params) => <TextField {...params} variant={variant ? variant : "filled"} label={label} />}
+    renderInput={(params) => <TextField {...params} variant={variant ? variant : "filled"} label={label} error={error}/>}
   />
 )
 

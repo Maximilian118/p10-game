@@ -55,6 +55,30 @@ export const updateForm = <T extends formStateType, U>(
     })
   }
 
+  const nameCase = (): void => {
+    if (/^[a-zA-Z\s-']{1,30}$/.test(e.target.value) || e.target.value.trim() === "") {
+      handleInput<U>(e.target.name, setFormErr)
+    } else {
+      handleInput<U>(e.target.name, setFormErr, "No numbers or special characters.")
+    }
+  }
+
+  const badgeNameCase = () => {
+    if (e.target.value.length <= 30 || e.target.value.trim() === "") {
+      handleInput<U>(e.target.name, setFormErr)
+    } else {
+      handleInput<U>(e.target.name, setFormErr, "Maximum length 30 characters.")
+    }
+  }
+  // prettier-ignore
+  const emailCase = () => {
+    if (/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(e.target.value) || e.target.value.trim() === "") { // eslint-disable-line
+      handleInput<U>(e.target.name, setFormErr)
+    } else {
+      handleInput<U>(e.target.name, setFormErr, "Please enter a valid email address.")
+    }
+  }
+
   const passwordCase = (): void => {
     if (
       /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!?_<>"'$£%^&(){};:+=*#]{8,40}$/.test(e.target.value) ||
@@ -74,11 +98,11 @@ export const updateForm = <T extends formStateType, U>(
     }
   }
 
-  const nameCase = (): void => {
-    if (/^[a-zA-Z\s-']{1,30}$/.test(e.target.value) || e.target.value.trim() === "") {
+  const passConfirmCase = () => {
+    if (e.target.value === form.password || e.target.value.trim() === "") {
       handleInput<U>(e.target.name, setFormErr)
     } else {
-      handleInput<U>(e.target.name, setFormErr, "No numbers or special characters.")
+      handleInput<U>(e.target.name, setFormErr, "Passwords do not match.")
     }
   }
 
@@ -87,18 +111,11 @@ export const updateForm = <T extends formStateType, U>(
   switch (e.target.name) {
     case "name": nameCase(); break
     case "champName": nameCase(); break
-    case "email": if (/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(e.target.value) || e.target.value.trim() === "") { // eslint-disable-line
-      handleInput<U>(e.target.name, setFormErr)
-    } else {
-      handleInput<U>(e.target.name, setFormErr, "Please enter a valid email address.")
-    }; break
+    case "badgeName": badgeNameCase(); break
+    case "email": emailCase(); break
     case "password": passwordCase(); break
     case "currentPass": passwordCase(); break
-    case "passConfirm": if (e.target.value === form.password || e.target.value.trim() === "") {
-      handleInput<U>(e.target.name, setFormErr)
-    } else {
-      handleInput<U>(e.target.name, setFormErr, "Passwords do not match.")
-    }; break
+    case "passConfirm": passConfirmCase(); break
     default: setFormErr(prevFormErr => prevFormErr)
   }
 }
@@ -174,6 +191,9 @@ export const inputLabel = (
       break
     case "badgeName":
       label = "Name"
+      break
+    case "awardedHow":
+      label = "Awarded For"
       break
     default:
       break

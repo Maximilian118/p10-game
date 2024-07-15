@@ -10,6 +10,7 @@ import { userType } from "../../../shared/localStorage"
 interface dropZoneType<T, U> {
   form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
+  formErr?: U
   setFormErr?: React.Dispatch<React.SetStateAction<U>>
   backendErr?: graphQLErrorType
   setBackendErr?: React.Dispatch<React.SetStateAction<graphQLErrorType>>
@@ -28,6 +29,7 @@ interface compressedImagesType {
 const DropZone = <T extends formType, U extends formErrType>({ 
   form, 
   setForm, 
+  formErr,
   setFormErr, 
   backendErr, 
   setBackendErr, 
@@ -136,6 +138,13 @@ const DropZone = <T extends formType, U extends formErrType>({
       setLoading(false)
     }
   }, [acceptedFiles, fileRejections, setForm, setFormErr, backendErr, setBackendErr])
+
+  // If formErr is passed, display the dropzone error if there is one.
+  useEffect(() => {
+    if (formErr?.dropzone) {
+      setError(formErr.dropzone)
+    }
+  }, [formErr?.dropzone])
 
   const dropZoneContent = (
     canDragDrop: () => boolean,

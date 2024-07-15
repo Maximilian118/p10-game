@@ -97,6 +97,7 @@ const CreateChamp: React.FC = props => {
           <DropZone<createChampFormType, createChampFormErrType> 
             form={form}
             setForm={setForm} 
+            formErr={formErr}
             setFormErr={setFormErr} 
             backendErr={backendErr}
             setBackendErr={setBackendErr}

@@ -10,6 +10,7 @@ import { inputLabel, updateForm } from "../../../../shared/formValidation"
 import MUIAutocomplete from "../../muiAutocomplete/muiAutocomplete"
 import { badgeOutcomeType, badgeRewardOutcomes } from "../../../../shared/badges"
 import { badgeType } from "../../../../shared/types"
+import { badgePickerErrors } from "../badgePickerUtility"
 
 interface badgePickerEditType<T> {
   isEdit: boolean | badgeType
@@ -24,8 +25,9 @@ interface editFormType {
   profile_picture: File | null
 }
 
-interface editFormErrType {
+export interface editFormErrType {
   dropzone: string
+  awardedHow: string
   [key: string]: string
 }
 
@@ -48,6 +50,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
   })
   const [ editFormErr, setEditFormErr ] = useState<editFormErrType>({
     badgeName: "",
+    awardedHow: "",
     dropzone: "",
   })
   const [ zoom, setZoom ] = useState<number>(isNewBadge ? 100 : isEdit.zoom)
@@ -68,7 +71,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
       !form.champBadges.some((badge: badgeType) => badge.awardedHow === outcome.awardedHow)
     ).map((outcome: badgeOutcomeType) => outcome.awardedHow)
 
-    if (typeof isEdit !== "boolean") {
+    if (!isNewBadge) {
       getHows.push(isEdit.awardedHow)
     }
 
@@ -78,6 +81,17 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
   // Depending on wheather we're editing or creating a new badge, setForm accordingly.
   // If a new image has been uploaded, store the file under the file key and create a URL for render.
   const onSubmitHandler = () => {
+    // Check for errors.
+    const hasErr = badgePickerErrors(isNewBadge, {
+      awardedHow: how,
+      icon: editForm.icon,
+    }, setEditFormErr)
+
+    if (hasErr) {
+      return
+    }
+
+    // setForm
     if (!isNewBadge) {
       setForm(prevForm => {
         return {
@@ -146,6 +160,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
         <DropZone<editFormType, editFormErrType>
           form={editForm}
           setForm={setEditForm}
+          formErr={editFormErr}
           setFormErr={setEditFormErr}
           backendErr={backendErr}
           setBackendErr={setBackendErr}
@@ -180,7 +195,6 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
         colour={getBadgeColour(rarity)}
       />
       <TextField
-        required={!editForm.badgeName && backendErr.type !== "badgeName"}
         name="badgeName"
         className="mui-el"
         label={inputLabel("badgeName", editFormErr, backendErr)}
@@ -190,11 +204,18 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
         error={editFormErr.badgeName || backendErr.type === "badgeName" ? true : false}
       />
       <MUIAutocomplete
-        label="Awarded for"
+        label={inputLabel("awardedHow", editFormErr, backendErr)}
         options={isAvailable()}
         className="mui-el"
         value={how}
         setValue={setHow}
+        error={editFormErr.awardedHow || backendErr.type === "awardedHow" ? true : false}
+        onChange={() => setEditFormErr(prevErrs => {
+          return {
+            ...prevErrs,
+            awardedHow: "",
+          }
+        })}
       />
       <div className="button-bar">
         <Button
