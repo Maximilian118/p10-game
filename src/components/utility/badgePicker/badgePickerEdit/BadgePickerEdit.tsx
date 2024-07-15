@@ -190,7 +190,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
         error={editFormErr.badgeName || backendErr.type === "badgeName" ? true : false}
       />
       <MUIAutocomplete
-        label="awarded for"
+        label="Awarded for"
         options={isAvailable()}
         className="mui-el"
         value={how}

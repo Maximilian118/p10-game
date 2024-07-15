@@ -113,3 +113,44 @@ export const getBadgesByChamp = async <T extends { champBadges: badgeType[] }>(
 
   setLoading(false)
 }
+
+export const updateBadge = async (
+  badge: badgeType,
+  user: userType,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+): Promise<void> => {
+  setLoading(true)
+
+  try {
+    await axios
+      .post(
+        "",
+        {
+          variables: badge,
+          query: `
+            mutation UpdateBadge($_id: ID!, $url: String, $name: String, $rarity: Int, $awardedHow: String, $awardedDesc: String, $zoom: Int) {
+              updateBadge(updateBadgeInput: { _id: $_id, url: $url, name: $name, rarity: $rarity, awardedHow: $awardedHow, awardedDesc: $awardedDesc, zoom: $zoom }) {
+                _id
+              }
+            }
+          `,
+        },
+        { headers: headers(user.token) },
+      )
+      .then((res: any) => {
+        if (res.data.errors) {
+          graphQLError("updateBadge", res.data.errors[0].message, setBackendErr, true)
+        } else {
+          graphQLResponse("updateBadge", res)
+        }
+      })
+      .catch((err: any) => {
+        graphQLError("updateBadge", err.response.data.errors[0], setBackendErr, true)
+      })
+  } catch (err: any) {
+    graphQLError("updateBadge", err, setBackendErr, true)
+  }
+
+  setLoading(false)
+}
