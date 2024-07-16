@@ -21,15 +21,15 @@ export const badgePickerErrors = (
     dropzone: "",
   }
 
+  if (!badge.name) {
+    errors.badgeName = "Please enter a name."
+  }
+
+  if (!badge.awardedHow) {
+    errors.awardedHow = "Please select one."
+  }
+
   if (isNewBadge) {
-    if (!badge.name) {
-      errors.badgeName = "Please enter a name."
-    }
-
-    if (!badge.awardedHow) {
-      errors.awardedHow = "Please select one."
-    }
-
     if (!badge.icon) {
       errors.dropzone = "Please select an image."
     }
