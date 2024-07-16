@@ -1,9 +1,10 @@
 import { logout, tokensHandler, userType } from "../localStorage"
 import { isJSON } from "../utility"
 
-const formatString = (str: string) => {
+export const formatString = (str: string) => {
   return str.toLowerCase().replace(/[^a-z0-9]/g, "-")
 }
+
 // Format name of all files to be uploaded to s3.
 export const formatFilename = (userName: string, category: string, file: File): string => {
   const username = formatString(userName)
@@ -11,6 +12,10 @@ export const formatFilename = (userName: string, category: string, file: File): 
   const filename = formatString(file.name)
 
   return `${username}/${cat}/${filename}`
+}
+
+export const getFilename = (url: string): string => {
+  return url.split("/").pop() as string
 }
 
 export interface graphQLErrorType {

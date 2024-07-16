@@ -83,14 +83,16 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
   const onSubmitHandler = () => {
     // Check for errors.
     const hasErr = badgePickerErrors(isNewBadge, {
+      name: editForm.badgeName,
       awardedHow: how,
       icon: editForm.icon,
-    }, setEditFormErr)
+    }, setEditFormErr, form.champBadges)
 
+    // If any strings in editFormErr are truthy, return.
     if (hasErr) {
       return
     }
-
+    
     // setForm
     if (!isNewBadge) {
       setForm(prevForm => {
@@ -156,7 +158,12 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
     <div className="badge-picker-edit">
       <h4>{`${isNewBadge ? `New` : `Edit`} Badge`}</h4>
       <div className="badge-wrapper" style={{ width:"50%" }}>
-        <BadgeOverlay rarity={rarity} thickness={10} style={{ opacity: displayOverlay ? "" : 0 }}/>
+        <BadgeOverlay 
+          rarity={rarity} 
+          thickness={10} 
+          style={{ opacity: displayOverlay ? "" : 0 }} 
+          error={editFormErr.dropzone || backendErr.type === "badge" ? true : false}
+        />
         <DropZone<editFormType, editFormErrType>
           form={editForm}
           setForm={setEditForm}

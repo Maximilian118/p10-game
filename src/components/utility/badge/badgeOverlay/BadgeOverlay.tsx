@@ -6,10 +6,15 @@ import Shimmer from "./shimmer/Shimmer"
 interface badgeOverlayType {
   rarity: number
   thickness?: number
+  error?: boolean
   style?: {}
 }
 
-export const getBadgeColour = (rarity: number): string => {
+export const getBadgeColour = (rarity: number, error?: boolean): string => {
+  if (error) {
+    return "#d32f2f" // Error
+  }
+
   switch (rarity) {
     case 0: return "#9d9d9d" // Common
     case 1: return "#967969" // Uncommon
@@ -21,14 +26,14 @@ export const getBadgeColour = (rarity: number): string => {
   }
 }
 
-const BadgeOverlay: React.FC<badgeOverlayType> = ({ rarity, thickness, style }) => {
+const BadgeOverlay: React.FC<badgeOverlayType> = ({ rarity, thickness, error, style }) => {
   return (
     <>
-      {rarity === 5 && <Shimmer style={style}/>}
-      {rarity >= 4 && <BadgeSpinner thickness={thickness ? thickness : 2} style={style}/>}
-      <div className="badge-outer" style={{ border: `${thickness ? thickness : 6}px solid ${getBadgeColour(rarity)}`, opacity: 0.9, ...style }}>
-        <div className="badge-middle" style={{ border: `${thickness ? thickness / 2 : 4}px solid ${getBadgeColour(rarity)}`, opacity: 0.6, ...style }}>
-          <div className="badge-inner" style={{ border: `${thickness ? thickness / 4 : 2}px solid ${getBadgeColour(rarity)}`, opacity: 0.5, ...style }} />
+      {!error && rarity === 5 && <Shimmer style={style}/>}
+      {!error && rarity >= 4 && <BadgeSpinner thickness={thickness ? thickness : 2} style={style}/>}
+      <div className="badge-outer" style={{ border: `${thickness ? thickness : 6}px solid ${getBadgeColour(rarity, error)}`, opacity: 0.9, ...style }}>
+        <div className="badge-middle" style={{ border: `${thickness ? thickness / 2 : 4}px solid ${getBadgeColour(rarity, error)}`, opacity: 0.6, ...style }}>
+          <div className="badge-inner" style={{ border: `${thickness ? thickness / 4 : 2}px solid ${getBadgeColour(rarity, error)}`, opacity: 0.5, ...style }} />
         </div>
       </div>
     </>
