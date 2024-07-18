@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import './_badgeFilterDraw.scss'
-import { Button } from "@mui/material"
+import { Button, Checkbox } from "@mui/material"
 import { badgeType } from "../../../../shared/types"
+import { badgeRarities, badgeRarityType } from "../../../../shared/badges"
 
 interface badgeFilterDrawType<T> {
   draw: boolean
@@ -51,7 +52,20 @@ const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({ draw, setDraw
   return (
     <div className={`badge-filter-draw ${draw ? "badge-draw-open" : ""}`}>
       <div className="badge-filter-options">
-
+        {badgeRarities().map((rarity: badgeRarityType, i: number) => (
+          <div key={i} className="checkbox-container">
+            <p>{rarity.rarityName}</p>
+            <Checkbox
+              defaultChecked
+              inputProps={{ 'aria-label': 'Checkbox demo' }} 
+              sx={{
+                '&.Mui-checked': {
+                  color: rarity.colour,
+                },
+              }}
+            />
+          </div>
+        ))}
       </div>
       <div className="badge-filter-buttons">
         <Button

@@ -1,3 +1,5 @@
+import { getBadgeColour } from "../components/utility/badge/badgeOverlay/BadgeOverlay"
+
 // A list of badge reward outcomes.
 // There may be more outcomes than there are badges in the DB.
 // Therefore, we must do it this way rather than just pulling awardedHow and awardedDesc from all of the badges in the DB.
@@ -590,6 +592,24 @@ export const badgeRewardOutcomes: badgeOutcomeType[] = [
     awardedDesc: "Win with a driver when their team mate finished in p9.",
   },
 ]
+
+export type badgeRarityType = {
+  rarity: number
+  rarityName: string
+  colour: string
+}
+
+export const badgeRarities = () => {
+  const rarities = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"]
+
+  return rarities.map((rarityName: string, i: number) => {
+    return {
+      rarity: i,
+      rarityName,
+      colour: getBadgeColour(i),
+    }
+  })
+}
 
 // Executed on round finish.
 // Passed will be the championship ID, the user that's being checked, then an array of badges that belong to the championship.
