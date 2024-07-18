@@ -9,6 +9,7 @@ import { userType } from "../../../shared/localStorage"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import { CircularProgress } from "@mui/material"
 import BadgeFilterDraw from "./badgeFilterDraw/BadgeFilterDraw"
+import { badgeRarities, badgeRarityType } from "../../../shared/badges"
 
 interface badgePickerType<T> {
   form: T
@@ -23,6 +24,7 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({ form, setForm, us
   const [ draw, setDraw ] = useState<boolean>(false)
   const [ defaults, setDefaults ] = useState<badgeType[]>([])
   const [ reqSent, setReqSent ] = useState<boolean>(false)
+  const [ filtered, setFiltered ] = useState<number[]>(badgeRarities().map((rarity: badgeRarityType) => rarity.rarity))
 
   useEffect(() => {
     if (form.champBadges.length === 0 && !reqSent) {
@@ -42,7 +44,9 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({ form, setForm, us
       {loading ? <CircularProgress/> :
         <>
           <div className="badge-list">
-            {form.champBadges.map((badge: badgeType, i: number) => (
+            {form.champBadges
+              .filter((badge) => filtered.includes(badge.rarity))
+              .map((badge: badgeType, i: number) => (
               <div key={i} className="list-item">
                 <Badge badge={badge} zoom={badge.zoom} onClick={() => setIsEdit(badge)}/>
               </div>
@@ -59,6 +63,8 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({ form, setForm, us
             form={form}
             setForm={setForm}
             defaults={defaults}
+            filtered={filtered}
+            setFiltered={setFiltered}
           />
         </>
       }

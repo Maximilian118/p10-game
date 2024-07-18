@@ -10,9 +10,11 @@ interface badgeFilterDrawType<T> {
   form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
   defaults: badgeType[]
+  filtered: number[]
+  setFiltered: React.Dispatch<React.SetStateAction<number[]>>
 }
 
-const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({ draw, setDraw, form, setForm, defaults }: badgeFilterDrawType<T>) => {
+const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({ draw, setDraw, form, setForm, defaults, filtered, setFiltered }: badgeFilterDrawType<T>) => {
   const [ defs, setDefs ] = useState<boolean>(false)
   
   const removeDefaultsHandler = (champBadges: badgeType[], setForm: React.Dispatch<React.SetStateAction<T>> ) => {
@@ -32,6 +34,19 @@ const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({ draw, setDraw
           ...prevForm.champBadges,
           ...defaults.filter((badge: badgeType) => !prevForm.champBadges.some(prevBadge => prevBadge._id === badge._id))
         ]
+      }
+    })
+  }
+
+  const filterBadgesHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, rarity: badgeRarityType) => {
+    setFiltered((prevFiltered) => {
+      const rareIndex = prevFiltered.indexOf(rarity.rarity)
+      if (rareIndex !== -1) {
+        // Remove the rarity index if it's already in the filtered array
+        return prevFiltered.filter((_, index) => index !== rareIndex)
+      } else {
+        // Add the rarity index if it's not in the filtered array
+        return [...prevFiltered, rarity.rarity]
       }
     })
   }
@@ -56,8 +71,9 @@ const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({ draw, setDraw
           <div key={i} className="checkbox-container">
             <p>{rarity.rarityName}</p>
             <Checkbox
-              defaultChecked
-              inputProps={{ 'aria-label': 'Checkbox demo' }} 
+              checked={filtered.includes(rarity.rarity)}
+              inputProps={{ 'aria-label': 'Badge filter checkbox' }}
+              onClick={e => filterBadgesHandler(e, rarity)}
               sx={{
                 '&.Mui-checked': {
                   color: rarity.colour,
