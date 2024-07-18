@@ -52,6 +52,7 @@ export interface badgeType {
   created_at?: string
   updated_at?: string
   file?: File | null
+  default?: boolean
 }
 
 export interface champType {

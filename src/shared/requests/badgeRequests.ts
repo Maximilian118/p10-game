@@ -50,6 +50,7 @@ export const getBadgesByChamp = async <T extends { champBadges: badgeType[] }>(
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
   setForm?: React.Dispatch<React.SetStateAction<T>>,
+  setDefaults?: React.Dispatch<React.SetStateAction<badgeType[]>>,
 ): Promise<void> => {
   setLoading(true)
 
@@ -94,6 +95,15 @@ export const getBadgesByChamp = async <T extends { champBadges: badgeType[] }>(
             code: number
           }
 
+          if (!championship) {
+            badges.array = badges.array.map((badge: badgeType) => {
+              return {
+                ...badge,
+                default: true,
+              }
+            })
+          }
+
           if (setForm && badges.array.length > 0) {
             setForm((prevForm) => {
               return {
@@ -101,6 +111,10 @@ export const getBadgesByChamp = async <T extends { champBadges: badgeType[] }>(
                 champBadges: badges.array,
               }
             })
+          }
+
+          if (setDefaults) {
+            setDefaults(badges.array)
           }
         }
       })

@@ -1,0 +1,34 @@
+@use '../../../../scss/variables';
+@use '../../../../scss/mixins';
+
+.badge-filter-draw {
+  width: 100%;
+  height: 145px;
+  position: absolute;
+  bottom: -190px;
+  background: variables.$colour-1;
+  z-index: 10;
+  padding: 18px 12px;
+  transition: variables.$trans-speed;
+  @include mixins.flexbox-column;
+  border-top: 1px solid rgba(0, 0, 0, 0.42);
+
+  .badge-filter-options, .badge-filter-buttons {
+    width: 100%;
+    padding: 0 22px;
+    box-sizing: border-box;
+  }
+  
+  .badge-filter-options {
+    @include mixins.flexbox-start;
+    flex-grow: 1;
+  }
+
+  .badge-filter-buttons {
+    @include mixins.flexbox-space-between;
+  }
+}
+
+.badge-draw-open {
+  bottom: -8px;
+}

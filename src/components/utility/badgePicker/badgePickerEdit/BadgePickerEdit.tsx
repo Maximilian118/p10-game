@@ -109,6 +109,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
                 awardedHow: how ? how : badge.awardedHow,
                 awardedDesc: findDesc(badgeRewardOutcomes, how),
                 file: editForm.icon,
+                default: false,
               }
             } else {
               return badge
@@ -130,6 +131,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
               awardedHow: how,
               awardedDesc: findDesc(badgeRewardOutcomes, how),
               file: editForm.icon,
+              default: false,
             },
             ...prevForm.champBadges,
           ]

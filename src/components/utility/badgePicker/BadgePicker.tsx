@@ -8,6 +8,7 @@ import { getBadgesByChamp } from "../../../shared/requests/badgeRequests"
 import { userType } from "../../../shared/localStorage"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import { CircularProgress } from "@mui/material"
+import BadgeFilterDraw from "./badgeFilterDraw/BadgeFilterDraw"
 
 interface badgePickerType<T> {
   form: T
@@ -19,12 +20,16 @@ interface badgePickerType<T> {
 const BadgePicker = <T extends { champBadges: badgeType[] }>({ form, setForm, user, setBackendErr }: badgePickerType<T>) => {
   const [ isEdit, setIsEdit ] = useState<boolean | badgeType>(false)
   const [ loading, setLoading ] = useState<boolean>(false)
+  const [ draw, setDraw ] = useState<boolean>(false)
+  const [ defaults, setDefaults ] = useState<badgeType[]>([])
+  const [ reqSent, setReqSent ] = useState<boolean>(false)
 
   useEffect(() => {
-    if (form.champBadges.length === 0) {
-      getBadgesByChamp(null, user, setLoading, setBackendErr, setForm)
+    if (form.champBadges.length === 0 && !reqSent) {
+      getBadgesByChamp(null, user, setLoading, setBackendErr, setForm, setDefaults)
+      setReqSent(true)
     }
-  }, [form, user, setBackendErr, setForm])
+  }, [form, user, setBackendErr, setForm, reqSent, defaults])
 
   return isEdit ? 
     <BadgePickerEdit 
@@ -45,6 +50,15 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({ form, setForm, us
           </div>
           <BadgePickerToolbar
             setIsEdit={setIsEdit}
+            draw={draw}
+            setDraw={setDraw}
+          />
+          <BadgeFilterDraw
+            draw={draw}
+            setDraw={setDraw}
+            form={form}
+            setForm={setForm}
+            defaults={defaults}
           />
         </>
       }

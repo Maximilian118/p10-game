@@ -6,13 +6,16 @@ import { badgeType } from "../../../../shared/types"
 
 interface badgePickerToolbarType {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean | badgeType>>
+  draw: boolean
+  setDraw: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const BadgePickerToolbar: React.FC<badgePickerToolbarType> = ({ setIsEdit }) => (
+const BadgePickerToolbar: React.FC<badgePickerToolbarType> = ({ setIsEdit, draw, setDraw }) => (
   <div className="badge-picker-toolbar">
     <Button 
       variant="contained" 
       size="small" 
+      onClick={() => setDraw(!draw)}
       endIcon={<FilterList/>}>
       Filter
     </Button>
