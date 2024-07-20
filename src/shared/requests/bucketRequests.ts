@@ -1,5 +1,5 @@
 import axios from "axios"
-import { formatFilename, graphQLError, graphQLErrorType } from "./requestsUtility"
+import { formatFilename, graphQLErrors, graphQLErrorType } from "./requestsUtility"
 
 const putS3 = async (
   file: File,
@@ -12,7 +12,7 @@ const putS3 = async (
       console.log(res)
     })
     .catch((err: any) => {
-      graphQLError("putS3", err, setBackendErr, true)
+      graphQLErrors("putS3", err, undefined, undefined, setBackendErr, true)
     })
 }
 
@@ -46,7 +46,7 @@ export const uplaodS3 = async (
       })
       .then(async (res: any) => {
         if (res.data.errors) {
-          graphQLError("signS3", res.data.errors[0].message, setBackendErr, true)
+          graphQLErrors("signS3", res, undefined, undefined, setBackendErr, true)
         } else {
           if (!res.data.data.signS3.duplicate) {
             await putS3(file, res.data.data.signS3.signedRequest, setBackendErr)
@@ -56,10 +56,10 @@ export const uplaodS3 = async (
         }
       })
       .catch((err: any) => {
-        graphQLError("signS3", err.response.data.errors[0], setBackendErr, true)
+        graphQLErrors("signS3", err, undefined, undefined, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("signS3", err.response.data, setBackendErr, true)
+    graphQLErrors("signS3", err, undefined, undefined, setBackendErr, true)
   }
 
   return url

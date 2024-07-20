@@ -1,13 +1,16 @@
 import axios from "axios"
 import { userType } from "../localStorage"
 import { badgeType } from "../types"
-import { graphQLError, graphQLErrorType, graphQLResponse, headers } from "./requestsUtility"
+import { graphQLErrors, graphQLErrorType, graphQLResponse, headers } from "./requestsUtility"
+import { NavigateFunction } from "react-router-dom"
 
 export const newBadge = async (
   badge: badgeType,
   user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+  navigate: NavigateFunction,
 ): Promise<void> => {
   setLoading(true)
 
@@ -29,16 +32,16 @@ export const newBadge = async (
       )
       .then((res: any) => {
         if (res.data.errors) {
-          graphQLError("newBadge", res.data.errors[0].message, setBackendErr, true)
+          graphQLErrors("newBadge", res, setUser, navigate, setBackendErr, true)
         } else {
-          graphQLResponse("newBadge", res)
+          graphQLResponse("newBadge", res, user, setUser)
         }
       })
       .catch((err: any) => {
-        graphQLError("newBadge", err.response.data.errors[0], setBackendErr, true)
+        graphQLErrors("newBadge", err, setUser, navigate, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("newBadge", err, setBackendErr, true)
+    graphQLErrors("newBadge", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)
@@ -47,6 +50,8 @@ export const newBadge = async (
 export const getBadgesByChamp = async <T extends { champBadges: badgeType[] }>(
   championship: string | null,
   user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  navigate: NavigateFunction,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
   setForm?: React.Dispatch<React.SetStateAction<T>>,
@@ -87,9 +92,9 @@ export const getBadgesByChamp = async <T extends { champBadges: badgeType[] }>(
       )
       .then((res: any) => {
         if (res.data.errors) {
-          graphQLError("getBadgesByChamp", res.data.errors[0].message, setBackendErr, true)
+          graphQLErrors("getBadgesByChamp", res, setUser, navigate, setBackendErr, true)
         } else {
-          const badges = graphQLResponse("getBadgesByChamp", res) as {
+          const badges = graphQLResponse("getBadgesByChamp", res, user, setUser) as {
             array: badgeType[]
             token: string
             code: number
@@ -119,10 +124,10 @@ export const getBadgesByChamp = async <T extends { champBadges: badgeType[] }>(
         }
       })
       .catch((err: any) => {
-        graphQLError("getBadgesByChamp", err.response.data.errors[0], setBackendErr, true)
+        graphQLErrors("getBadgesByChamp", err, setUser, navigate, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("getBadgesByChamp", err, setBackendErr, true)
+    graphQLErrors("getBadgesByChamp", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)
@@ -131,6 +136,8 @@ export const getBadgesByChamp = async <T extends { champBadges: badgeType[] }>(
 export const updateBadge = async (
   badge: badgeType,
   user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  navigate: NavigateFunction,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
 ): Promise<void> => {
@@ -154,16 +161,16 @@ export const updateBadge = async (
       )
       .then((res: any) => {
         if (res.data.errors) {
-          graphQLError("updateBadge", res.data.errors[0].message, setBackendErr, true)
+          graphQLErrors("updateBadge", res, setUser, navigate, setBackendErr, true)
         } else {
-          graphQLResponse("updateBadge", res)
+          graphQLResponse("updateBadge", res, user, setUser)
         }
       })
       .catch((err: any) => {
-        graphQLError("updateBadge", err.response.data.errors[0], setBackendErr, true)
+        graphQLErrors("updateBadge", err, setUser, navigate, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("updateBadge", err, setBackendErr, true)
+    graphQLErrors("updateBadge", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)

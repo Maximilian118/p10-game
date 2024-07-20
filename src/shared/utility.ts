@@ -18,18 +18,6 @@ export const getInitials = (userName: string) => {
   return initials
 }
 
-// Check if a string has proper JSON interchange format.
-export const isJSON = (str: string) => {
-  if (typeof str !== "string") return false
-  try {
-    const result = JSON.parse(str)
-    const type = Object.prototype.toString.call(result)
-    return type === "[object Object]" || type === "[object Array]"
-  } catch (err) {
-    return false
-  }
-}
-
 // Return a string reflecting the current permissions level of a user.
 export const getPermLevel = (user: userType): string => {
   const perms = user.permissions

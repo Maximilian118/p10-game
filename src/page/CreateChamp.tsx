@@ -35,7 +35,7 @@ export interface createChampFormErrType extends createChampFormBaseType {
 }
 
 const CreateChamp: React.FC = props => {
-  const { user } = useContext(AppContext)
+  const { user, setUser } = useContext(AppContext)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ form, setForm ] = useState<createChampFormType>({
@@ -158,6 +158,7 @@ const CreateChamp: React.FC = props => {
                 form={form}
                 setForm={setForm}
                 user={user}
+                setUser={setUser}
                 setBackendErr={setBackendErr}
               />
             }

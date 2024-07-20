@@ -1,5 +1,5 @@
 import { logout, tokensHandler, userType } from "../localStorage"
-import { isJSON } from "../utility"
+import { NavigateFunction } from "react-router-dom"
 
 export const formatString = (str: string) => {
   return str.toLowerCase().replace(/[^a-z0-9]/g, "-")
@@ -18,15 +18,18 @@ export const getFilename = (url: string): string => {
   return url.split("/").pop() as string
 }
 
-export interface graphQLErrorType {
-  request: string
+type errorType = {
   type: string
   message: string
   code: number | null
   value: any
   locations: readonly string[]
   path: readonly (string | number)[]
-  originalError: object
+}
+
+export interface graphQLErrorType extends errorType {
+  request: string
+  originalErrors: errorType[]
 }
 
 export let initGraphQLError: graphQLErrorType = {
@@ -37,60 +40,102 @@ export let initGraphQLError: graphQLErrorType = {
   value: null,
   locations: [],
   path: [],
-  originalError: {},
+  originalErrors: [],
+}
+
+type axiosGraphqlErrObj = {
+  data?: {
+    errors: errorType[]
+  }
+  response?: {
+    data: {
+      errors: errorType[]
+    }
+  }
+}
+
+// Find errors from an axios graphql request, wherever they might be and return an array of graphQLErrors.
+const findErrs = (err: axiosGraphqlErrObj): errorType[] => {
+  if (err.response) {
+    return err.response.data.errors
+  }
+
+  if (err.data) {
+    return err.data.errors
+  }
+
+  return []
 }
 
 // Format and return a GraphQL Error from an Axios request.
-export const graphQLError = (
+export const graphQLErrors = (
   request: string,
-  error: graphQLErrorType,
-  setBackendErr?: React.Dispatch<React.SetStateAction<graphQLErrorType>> | false,
+  err: {},
+  setUser?: React.Dispatch<React.SetStateAction<userType>> | undefined,
+  navigate?: NavigateFunction | undefined,
+  setBackendErr?: React.Dispatch<React.SetStateAction<graphQLErrorType>> | undefined,
   log?: boolean,
-): graphQLErrorType => {
-  let errorObj: graphQLErrorType = initGraphQLError
-  const e = error
+): graphQLErrorType[] => {
+  // Initialise the error response array.
+  const errsArr: errorType[] = []
 
-  if (!error.type || e.type === "Unknown") {
-    e.message = `Unknown Error: ${e.message}`
-    e.code = 500
+  // Find all of the errors.
+  const errs = findErrs(err)
 
-    switch (request) {
-      case "updateEmail":
-        e.type = "email"
-        break
-      case "updateName":
-        e.type = "name"
-        break
-      default:
-        break
+  // Loop through all of the errors.
+  for (const err of errs) {
+    // Errors that can break the loop if true:
+    // If no connection to backend.
+    if (err.message === "Network Error") {
+      errsArr.push(err)
+      break
+    }
+
+    // If user tokens have expired.
+    if (err.message === "Not Authenticated!") {
+      errsArr.push(err)
+      logout(setUser, navigate)
+      break
+    }
+
+    // Errors that can collectively be in the array:
+    // If type of error is unhandled by the backend.
+    if (!err.type || err.type === "Unknown") {
+      errsArr.push({
+        ...err,
+        message: `Unknown Error: ${err.message}`,
+        code: 500,
+      })
+      // If error is handled by the backend.
+    } else {
+      errsArr.push(err)
     }
   }
 
-  errorObj = {
-    request,
-    type: e.type ? e.type : "",
-    message: e.message ? e.message : "",
-    code: e.code ? e.code : 400,
-    value: e.value ? e.value : null,
-    locations: e.locations ? e.locations : [],
-    path: e.path ? e.path : [],
-    originalError: error,
-  }
+  // Add request and original errors.
+  const graphQLErrors = errsArr.map((err: errorType): graphQLErrorType => {
+    return {
+      ...err,
+      request,
+      originalErrors: errsArr,
+    }
+  })
 
+  // setBackendErr with the first item in graphQLErrors array.
   if (setBackendErr) {
     setBackendErr((prevErr) => {
       return {
         ...prevErr,
-        ...errorObj,
+        ...graphQLErrors[0],
       }
     })
   }
 
   if (log) {
-    console.error(errorObj)
+    console.error(graphQLErrors)
   }
 
-  return errorObj
+  return graphQLErrors
 }
 
 // Format and return a GraphQL response from an Axios request.
@@ -99,17 +144,19 @@ export const graphQLResponse = (
   res: {
     data: {
       data: {
-        [key: string]: { tokens?: string; code?: number; array?: [] }
+        [key: string]: { tokens?: string[]; code?: number; array?: [] }
       }
     }
   },
+  user?: userType,
+  setUser?: React.Dispatch<React.SetStateAction<userType>>,
   log?: boolean,
   code?: number,
 ): object => {
   let obj = res.data.data[request]
 
-  if (obj.tokens && isJSON(obj.tokens)) {
-    obj = tokensHandler(obj)
+  if (user && setUser) {
+    tokensHandler(user, obj.tokens, setUser)
   }
 
   obj = {
@@ -144,8 +191,8 @@ export const hasBackendErr = (types: string[], backendErr: graphQLErrorType): bo
 // prettier-ignore
 export const headers = (token: string): {
   "Content-Type": string,
-    accessToken: string,
-    refreshToken: string,
+  accessToken: string,
+  refreshToken: string,
 } => {
   const refreshToken = localStorage.getItem("refresh_token")
 
@@ -154,17 +201,4 @@ export const headers = (token: string): {
     accessToken: `Bearer ${token}`,
     refreshToken: `Bearer ${refreshToken}`,
   }
-}
-
-// If no authentication, logout.
-export const checkAuth = (
-  errors: [],
-  setUser: React.Dispatch<React.SetStateAction<userType>>,
-  navigate: Function,
-): void => {
-  errors.forEach((err: { message: string }) => {
-    if (err.message === "Not Authenticated!") {
-      logout(setUser, navigate)
-    }
-  })
 }

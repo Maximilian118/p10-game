@@ -6,6 +6,7 @@ import { formErrType, formType } from "../../../shared/types"
 import { inputLabel, updateForm } from "../../../shared/formValidation"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import { updateEmail } from "../../../shared/requests/userRequests"
+import { useNavigate } from "react-router-dom"
 
 interface updateEmailCardType<T, U> {
   user: userType
@@ -22,11 +23,13 @@ const UpdateEmailCard = <T extends formType, U extends formErrType>({ user, setU
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ success, setSuccess ] = useState<boolean>(false)
 
+  const navigate = useNavigate()
+
   const updateEmailHandler = async (
     e: React.FormEvent<HTMLButtonElement>
   ): Promise<void> => {
     e.preventDefault()
-    updateEmail(form, setForm, user, setUser, setLoading, setBackendErr, setSuccess)
+    updateEmail(form, setForm, user, setUser, navigate, setLoading, setBackendErr, setSuccess)
   }
 
   return (

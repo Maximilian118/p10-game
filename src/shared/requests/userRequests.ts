@@ -1,9 +1,9 @@
 import axios from "axios"
 import { createFormType } from "../../page/Create"
-import { userType, logInSuccess, logout } from "../localStorage"
+import { userType, logInSuccess, logout, tokensHandler } from "../localStorage"
 import { populateUser } from "./requestPopulation"
 import { uplaodS3 } from "./bucketRequests"
-import { graphQLError, graphQLErrorType, graphQLResponse, headers } from "./requestsUtility"
+import { graphQLErrors, graphQLErrorType, graphQLResponse, headers } from "./requestsUtility"
 import { NavigateFunction } from "react-router-dom"
 import { loginFormType } from "../../page/Login"
 import { forgotFormType } from "../../page/Forgot"
@@ -66,17 +66,17 @@ export const createUser = async (
       })
       .then((res: any) => {
         if (res.data.errors) {
-          graphQLError("createUser", res.data.errors[0].message, setBackendErr, true)
+          graphQLErrors("createUser", res, setUser, navigate, setBackendErr, true)
         } else {
           logInSuccess("createUser", res, setUser, true)
           navigate("/")
         }
       })
       .catch((err: any) => {
-        graphQLError("createUser", err.response.data.errors[0], setBackendErr, true)
+        graphQLErrors("createUser", err, setUser, navigate, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("createUser", err, setBackendErr, true)
+    graphQLErrors("createUser", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)
@@ -105,17 +105,18 @@ export const login = async (
       })
       .then((res: any) => {
         if (res.data.errors) {
-          graphQLError("login", res.data.errors[0].message, setBackendErr, true)
+          graphQLErrors("login", res, setUser, navigate, setBackendErr, true)
         } else {
           logInSuccess("login", res, setUser, true)
           navigate("/")
         }
       })
       .catch((err: any) => {
-        graphQLError("login", err.response.data.errors[0], setBackendErr, true)
+        console.log(err)
+        graphQLErrors("login", err, setUser, navigate, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("login", err, setBackendErr, true)
+    graphQLErrors("login", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)
@@ -141,16 +142,16 @@ export const forgot = async (
       })
       .then((res: any) => {
         if (res.data.errors) {
-          graphQLError("forgot", res.data.errors[0].message, setBackendErr, true)
+          graphQLErrors("forgot", res, undefined, undefined, setBackendErr, true)
         } else {
           setSuccess(true)
         }
       })
       .catch((err: any) => {
-        graphQLError("forgot", err.response.data.errors[0], setBackendErr, true)
+        graphQLErrors("forgot", err, undefined, undefined, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("forgot", err, setBackendErr, true)
+    graphQLErrors("forgot", err, undefined, undefined, setBackendErr, true)
   }
 
   setLoading(false)
@@ -161,6 +162,7 @@ export const updatePP = async <T extends formType>(
   setForm: React.Dispatch<React.SetStateAction<T>>,
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
+  navigate: NavigateFunction,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
 ): Promise<void> => {
@@ -203,7 +205,7 @@ export const updatePP = async <T extends formType>(
       )
       .then((res: any) => {
         if (res.data.errors) {
-          graphQLError("updatePP", res.data.errors[0].message, setBackendErr, true)
+          graphQLErrors("updatePP", res, setUser, navigate, setBackendErr, true)
         } else {
           const response = graphQLResponse("updatePP", res) as userType
 
@@ -212,6 +214,7 @@ export const updatePP = async <T extends formType>(
               ...prevUser,
               icon: response.icon,
               profile_picture: response.profile_picture,
+              token: tokensHandler(user, response.tokens),
             }
           })
 
@@ -225,10 +228,10 @@ export const updatePP = async <T extends formType>(
         }
       })
       .catch((err: any) => {
-        graphQLError("updatePP", err.response.data.errors[0], setBackendErr, true)
+        graphQLErrors("updatePP", err, setUser, navigate, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("updatePP", err, setBackendErr, true)
+    graphQLErrors("updatePP", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)
@@ -239,6 +242,7 @@ export const updateEmail = async <T extends formType>(
   setForm: React.Dispatch<React.SetStateAction<T>>,
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
+  navigate: NavigateFunction,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>,
@@ -264,7 +268,7 @@ export const updateEmail = async <T extends formType>(
       )
       .then((res: any) => {
         if (res.data.errors) {
-          graphQLError("updateEmail", res.data.errors[0].message, setBackendErr, true)
+          graphQLErrors("updateEmail", res, setUser, navigate, setBackendErr, true)
         } else {
           const response = graphQLResponse("updateEmail", res) as userType
 
@@ -272,6 +276,7 @@ export const updateEmail = async <T extends formType>(
             return {
               ...prevUser,
               email: response.email,
+              token: tokensHandler(user, response.tokens),
             }
           })
 
@@ -287,10 +292,10 @@ export const updateEmail = async <T extends formType>(
         }
       })
       .catch((err: any) => {
-        graphQLError("updateEmail", err.response.data.errors[0], setBackendErr, true)
+        graphQLErrors("updateEmail", err, setUser, navigate, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("updateEmail", err, setBackendErr, true)
+    graphQLErrors("updateEmail", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)
@@ -301,6 +306,7 @@ export const updateName = async <T extends formType>(
   setForm: React.Dispatch<React.SetStateAction<T>>,
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
+  navigate: NavigateFunction,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>,
@@ -326,7 +332,7 @@ export const updateName = async <T extends formType>(
       )
       .then((res: any) => {
         if (res.data.errors) {
-          graphQLError("updateName", res.data.errors[0].message, setBackendErr, true)
+          graphQLErrors("updateName", res, setUser, navigate, setBackendErr, true)
         } else {
           const response = graphQLResponse("updateName", res) as userType
 
@@ -334,6 +340,7 @@ export const updateName = async <T extends formType>(
             return {
               ...prevUser,
               name: response.name,
+              token: tokensHandler(user, response.tokens),
             }
           })
 
@@ -349,10 +356,10 @@ export const updateName = async <T extends formType>(
         }
       })
       .catch((err: any) => {
-        graphQLError("updateName", err.response.data.errors[0], setBackendErr, true)
+        graphQLErrors("updateName", err, setUser, navigate, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("updateName", err, setBackendErr, true)
+    graphQLErrors("updateName", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)
@@ -387,7 +394,7 @@ export const updatePassword = async <T extends passFormType>(
       )
       .then((res: any) => {
         if (res.data.errors) {
-          graphQLError("updatePassword", res.data.errors[0].message, setBackendErr, true)
+          graphQLErrors("updatePassword", res, setUser, navigate, setBackendErr, true)
         } else {
           graphQLResponse("updatePassword", res) as userType
           setSuccess(true)
@@ -396,10 +403,10 @@ export const updatePassword = async <T extends passFormType>(
         }
       })
       .catch((err: any) => {
-        graphQLError("updatePassword", err.response.data.errors[0], setBackendErr, true)
+        graphQLErrors("updatePassword", err, setUser, navigate, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLError("updatePassword", err, setBackendErr, true)
+    graphQLErrors("updatePassword", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)

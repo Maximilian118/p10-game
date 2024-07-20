@@ -1,4 +1,4 @@
-import { isJSON } from "./utility"
+import { NavigateFunction } from "react-router-dom"
 
 export interface userType {
   _id: string
@@ -17,6 +17,7 @@ export interface userType {
     [key: string]: string | boolean
   }
   localStorage: boolean
+  tokens?: string[]
 }
 
 // A user object template with falsy values.
@@ -79,7 +80,7 @@ export const checkUserLS = (): userType => {
 // If the navigate function is passed, navigate to /login.
 export const logout = (
   setUser?: React.Dispatch<React.SetStateAction<userType>>,
-  navigate?: Function,
+  navigate?: NavigateFunction,
 ): userType => {
   localStorage.removeItem("_id")
   localStorage.removeItem("access_token")
@@ -93,21 +94,18 @@ export const logout = (
   localStorage.removeItem("created_at")
   localStorage.removeItem("permissions")
 
-  setUser &&
+  if (setUser) {
     setUser((prevUser) => {
       return {
         ...prevUser,
         ...blankUser,
       }
     })
+  }
 
   navigate && navigate("/login")
 
   return blankUser
-}
-
-interface userWithTokensType extends userType {
-  tokens?: string
 }
 
 // Populate local storage and return the populated user object.
@@ -116,7 +114,7 @@ export const logInSuccess = (
   res: {
     data: {
       data: {
-        [key: string]: userWithTokensType
+        [key: string]: userType
       }
     }
   },
@@ -125,10 +123,8 @@ export const logInSuccess = (
 ): userType => {
   let user = res.data.data[request]
 
-  if (user.tokens && isJSON(user.tokens)) {
-    user = tokensHandler(user)
-  } else {
-    console.error(`Error: Failed to parse tokens.`)
+  if (user.tokens) {
+    user.token = tokensHandler(user, user.tokens)
   }
 
   if (!user.localStorage) {
@@ -159,34 +155,27 @@ export const logInSuccess = (
   return user
 }
 
-// If req res has tokens JSON, parse them and save them to LS.
-// If setUser is passed, setUser with latest access_token.
-export const tokensHandler = <T extends { tokens?: string }>(
-  res: T,
+//
+export const tokensHandler = (
+  user: userType,
+  tokens?: string[],
   setUser?: React.Dispatch<React.SetStateAction<userType>>,
-) => {
-  if (res.tokens && isJSON(res.tokens)) {
-    const tokens = JSON.parse(res.tokens)
-
+): string => {
+  if (!Array.isArray(tokens) || !tokens.length) {
+    return user.token
+  } else {
     if (setUser) {
       setUser((prevUser) => {
         return {
           ...prevUser,
-          token: tokens.access_token,
+          token: tokens[0],
         }
       })
     }
 
-    localStorage.setItem("access_token", tokens.access_token)
-    localStorage.setItem("refresh_token", tokens.refresh_token)
+    localStorage.setItem("access_token", tokens[0])
+    localStorage.setItem("refresh_token", tokens[1])
 
-    delete res.tokens
-
-    return {
-      ...res,
-      token: tokens.access_token,
-    }
-  } else {
-    return res
+    return tokens[0]
   }
 }
