@@ -103,6 +103,12 @@ body {
           ul {
             width: 100%;
             @include mixins.flexbox-space-between;
+            flex-wrap: nowrap;
+          }
+
+          li {
+            width: 11.1%;
+            @include mixins.flexbox;
           }
         }
 
