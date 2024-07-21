@@ -195,6 +195,9 @@ export const inputLabel = (
     case "awardedHow":
       label = "Awarded For"
       break
+    case "driverGroups":
+      label = "Drivers"
+      break
     default:
       break
   }

@@ -7,11 +7,12 @@ import { NavigateFunction, useNavigate } from "react-router-dom"
 import FormElContainer from "../components/utility/formElContainer/FormElContainer"
 import PointsPicker from "../components/utility/pointsPicker/PointsPicker"
 import { presetArrays } from "../components/utility/pointsPicker/ppPresets"
-import { badgeType, pointsStructureType, rulesAndRegsType } from "../shared/types"
+import { badgeType, driverGroupType, pointsStructureType, rulesAndRegsType } from "../shared/types"
 import { defaultRulesAndRegs } from "../shared/rulesAndRegs"
 import AppContext from "../context"
 import RulesAndRegsPicker from "../components/utility/rulesAndRegsPicker/RulesAndRegsPicker"
 import BadgePicker from "../components/utility/badgePicker/BadgePicker"
+import DriverPicker from "../components/utility/driverPicker/DriverPicker"
 
 interface createChampFormBaseType {
   champName: string
@@ -19,6 +20,7 @@ interface createChampFormBaseType {
 }
 
 export interface createChampFormType extends createChampFormBaseType {
+  driverGroups: driverGroupType[]
   icon: File | null
   profile_picture: File | null
   pointsStructure: pointsStructureType
@@ -27,6 +29,7 @@ export interface createChampFormType extends createChampFormBaseType {
 }
 
 export interface createChampFormErrType extends createChampFormBaseType {
+  driverGroups: string
   dropzone: string
   pointsStructure: string
   rulesAndRegs: string
@@ -41,6 +44,7 @@ const CreateChamp: React.FC = props => {
   const [ form, setForm ] = useState<createChampFormType>({
     champName: "",
     rounds: 24,
+    driverGroups: [],
     icon: null,
     profile_picture: null,
     pointsStructure: presetArrays(1).map(item => {
@@ -56,6 +60,7 @@ const CreateChamp: React.FC = props => {
     champBadges: [],
   })
   const [ formErr, setFormErr ] = useState<createChampFormErrType>({
+    driverGroups: "",
     champName: "",
     rounds: "",
     dropzone: "",
@@ -134,6 +139,19 @@ const CreateChamp: React.FC = props => {
                 setForm={setForm}
                 formErr={formErr}
                 backendErr={backendErr}
+              />
+            }
+            formErr={formErr}
+            backendErr={backendErr}
+          />
+          <FormElContainer
+            name="driverGroups"
+            content={
+              <DriverPicker
+                form={form}
+                user={user}
+                setUser={setUser}
+                setBackendErr={setBackendErr}
               />
             }
             formErr={formErr}

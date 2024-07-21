@@ -55,6 +55,33 @@ export interface badgeType {
   default?: boolean
 }
 
+export interface driverType {
+  _id?: string
+  url: string
+  name: string
+  driverGroups: driverGroupType[]
+  stats: {
+    heightCM: number
+    weightKG: number
+    age: number
+    moustache: boolean
+    mullet: boolean
+  }
+  created_at?: string
+  updated_at?: string
+}
+
+export interface driverGroupType {
+  _id?: string
+  url: string
+  name: string
+  championships: champType[]
+  drivers: driverType[]
+  created_at?: string
+  updated_at?: string
+  tokens?: string[]
+}
+
 export interface champType {
   _id: string
   name: string
@@ -84,6 +111,7 @@ export interface champType {
     }[]
   }
   players: userType[]
+  driverGroup: driverGroupType
   pointsStructure: pointsStructureType
   rulesAndRegs: rulesAndRegsType
   protests: protestType[] // Protest model
