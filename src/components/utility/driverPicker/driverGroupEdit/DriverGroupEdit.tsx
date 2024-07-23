@@ -3,8 +3,9 @@ import './_driverGroupEdit.scss'
 import { driverGroupType } from "../../../../shared/types"
 import { graphQLErrorType, initGraphQLError } from "../../../../shared/requests/requestsUtility"
 import DropZone from "../../dropZone/DropZone"
-import { TextField } from "@mui/material"
+import { Button, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
+import { initDriverGroup } from "../DriverPicker"
 
 interface driverGroupEditType<T> {
   form: T
@@ -46,6 +47,10 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
     dropzone: "",
   })
 
+  const onSubmitHandler = () => {
+
+  }
+
   return (
     <div className="driver-group-edit">
       <h4>{`${isEdit ? `New` : `Edit`} Driver Group`}</h4>
@@ -69,6 +74,21 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
         value={editForm.groupName}
         error={editFormErr.groupName || backendErr.type === "groupName" ? true : false}
       />
+      <div className="button-bar">
+        <Button
+          className="mui-button-back"
+          variant="contained" 
+          color="inherit"
+          onClick={e => {
+            setIsEdit(false)
+            setGroup(initDriverGroup)
+          }}
+        >Back</Button>
+        <Button
+          variant="contained"
+          onClick={e => onSubmitHandler()}
+        >Submit</Button>
+      </div>
     </div>
   )
 }

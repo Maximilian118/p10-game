@@ -21,4 +21,18 @@
     width: calc(100% - 20px);
     margin-bottom: 20px;
   }
+
+  .button-bar {
+    width: calc(100% - 20px);
+    @include mixins.flexbox;
+    justify-content: space-evenly;
+    margin: 20px 0;
+    position: relative;
+    z-index: 99;
+
+    .mui-button-back {
+      background: variables.$colour-4;
+      color: white;
+    }
+  }
 }

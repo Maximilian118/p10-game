@@ -18,7 +18,7 @@ interface driverPickerType<T> {
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
 }
 
-const initDriverGroup: driverGroupType = {
+export const initDriverGroup: driverGroupType = {
   url: "",
   name: "",
   championships: [],
