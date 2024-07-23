@@ -149,6 +149,7 @@ const CreateChamp: React.FC = props => {
             content={
               <DriverPicker
                 form={form}
+                setForm={setForm}
                 user={user}
                 setUser={setUser}
                 setBackendErr={setBackendErr}

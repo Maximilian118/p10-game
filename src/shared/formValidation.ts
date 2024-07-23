@@ -4,6 +4,7 @@ import { initGraphQLError, graphQLErrorType, hasBackendErr } from "./requests/re
 interface formStateType {
   name?: string
   badgeName?: string
+  groupName?: string
   champName?: string
   email?: string
   password?: string
@@ -197,6 +198,9 @@ export const inputLabel = (
       break
     case "driverGroups":
       label = "Drivers"
+      break
+    case "groupName":
+      label = "Group Name"
       break
     default:
       break

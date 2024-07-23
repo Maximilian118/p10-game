@@ -1,9 +1,13 @@
 import React from "react"
 import './_driverGroup.scss'
 
-const DriverGroup: React.FC = props => {
+interface driverGroupType {
+  onClick: () => void
+}
+
+const DriverGroup: React.FC<driverGroupType> = ({ onClick }) => {
   return (
-    <div className="driver-group">
+    <div className="driver-group" onClick={onClick}>
       
     </div>
   )
