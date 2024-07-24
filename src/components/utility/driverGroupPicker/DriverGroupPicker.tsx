@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import "./_driverPicker.scss"
+import "./_driverGroupPicker.scss"
 import { CircularProgress, IconButton } from "@mui/material"
 import { Add } from "@mui/icons-material"
 import { driverGroupType } from "../../../shared/types"
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import DriverGroupEdit from "./driverGroupEdit/DriverGroupEdit"
 
-interface driverPickerType<T> {
+interface driverGroupPickerType<T> {
   form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
   user: userType
@@ -25,7 +25,7 @@ export const initDriverGroup: driverGroupType = {
   drivers: [],
 }
 
-const DriverPicker= <T extends { driverGroups: driverGroupType[] }>({ form, setForm, user, setUser, setBackendErr }: driverPickerType<T>) => {
+const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({ form, setForm, user, setUser, setBackendErr }: driverGroupPickerType<T>) => {
   const [ isEdit, setIsEdit ] = useState<boolean>(false)
   const [ group, setGroup ] = useState<driverGroupType>(initDriverGroup)
   const [ groups, setGroups ] = useState<driverGroupType[]>([])
@@ -50,7 +50,7 @@ const DriverPicker= <T extends { driverGroups: driverGroupType[] }>({ form, setF
       group={group}
       setGroup={setGroup}
     /> : (
-    <div className="driver-picker">
+    <div className="driver-group-picker">
       {loading ? <CircularProgress/> : 
         <>
           {groups.map((driverGroup: driverGroupType) => 
@@ -72,4 +72,4 @@ const DriverPicker= <T extends { driverGroups: driverGroupType[] }>({ form, setF
   )
 }
 
-export default DriverPicker
+export default DriverGroupPicker

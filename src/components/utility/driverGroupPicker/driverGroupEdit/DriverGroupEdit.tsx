@@ -5,7 +5,7 @@ import { graphQLErrorType, initGraphQLError } from "../../../../shared/requests/
 import DropZone from "../../dropZone/DropZone"
 import { Button, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
-import { initDriverGroup } from "../DriverPicker"
+import { initDriverGroup } from "../DriverGroupPicker"
 
 interface driverGroupEditType<T> {
   form: T

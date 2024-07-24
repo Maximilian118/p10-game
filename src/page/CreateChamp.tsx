@@ -12,7 +12,7 @@ import { defaultRulesAndRegs } from "../shared/rulesAndRegs"
 import AppContext from "../context"
 import RulesAndRegsPicker from "../components/utility/rulesAndRegsPicker/RulesAndRegsPicker"
 import BadgePicker from "../components/utility/badgePicker/BadgePicker"
-import DriverPicker from "../components/utility/driverPicker/DriverPicker"
+import DriverGroupPicker from "../components/utility/driverGroupPicker/DriverGroupPicker"
 
 interface createChampFormBaseType {
   champName: string
@@ -147,7 +147,7 @@ const CreateChamp: React.FC = props => {
           <FormElContainer
             name="driverGroups"
             content={
-              <DriverPicker
+              <DriverGroupPicker
                 form={form}
                 setForm={setForm}
                 user={user}
