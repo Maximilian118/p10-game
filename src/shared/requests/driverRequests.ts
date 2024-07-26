@@ -1,11 +1,11 @@
 import axios from "axios"
+import { driverType } from "../types"
 import { userType } from "../localStorage"
-import { NavigateFunction } from "react-router-dom"
 import { graphQLErrors, graphQLErrorType, graphQLResponse, headers } from "./requestsUtility"
-import { driverGroupType } from "../types"
+import { NavigateFunction } from "react-router-dom"
 
-export const getDriverGroups = async (
-  setGroups: React.Dispatch<React.SetStateAction<driverGroupType[]>>,
+export const getDrivers = async (
+  setDrivers: React.Dispatch<React.SetStateAction<driverType[]>>,
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   navigate: NavigateFunction,
@@ -22,13 +22,19 @@ export const getDriverGroups = async (
           variables: {},
           query: `
             query {
-              getDriverGroups {
+              getDrivers {
                 array {
                   _id
                   url
                   name
-                  championships
-                  drivers
+                  driverGroups
+                  stats {
+                    heightCM
+                    weightKG
+                    age
+                    moustache
+                    mullet
+                  }
                   created_at
                   updated_at
                 }
@@ -41,24 +47,24 @@ export const getDriverGroups = async (
       )
       .then((res: any) => {
         if (res.data.errors) {
-          graphQLErrors("getDriverGroups", res, setUser, navigate, setBackendErr, true)
+          graphQLErrors("getDrivers", res, setUser, navigate, setBackendErr, true)
         } else {
-          const driverGroups = graphQLResponse("getDriverGroups", res, user, setUser) as {
-            array: driverGroupType[]
+          const drivers = graphQLResponse("getDrivers", res, user, setUser) as {
+            array: driverType[]
             token: string
             code: number
           }
 
-          if (driverGroups.array.length > 0) {
-            setGroups(driverGroups.array)
+          if (drivers.array.length > 0) {
+            setDrivers(drivers.array)
           }
         }
       })
       .catch((err: any) => {
-        graphQLErrors("getDriverGroups", err, setUser, navigate, setBackendErr, true)
+        graphQLErrors("getDrivers", err, setUser, navigate, setBackendErr, true)
       })
   } catch (err: any) {
-    graphQLErrors("getDriverGroups", err, setUser, navigate, setBackendErr, true)
+    graphQLErrors("getDrivers", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)
