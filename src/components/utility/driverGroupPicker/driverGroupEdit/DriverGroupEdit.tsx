@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import './_driverGroupEdit.scss'
 import { driverGroupType, driverType } from "../../../../shared/types"
-import { graphQLErrorType, initGraphQLError } from "../../../../shared/requests/requestsUtility"
 import DropZone from "../../dropZone/DropZone"
 import { Button, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
 import { initDriverGroup } from "../DriverGroupPicker"
-import { getDrivers } from "../../../../shared/requests/driverRequests"
 import { userType } from "../../../../shared/localStorage"
-import { useNavigate } from "react-router-dom"
+import DriverPicker from "../../driverPicker/DriverPicker"
+import { graphQLErrorType, initGraphQLError } from "../../../../shared/requests/requestsUtility"
 
 interface driverGroupEditType<T> {
   form: T
@@ -23,14 +22,14 @@ interface driverGroupEditType<T> {
 
 interface editFormType {
   groupName: string
-  groupDrivers: driverType[]
+  drivers: driverType[]
   icon: File | null
   profile_picture: File | null
 }
 
 export interface editFormErrType {
   groupName: string
-  groupDrivers: string
+  drivers: string
   dropzone: string
   [key: string]: string
 }
@@ -46,30 +45,17 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
   setGroup,
 }: driverGroupEditType<T>) => {
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
-  const [ drivers, setDrivers ] = useState<driverType[]>([]) // All drivers in the database.
-  const [ reqSent, setReqSent ] = useState<boolean>(false)
-  const [ loading, setLoading ] = useState<boolean>(false)
   const [ editForm, setEditForm ] = useState<editFormType>({
     groupName: isEdit ? group.name : "",
-    groupDrivers: isEdit ? group.drivers : [], // All drivers already in the the object for this group.
+    drivers: isEdit ? group.drivers : [], // All drivers already in the the object for this group.
     icon: null,
     profile_picture: null,
   })
   const [ editFormErr, setEditFormErr ] = useState<editFormErrType>({
     groupName: "",
-    groupDrivers: "",
+    drivers: "",
     dropzone: "",
   })
-
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (drivers.length === 0 && !reqSent) {
-      // Get all drivers in the database so the user can select existing drivers for the group.
-      getDrivers(setDrivers, user, setUser, navigate, setLoading, setBackendErr)
-    }
-    setReqSent(true)
-  }, [drivers, reqSent, user, setUser, navigate])
 
   const onSubmitHandler = () => {
 
@@ -97,6 +83,13 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
         onChange={e => updateForm<editFormType, editFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
         value={editForm.groupName}
         error={editFormErr.groupName || backendErr.type === "groupName" ? true : false}
+      />
+      <DriverPicker
+        form={editForm}
+        setForm={setEditForm}
+        user={user}
+        setUser={setUser}
+        setBackendErr={setBackendErr}
       />
       <div className="button-bar">
         <Button
