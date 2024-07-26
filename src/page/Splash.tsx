@@ -14,7 +14,7 @@ const Splash: React.FC = () => {
           style={{ top: 40, left: 0 }}
         />
         <div className="form-title" style={{ marginBottom: 200 }}>
-          <h2 style={{ marginBottom: 10 }}>P10 Game</h2>
+          <h2 style={{ marginBottom: 10 }}>P10</h2>
           <h2 className="clickable" onClick={() => navigate("/login")}>Go to Login</h2>
         </div>
       </div>

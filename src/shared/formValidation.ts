@@ -197,7 +197,7 @@ export const inputLabel = (
       label = "Awarded For"
       break
     case "driverGroups":
-      label = "Drivers"
+      label = "Driver Groups"
       break
     case "groupName":
       label = "Group Name"
