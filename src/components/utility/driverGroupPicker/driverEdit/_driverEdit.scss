@@ -35,4 +35,13 @@
       color: white;
     }
   }
+
+  .driver-edit-stats {
+    width: calc(100% - 20px);
+    @include mixins.flexbox-space-between;
+
+    > * {
+      width: 48%;
+    }
+  }
 }

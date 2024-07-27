@@ -206,6 +206,12 @@ export const inputLabel = (
     case "driverName":
       label = "Name"
       break
+    case "heightCM":
+      label = "Height"
+      break
+    case "weightKG":
+      label = "Weight"
+      break
     default:
       break
   }

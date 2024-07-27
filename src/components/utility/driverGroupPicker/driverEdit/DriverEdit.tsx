@@ -6,6 +6,8 @@ import { inputLabel, updateForm } from "../../../../shared/formValidation"
 import { graphQLErrorType } from "../../../../shared/requests/requestsUtility"
 import { driverType } from "../../../../shared/types"
 import { initDriver } from "../driverGroupEdit/DriverGroupEdit"
+import MUIAutocomplete from "../../muiAutocomplete/muiAutocomplete"
+import { heightCMOptions, weightKGOptions } from "../../../../shared/utility"
 
 interface driverEditType {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -18,6 +20,11 @@ interface driverEditType {
 interface editFormType {
   url: string
   driverName: string
+  heightCM: string | null
+  weightKG: string | null
+  age: string | null
+  moustache: boolean
+  mullet: boolean
   icon: File | null
   profile_picture: File | null
 }
@@ -25,6 +32,11 @@ interface editFormType {
 interface editFormErrType {
   url: string
   driverName: string
+  heightCM: string
+  weightKG: string
+  age: string
+  moustache: string
+  mullet: string
   dropzone: string
   [key: string]: string
 }
@@ -33,17 +45,28 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
   const [ editForm, setEditForm ] = useState<editFormType>({
     url: driver.url ? driver.url : "",
     driverName: driver.name ? driver.name : "",
+    heightCM: driver.stats.heightCM ? `${driver.stats.heightCM}cm` : null,
+    weightKG: driver.stats.weightKG ? `${driver.stats.weightKG}kg` : null,
+    age: null,
+    moustache: false,
+    mullet: false,
     icon: null,
     profile_picture: null,
   })
   const [ editFormErr, setEditFormErr ] = useState<editFormErrType>({
     url: "",
     driverName: "",
+    heightCM: "",
+    weightKG: "",
+    age: "",
+    moustache: "",
+    mullet: "",
     dropzone: "",
   })
 
   const onSubmitHandler = () => {
     // Update group. Group will update form on submission.
+    // Convert strings to numbers
   }
 
   return (
@@ -69,6 +92,48 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         value={editForm.driverName}
         error={editFormErr.driverName || backendErr.type === "driverName" ? true : false}
       />
+      <div className="driver-edit-stats">
+        <MUIAutocomplete
+          label={inputLabel("heightCM", editFormErr, backendErr)}
+          options={heightCMOptions()}
+          value={editForm.heightCM}
+          error={editFormErr.heightCM || backendErr.type === "heightCM" ? true : false}
+          setValue={(value) => {
+            setEditForm(prevForm => {
+              return {
+                ...prevForm,
+                heightCM: value as string
+              }
+            })
+          }}
+          onChange={() => setEditFormErr(prevErrs => {
+            return {
+              ...prevErrs,
+              heightCM: "",
+            }
+          })}
+        />
+        <MUIAutocomplete
+          label={inputLabel("weightKG", editFormErr, backendErr)}
+          options={weightKGOptions()}
+          value={editForm.weightKG}
+          error={editFormErr.weightKG || backendErr.type === "weightKG" ? true : false}
+          setValue={(value) => {
+            setEditForm(prevForm => {
+              return {
+                ...prevForm,
+                weightKG: value as string
+              }
+            })
+          }}
+          onChange={() => setEditFormErr(prevErrs => {
+            return {
+              ...prevErrs,
+              weightKG: "",
+            }
+          })}
+        />
+      </div>
       <div className="button-bar">
         <Button
           className="mui-button-back"

@@ -67,3 +67,23 @@ export const preloadFormImgs = (location: Location<any>): void => {
   const newImgs = imgs.filter((obj) => obj.endpoint !== location.pathname)
   newImgs.forEach((img) => (new Image().src = img.url))
 }
+
+export const heightCMOptions = (): string[] => {
+  const opt = []
+
+  for (let i = 130; i <= 220; i++) {
+    opt.push(`${i}cm`)
+  }
+
+  return opt
+}
+
+export const weightKGOptions = (): string[] => {
+  const opt = []
+
+  for (let i = 40; i <= 120; i++) {
+    opt.push(`${i}kg`)
+  }
+
+  return opt
+}
