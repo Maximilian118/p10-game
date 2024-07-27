@@ -59,11 +59,12 @@ export interface driverType {
   _id?: string
   url: string
   name: string
+  driverID: `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}` | ""
   driverGroups: driverGroupType[]
   stats: {
     heightCM: number | null
     weightKG: number | null
-    age: number | null
+    birthday: string | null
     moustache: boolean
     mullet: boolean
   }

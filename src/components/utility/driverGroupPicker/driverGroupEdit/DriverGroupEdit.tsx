@@ -36,11 +36,12 @@ interface editFormErrType {
 export const initDriver: driverType = {
   url: "",
   name: "",
+  driverID: "",
   driverGroups: [],
   stats: {
     heightCM: null,
     weightKG: null,
-    age: null,
+    birthday: null,
     moustache: false,
     mullet: false,
   },

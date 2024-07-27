@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import './_driverEdit.scss'
 import DropZone from "../../dropZone/DropZone"
-import { Button, TextField } from "@mui/material"
+import { Button, InputAdornment, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
 import { graphQLErrorType } from "../../../../shared/requests/requestsUtility"
 import { driverType } from "../../../../shared/types"
@@ -10,6 +10,7 @@ import MUIAutocomplete from "../../muiAutocomplete/muiAutocomplete"
 import { heightCMOptions, weightKGOptions } from "../../../../shared/utility"
 import { Moment } from "moment"
 import MUIDatePicker from "../../muiDatePicker/MUIDatePicker"
+import { Abc } from "@mui/icons-material"
 
 interface driverEditType {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -22,6 +23,7 @@ interface driverEditType {
 interface editFormType {
   url: string
   driverName: string
+  driverID: `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}` | ""
   heightCM: string | null
   weightKG: string | null
   birthday: Moment | null
@@ -34,6 +36,7 @@ interface editFormType {
 interface editFormErrType {
   url: string
   driverName: string
+  driverID: string
   heightCM: string
   weightKG: string
   birthday: string
@@ -47,6 +50,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
   const [ editForm, setEditForm ] = useState<editFormType>({
     url: driver.url ? driver.url : "",
     driverName: driver.name ? driver.name : "",
+    driverID: driver.driverID ? driver.driverID : "",
     heightCM: driver.stats.heightCM ? `${driver.stats.heightCM}cm` : null,
     weightKG: driver.stats.weightKG ? `${driver.stats.weightKG}kg` : null,
     birthday: null,
@@ -58,6 +62,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
   const [ editFormErr, setEditFormErr ] = useState<editFormErrType>({
     url: "",
     driverName: "",
+    driverID: "",
     heightCM: "",
     weightKG: "",
     birthday: "",
@@ -147,6 +152,22 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
                 birthday: newValue
               }
             })
+          }}
+        />
+        <TextField
+          name="driverID"
+          label={inputLabel("driverID", editFormErr, backendErr)}
+          variant="filled" 
+          onChange={e => updateForm<editFormType, editFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
+          value={editForm.driverID}
+          error={editFormErr.driverID || backendErr.type === "driverID" ? true : false}
+          inputProps={{ maxLength: 3 }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Abc/>
+              </InputAdornment>
+            ),
           }}
         />
       </div>

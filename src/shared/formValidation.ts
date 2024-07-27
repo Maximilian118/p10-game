@@ -108,6 +108,14 @@ export const updateForm = <T extends formStateType, U>(
     }
   }
 
+  const driverIDCase = () => {
+    if (/^[A-Z]{3}$/.test(e.target.value) || e.target.value.trim() === "") {
+      handleInput<U>(e.target.name, setFormErr)
+    } else {
+      handleInput<U>(e.target.name, setFormErr, "Only 3 capital letters.")
+    }
+  }
+
   // Depending on the current element do some basic validation checks.
   // prettier-ignore
   switch (e.target.name) {
@@ -118,6 +126,7 @@ export const updateForm = <T extends formStateType, U>(
     case "password": passwordCase(); break
     case "currentPass": passwordCase(); break
     case "passConfirm": passConfirmCase(); break
+    case "driverID": driverIDCase(); break
     default: setFormErr(prevFormErr => prevFormErr)
   }
 }
@@ -211,6 +220,9 @@ export const inputLabel = (
       break
     case "weightKG":
       label = "Weight"
+      break
+    case "driverID":
+      label = "Driver ID"
       break
     default:
       break
