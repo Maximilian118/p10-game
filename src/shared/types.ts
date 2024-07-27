@@ -61,9 +61,9 @@ export interface driverType {
   name: string
   driverGroups: driverGroupType[]
   stats: {
-    heightCM: number
-    weightKG: number
-    age: number
+    heightCM: number | null
+    weightKG: number | null
+    age: number | null
     moustache: boolean
     mullet: boolean
   }

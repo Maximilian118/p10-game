@@ -1,14 +1,14 @@
 @use '../../../../scss/mixins';
 @use '../../../../scss/variables';
 
-.driver-group-edit {
+.driver-edit {
   width: 100%;
   height: 340px;
-  @include mixins.flexbox-start-column;
-  margin-top: 10px;
-  overflow-y: scroll;
   position: relative;
   z-index: 1;
+  margin-top: 10px;
+  @include mixins.flexbox-start-column;
+  overflow-y: scroll;
 
   h4 {
     width: 100%;

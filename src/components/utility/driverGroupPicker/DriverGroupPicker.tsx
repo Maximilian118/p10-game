@@ -43,11 +43,9 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({ form,
 
   return isEdit ? 
     <DriverGroupEdit
-      form={form}
       setForm={setForm}
       user={user}
       setUser={setUser}
-      isEdit={isEdit}
       setIsEdit={setIsEdit}
       group={group}
       setGroup={setGroup}
