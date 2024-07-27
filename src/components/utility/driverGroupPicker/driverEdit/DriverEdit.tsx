@@ -11,6 +11,7 @@ import { heightCMOptions, weightKGOptions } from "../../../../shared/utility"
 import { Moment } from "moment"
 import MUIDatePicker from "../../muiDatePicker/MUIDatePicker"
 import { Abc } from "@mui/icons-material"
+import MUICheckbox from "../../muiCheckbox/MUICheckbox"
 
 interface driverEditType {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -169,6 +170,30 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
               </InputAdornment>
             ),
           }}
+        />
+      </div>
+      <div className="driver-edit-checkboxes">
+        <MUICheckbox
+          text="Moustache"
+          checked={editForm.moustache}
+          onClick={() => setEditForm(prevForm => {
+            return {
+              ...prevForm,
+              moustache: !prevForm.moustache,
+            }
+          })}
+          textRight
+        />
+        <MUICheckbox
+          text="Mullet"
+          checked={editForm.mullet}
+          onClick={() => setEditForm(prevForm => {
+            return {
+              ...prevForm,
+              mullet: !prevForm.mullet,
+            }
+          })}
+          textRight
         />
       </div>
       <div className="button-bar">

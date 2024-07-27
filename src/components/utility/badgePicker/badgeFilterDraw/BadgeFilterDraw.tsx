@@ -1,8 +1,9 @@
-import React, { useState } from "react"
+import React, { MouseEvent, useState } from "react"
 import './_badgeFilterDraw.scss'
-import { Button, Checkbox } from "@mui/material"
+import { Button } from "@mui/material"
 import { badgeType } from "../../../../shared/types"
 import { badgeRarities, badgeRarityType } from "../../../../shared/badges"
+import MUICheckbox from "../../muiCheckbox/MUICheckbox"
 
 interface badgeFilterDrawType<T> {
   draw: boolean
@@ -38,7 +39,7 @@ const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({ draw, setDraw
     })
   }
 
-  const filterBadgesHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, rarity: badgeRarityType) => {
+  const filterBadgesHandler = (e: MouseEvent, rarity: badgeRarityType) => {
     setFiltered((prevFiltered) => {
       const rareIndex = prevFiltered.indexOf(rarity.rarity)
       if (rareIndex !== -1) {
@@ -68,19 +69,13 @@ const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({ draw, setDraw
     <div className={`badge-filter-draw ${draw ? "badge-draw-open" : ""}`}>
       <div className="badge-filter-options">
         {badgeRarities().map((rarity: badgeRarityType, i: number) => (
-          <div key={i} className="checkbox-container">
-            <p>{rarity.rarityName}</p>
-            <Checkbox
-              checked={filtered.includes(rarity.rarity)}
-              inputProps={{ 'aria-label': 'Badge filter checkbox' }}
-              onClick={e => filterBadgesHandler(e, rarity)}
-              sx={{
-                '&.Mui-checked': {
-                  color: rarity.colour,
-                },
-              }}
-            />
-          </div>
+          <MUICheckbox
+            key={i}
+            text={rarity.rarityName}
+            checked={filtered.includes(rarity.rarity)}
+            onClick={(e: MouseEvent) => filterBadgesHandler(e, rarity)}
+            checkedColour={rarity.colour}
+          />
         ))}
       </div>
       <div className="badge-filter-buttons">

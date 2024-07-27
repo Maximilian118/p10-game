@@ -33,12 +33,6 @@
   .badge-filter-buttons {
     @include mixins.flexbox-space-between;
   }
-
-  .checkbox-container {
-    width: 50%;
-    @include mixins.flexbox-end;
-    flex-shrink: 0;
-  }
 }
 
 .badge-draw-open {

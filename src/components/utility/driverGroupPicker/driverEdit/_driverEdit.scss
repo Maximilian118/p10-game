@@ -17,16 +17,15 @@
     text-align: left;
   }
 
-  .mui-el {
+  .mui-el, .button-bar, .driver-edit-stats, .driver-edit-checkboxes {
     width: calc(100% - 20px);
     margin-bottom: 20px;
   }
 
   .button-bar {
-    width: calc(100% - 20px);
     @include mixins.flexbox;
     justify-content: space-evenly;
-    margin: 20px 0;
+    margin-top: 20px;
     position: relative;
     z-index: 99;
 
@@ -37,12 +36,20 @@
   }
 
   .driver-edit-stats {
-    width: calc(100% - 20px);
     @include mixins.flexbox-space-between;
-    margin-bottom: 20px;
 
     > * {
       width: 48%;
+    }
+  }
+
+  .driver-edit-checkboxes {
+    @include mixins.flexbox-start-column;
+    margin-top: 20px;
+
+    > * {
+      @include mixins.flexbox-start;
+      width: 130px;
     }
   }
 }
