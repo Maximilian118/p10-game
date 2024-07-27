@@ -39,6 +39,7 @@
   .driver-edit-stats {
     width: calc(100% - 20px);
     @include mixins.flexbox-space-between;
+    margin-bottom: 20px;
 
     > * {
       width: 48%;

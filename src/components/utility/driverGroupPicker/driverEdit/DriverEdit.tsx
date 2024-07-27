@@ -8,6 +8,8 @@ import { driverType } from "../../../../shared/types"
 import { initDriver } from "../driverGroupEdit/DriverGroupEdit"
 import MUIAutocomplete from "../../muiAutocomplete/muiAutocomplete"
 import { heightCMOptions, weightKGOptions } from "../../../../shared/utility"
+import { Moment } from "moment"
+import MUIDatePicker from "../../muiDatePicker/MUIDatePicker"
 
 interface driverEditType {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -22,7 +24,7 @@ interface editFormType {
   driverName: string
   heightCM: string | null
   weightKG: string | null
-  age: string | null
+  birthday: Moment | null
   moustache: boolean
   mullet: boolean
   icon: File | null
@@ -34,7 +36,7 @@ interface editFormErrType {
   driverName: string
   heightCM: string
   weightKG: string
-  age: string
+  birthday: string
   moustache: string
   mullet: string
   dropzone: string
@@ -47,7 +49,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     driverName: driver.name ? driver.name : "",
     heightCM: driver.stats.heightCM ? `${driver.stats.heightCM}cm` : null,
     weightKG: driver.stats.weightKG ? `${driver.stats.weightKG}kg` : null,
-    age: null,
+    birthday: null,
     moustache: false,
     mullet: false,
     icon: null,
@@ -58,7 +60,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     driverName: "",
     heightCM: "",
     weightKG: "",
-    age: "",
+    birthday: "",
     moustache: "",
     mullet: "",
     dropzone: "",
@@ -67,6 +69,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
   const onSubmitHandler = () => {
     // Update group. Group will update form on submission.
     // Convert strings to numbers
+    console.log(editForm.birthday)
   }
 
   return (
@@ -132,6 +135,19 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
               weightKG: "",
             }
           })}
+        />
+      </div>
+      <div className="driver-edit-stats">
+        <MUIDatePicker
+          value={editForm.birthday as null}
+          onChange={(newValue: Moment | null) => {
+            setEditForm(prevForm => {
+              return {
+                ...prevForm,
+                birthday: newValue
+              }
+            })
+          }}
         />
       </div>
       <div className="button-bar">
