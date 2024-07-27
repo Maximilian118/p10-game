@@ -1,3 +1,13 @@
+@use '../../../scss/mixins';
+
 .mui-autocomplete {
   width: 100%;
+
+  .spinner {
+    position: absolute;
+    @include mixins.flexbox;
+    height: 100%;
+    right: 45px;
+    top: 0px;
+  }
 }

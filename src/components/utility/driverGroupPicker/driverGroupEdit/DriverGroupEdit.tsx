@@ -106,7 +106,6 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
       />
       <DriverPicker
         setIsDriverEdit={setIsDriverEdit}
-        driver={driver}
         setDriver={setDriver}
         user={user}
         setUser={setUser}

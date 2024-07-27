@@ -9,10 +9,10 @@ import { userType } from "../../../../shared/localStorage"
 import { graphQLErrorType } from "../../../../shared/requests/requestsUtility"
 import { IconButton } from "@mui/material"
 import { Add } from "@mui/icons-material"
+import DriverCard from "../../../cards/driverCard/DriverCard"
 
 interface driverPickerType<U> {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
-  driver: driverType
   setDriver: React.Dispatch<React.SetStateAction<driverType>>
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
@@ -24,7 +24,6 @@ interface driverPickerType<U> {
 
 const DriverPicker = <U extends { drivers: string }>({
   setIsDriverEdit,
-  driver,
   setDriver,
   user, 
   setUser,
@@ -56,6 +55,7 @@ const DriverPicker = <U extends { drivers: string }>({
         value={value}
         setValue={setValue}
         error={editFormErr.drivers || backendErr.type === "drivers" ? true : false}
+        loading={loading}
         onChange={() => setEditFormErr(prevErrs => {
           return {
             ...prevErrs,
@@ -64,6 +64,19 @@ const DriverPicker = <U extends { drivers: string }>({
         })}
       />
       <div className="driver-picker-list">
+        {drivers
+          // Add filter to remove all drivers already in the group
+          .map((driver: driverType, i: number) => (
+            <DriverCard 
+              key={i} 
+              driver={driver}
+              onClick={() => {
+                setDriver(driver)
+                setIsDriverEdit(true)
+              }}
+            />
+          ))
+        }
         <IconButton 
           className="add-button" 
           onClick={() => {
