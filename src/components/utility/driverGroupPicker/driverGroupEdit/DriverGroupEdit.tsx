@@ -37,6 +37,7 @@ export const initDriver: driverType = {
   url: "",
   name: "",
   driverID: "",
+  team: null,
   driverGroups: [],
   stats: {
     heightCM: null,
@@ -79,6 +80,8 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
       setIsDriverEdit={setIsDriverEdit}
       driver={driver}
       setDriver={setDriver}
+      user={user}
+      setUser={setUser}
       backendErr={backendErr}
       setBackendErr={setBackendErr}
     />

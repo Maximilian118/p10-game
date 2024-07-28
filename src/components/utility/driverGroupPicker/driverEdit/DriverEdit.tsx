@@ -1,10 +1,10 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import './_driverEdit.scss'
 import DropZone from "../../dropZone/DropZone"
 import { Button, InputAdornment, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
 import { graphQLErrorType } from "../../../../shared/requests/requestsUtility"
-import { driverType } from "../../../../shared/types"
+import { driverType, teamType } from "../../../../shared/types"
 import { initDriver } from "../driverGroupEdit/DriverGroupEdit"
 import MUIAutocomplete from "../../muiAutocomplete/muiAutocomplete"
 import { heightCMOptions, weightKGOptions } from "../../../../shared/utility"
@@ -12,11 +12,16 @@ import { Moment } from "moment"
 import MUIDatePicker from "../../muiDatePicker/MUIDatePicker"
 import { Abc } from "@mui/icons-material"
 import MUICheckbox from "../../muiCheckbox/MUICheckbox"
+import { getTeams } from "../../../../shared/requests/teamRequests"
+import { useNavigate } from "react-router-dom"
+import { userType } from "../../../../shared/localStorage"
 
 interface driverEditType {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
   driver: driverType
   setDriver: React.Dispatch<React.SetStateAction<driverType>>
+  user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
 }
@@ -25,6 +30,7 @@ interface editFormType {
   url: string
   driverName: string
   driverID: `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}` | ""
+  team: string | null
   heightCM: string | null
   weightKG: string | null
   birthday: Moment | null
@@ -38,6 +44,7 @@ interface editFormErrType {
   url: string
   driverName: string
   driverID: string
+  team: string
   heightCM: string
   weightKG: string
   birthday: string
@@ -47,11 +54,15 @@ interface editFormErrType {
   [key: string]: string
 }
 
-const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriver, backendErr, setBackendErr }) => {
+const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriver, user, setUser, backendErr, setBackendErr }) => {
+  const [ reqSent, setReqSent ] = useState<boolean>(false)
+  const [ teams, setTeams ] = useState<teamType[]>([])
+  const [ loading, setLoading ] = useState<boolean>(false)
   const [ editForm, setEditForm ] = useState<editFormType>({
     url: driver.url ? driver.url : "",
     driverName: driver.name ? driver.name : "",
     driverID: driver.driverID ? driver.driverID : "",
+    team: driver.team ? driver.team.name : null,
     heightCM: driver.stats.heightCM ? `${driver.stats.heightCM}cm` : null,
     weightKG: driver.stats.weightKG ? `${driver.stats.weightKG}kg` : null,
     birthday: null,
@@ -64,6 +75,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     url: "",
     driverName: "",
     driverID: "",
+    team: "",
     heightCM: "",
     weightKG: "",
     birthday: "",
@@ -71,6 +83,15 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     mullet: "",
     dropzone: "",
   })
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (teams.length === 0 && !reqSent) {
+      getTeams(setTeams, user, setUser, navigate, setLoading, setBackendErr)
+      setReqSent(true)
+    }
+  }, [teams, reqSent, user, setUser, navigate, setBackendErr])
 
   const onSubmitHandler = () => {
     // Update group. Group will update form on submission.
@@ -100,6 +121,28 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         onChange={e => updateForm<editFormType, editFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
         value={editForm.driverName}
         error={editFormErr.driverName || backendErr.type === "driverName" ? true : false}
+      />
+      <MUIAutocomplete
+        label={inputLabel("team", editFormErr, backendErr)}
+        className="mui-el"
+        options={teams.map((team: teamType) => team.name)}
+        value={editForm.team}
+        loading={loading}
+        error={editFormErr.team || backendErr.type === "team" ? true : false}
+        setValue={(value) => {
+          setEditForm(prevForm => {
+            return {
+              ...prevForm,
+              team: value as string
+            }
+          })
+        }}
+        onChange={() => setEditFormErr(prevErrs => {
+          return {
+            ...prevErrs,
+            team: "",
+          }
+        })}
       />
       <div className="driver-edit-stats">
         <MUIAutocomplete

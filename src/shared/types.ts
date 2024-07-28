@@ -55,11 +55,29 @@ export interface badgeType {
   default?: boolean
 }
 
+export interface teamType {
+  _id: string
+  url: string
+  name: string
+  driverGroups: driverGroupType[]
+  drivers: driverType[]
+  stats: {
+    inceptionDate: string
+    locationHQ: string
+    nationality: string
+  }
+  created_at: string
+  updated_at: string
+  tokens: string[]
+  _doc: teamType
+}
+
 export interface driverType {
   _id?: string
   url: string
   name: string
   driverID: `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}` | ""
+  team: teamType | null
   driverGroups: driverGroupType[]
   stats: {
     heightCM: number | null
