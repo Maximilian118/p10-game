@@ -53,7 +53,7 @@ export const getTeams = async (
             token: string
             code: number
           }
-          console.log(teams.array)
+
           if (teams.array.length > 0) {
             setTeams(teams.array)
           }

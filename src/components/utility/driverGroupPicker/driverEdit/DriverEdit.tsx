@@ -96,7 +96,6 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
   const onSubmitHandler = () => {
     // Update group. Group will update form on submission.
     // Convert strings to numbers
-    console.log(editForm.birthday)
   }
 
   return (
@@ -124,6 +123,10 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
       />
       <MUIAutocomplete
         label={inputLabel("team", editFormErr, backendErr)}
+        displayNew="always"
+        onNewMouseDown={() => {
+          // setState to display TeamEdit.
+        }}
         className="mui-el"
         options={teams.map((team: teamType) => team.name)}
         value={editForm.team}
