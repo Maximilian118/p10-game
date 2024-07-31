@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react"
 import DropZone from "../components/utility/dropZone/DropZone"
 import { graphQLErrorType, initGraphQLError } from "../shared/requests/requestsUtility"
-import { Button, CircularProgress, Pagination, TextField } from "@mui/material"
+import { Button, CircularProgress, Pagination } from "@mui/material"
 import { inputLabel, updateForm } from "../shared/formValidation"
 import { NavigateFunction, useNavigate } from "react-router-dom"
 import FormElContainer from "../components/utility/formElContainer/FormElContainer"
@@ -13,6 +13,7 @@ import AppContext from "../context"
 import RulesAndRegsPicker from "../components/utility/rulesAndRegsPicker/RulesAndRegsPicker"
 import BadgePicker from "../components/utility/badgePicker/BadgePicker"
 import DriverGroupPicker from "../components/utility/driverGroupPicker/DriverGroupPicker"
+import MUITextField from "../components/utility/muiTextField/MUITextField"
 
 interface createChampFormBaseType {
   champName: string
@@ -108,15 +109,13 @@ const CreateChamp: React.FC = props => {
             setBackendErr={setBackendErr}
             purposeText="Championship Icon"
           />
-          <TextField
-            required={!formErr.name && backendErr.type !== "champName"}
+          <MUITextField
             inputProps={{ maxLength: 30 }}
             className="mui-form-el"
             name="champName"
             label={inputLabel("champName", formErr, backendErr)}
-            variant="filled" 
-            onChange={e => updateForm<createChampFormType, createChampFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
             value={form.champName}
+            onBlur={e => updateForm<createChampFormType, createChampFormErrType>(e, form, setForm, setFormErr, backendErr, setBackendErr)}
             error={formErr.champName || backendErr.type === "champName" ? true : false}
           />
           <FormElContainer
