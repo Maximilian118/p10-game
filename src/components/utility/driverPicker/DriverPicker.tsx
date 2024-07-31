@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react"
 import './_driverPicker.scss'
-import MUIAutocomplete from "../../muiAutocomplete/muiAutocomplete"
-import { inputLabel } from "../../../../shared/formValidation"
-import { driverType } from "../../../../shared/types"
+import MUIAutocomplete from "../muiAutocomplete/muiAutocomplete"
+import { inputLabel } from "../../../shared/formValidation"
+import { driverType } from "../../../shared/types"
 import { useNavigate } from "react-router-dom"
-import { getDrivers } from "../../../../shared/requests/driverRequests"
-import { userType } from "../../../../shared/localStorage"
-import { graphQLErrorType } from "../../../../shared/requests/requestsUtility"
+import { getDrivers } from "../../../shared/requests/driverRequests"
+import { userType } from "../../../shared/localStorage"
+import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import { IconButton } from "@mui/material"
 import { Add } from "@mui/icons-material"
-import DriverCard from "../../../cards/driverCard/DriverCard"
+import DriverCard from "../../cards/driverCard/DriverCard"
 
 interface driverPickerType<U> {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>

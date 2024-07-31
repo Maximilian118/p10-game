@@ -6,9 +6,9 @@ import { Button, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
 import { initDriverGroup } from "../DriverGroupPicker"
 import { graphQLErrorType, initGraphQLError } from "../../../../shared/requests/requestsUtility"
-import DriverEdit from "../driverEdit/DriverEdit"
+import DriverEdit from '../../driverPicker/driverEdit/DriverEdit'
 import { userType } from "../../../../shared/localStorage"
-import DriverPicker from "../driverPicker/DriverPicker"
+import DriverPicker from "../../driverPicker/DriverPicker"
 
 interface driverGroupEditType<T> {
   setForm: React.Dispatch<React.SetStateAction<T>>

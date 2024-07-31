@@ -5,7 +5,6 @@ import { Button, InputAdornment, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
 import { graphQLErrorType } from "../../../../shared/requests/requestsUtility"
 import { driverType, teamType } from "../../../../shared/types"
-import { initDriver } from "../driverGroupEdit/DriverGroupEdit"
 import MUIAutocomplete from "../../muiAutocomplete/muiAutocomplete"
 import { heightCMOptions, weightKGOptions } from "../../../../shared/utility"
 import { Moment } from "moment"
@@ -15,6 +14,7 @@ import MUICheckbox from "../../muiCheckbox/MUICheckbox"
 import { getTeams } from "../../../../shared/requests/teamRequests"
 import { useNavigate } from "react-router-dom"
 import { userType } from "../../../../shared/localStorage"
+import { initDriver } from "../../driverGroupPicker/driverGroupEdit/DriverGroupEdit"
 
 interface driverEditType {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
