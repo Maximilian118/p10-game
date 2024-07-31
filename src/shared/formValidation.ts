@@ -58,6 +58,11 @@ export const updateForm = <T extends formStateType, U>(
   }
 
   const nameCase = (): void => {
+    if (e.target.value.length > 30) {
+      handleInput<U>(e.target.name, setFormErr, "Maximum length 30 characters.")
+      return
+    }
+
     if (/^[a-zA-Z\s-']{1,30}$/.test(e.target.value) || e.target.value.trim() === "") {
       handleInput<U>(e.target.name, setFormErr)
     } else {
@@ -65,7 +70,20 @@ export const updateForm = <T extends formStateType, U>(
     }
   }
 
-  const badgeNameCase = () => {
+  const nameCaseCanNumbers = () => {
+    if (e.target.value.length > 30) {
+      handleInput<U>(e.target.name, setFormErr, "Maximum length 30 characters.")
+      return
+    }
+
+    if (/^[a-zA-Z0-9]{1,30}$/.test(e.target.value) || e.target.value.trim() === "") {
+      handleInput<U>(e.target.name, setFormErr)
+    } else {
+      handleInput<U>(e.target.name, setFormErr, "No special characters.")
+    }
+  }
+
+  const nameCaseCanSpecial = () => {
     if (e.target.value.length <= 30 || e.target.value.trim() === "") {
       handleInput<U>(e.target.name, setFormErr)
     } else {
@@ -82,6 +100,11 @@ export const updateForm = <T extends formStateType, U>(
   }
 
   const passwordCase = (): void => {
+    if (e.target.value.length > 40) {
+      handleInput<U>(e.target.name, setFormErr, "Maximum length 40 characters.")
+      return
+    }
+
     if (
       /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!?_<>"'$£%^&(){};:+=*#]{8,40}$/.test(e.target.value) ||
       e.target.value.trim() === ""
@@ -109,6 +132,11 @@ export const updateForm = <T extends formStateType, U>(
   }
 
   const driverIDCase = () => {
+    if (e.target.value.length > 3) {
+      handleInput<U>(e.target.name, setFormErr, "Maximum length 3 characters.")
+      return
+    }
+
     if (/^[A-Z]{3}$/.test(e.target.value) || e.target.value.trim() === "") {
       handleInput<U>(e.target.name, setFormErr)
     } else {
@@ -120,8 +148,10 @@ export const updateForm = <T extends formStateType, U>(
   // prettier-ignore
   switch (e.target.name) {
     case "name": nameCase(); break
-    case "champName": nameCase(); break
-    case "badgeName": badgeNameCase(); break
+    case "champName": nameCaseCanNumbers(); break
+    case "badgeName": nameCaseCanSpecial(); break
+    case "groupName": nameCaseCanNumbers(); break
+    case "driverName": nameCase(); break
     case "email": emailCase(); break
     case "password": passwordCase(); break
     case "currentPass": passwordCase(); break

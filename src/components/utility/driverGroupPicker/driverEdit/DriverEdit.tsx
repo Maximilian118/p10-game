@@ -114,6 +114,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
       />
       <TextField
         name="driverName"
+        inputProps={{ maxLength: 30 }}
         className="mui-el"
         label={inputLabel("driverName", editFormErr, backendErr)}
         variant="filled" 

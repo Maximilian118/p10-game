@@ -101,6 +101,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
       />
       <TextField
         name="groupName"
+        inputProps={{ maxLength: 30 }}
         className="mui-el"
         label={inputLabel("groupName", editFormErr, backendErr)}
         variant="filled" 

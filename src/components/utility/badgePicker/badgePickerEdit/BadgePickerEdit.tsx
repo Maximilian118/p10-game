@@ -205,6 +205,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
       />
       <TextField
         name="badgeName"
+        inputProps={{ maxLength: 30 }}
         className="mui-el"
         label={inputLabel("badgeName", editFormErr, backendErr)}
         variant="filled" 

@@ -110,6 +110,7 @@ const CreateChamp: React.FC = props => {
           />
           <TextField
             required={!formErr.name && backendErr.type !== "champName"}
+            inputProps={{ maxLength: 30 }}
             className="mui-form-el"
             name="champName"
             label={inputLabel("champName", formErr, backendErr)}

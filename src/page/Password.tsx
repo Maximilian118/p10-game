@@ -55,6 +55,7 @@ const Password: React.FC = () => {
       />
       <TextField
         required={!formErr.newPass}
+        inputProps={{ maxLength: 40 }}
         type="password"
         className="mui-form-el"
         name="password" 

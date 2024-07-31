@@ -35,10 +35,11 @@ const UpdateNameCard = <T extends formType, U extends formErrType>({ user, setUs
   return (
     <form className="change-email-card">
       <TextField
+        label={inputLabel("name", formErr, backendErr)}
+        inputProps={{ maxLength: 40 }}
         className="mui-form-el"
         style={{ margin: "20px 20px 20px 0" }}
         name="name"
-        label={inputLabel("name", formErr, backendErr)}
         variant="filled"
         onChange={e => {
           setSuccess(false)

@@ -75,6 +75,7 @@ const Create: React.FC = () => {
           <TextField
             required={!formErr.name && backendErr.type !== "name"}
             className="mui-form-el"
+            inputProps={{ maxLength: 30 }}
             name="name"
             label={inputLabel("name", formErr, backendErr)}
             variant="filled" 
@@ -96,6 +97,7 @@ const Create: React.FC = () => {
             required={!formErr.password && backendErr.type !== "password"}
             type="password"
             className="mui-form-el"
+            inputProps={{ maxLength: 40 }}
             name="password" 
             label={inputLabel("password", formErr, backendErr)} 
             variant="filled"
@@ -107,6 +109,7 @@ const Create: React.FC = () => {
             required={!formErr.passConfirm && backendErr.type !== "passConfirm"}
             type="password"
             className="mui-form-el"
+            inputProps={{ maxLength: 40 }}
             name="passConfirm" 
             label={inputLabel("passConfirm", formErr, backendErr)} 
             variant="filled"
