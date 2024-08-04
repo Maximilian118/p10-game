@@ -19,6 +19,11 @@
     padding-bottom: 50px;
   }
 
+  .badge-picker-spinner-wrapper {
+    height: 100%;
+    @include mixins.flexbox;
+  }
+
   .list-item {
     @include mixins.flexbox;
   }

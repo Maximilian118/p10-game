@@ -52,7 +52,7 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({ form,
     /> : (
     <div className="driver-group-picker">
       {loading ? <CircularProgress/> : 
-        <>
+        <div className="driver-group-list">
           {groups.map((driverGroup: driverGroupType) => 
             <DriverGroup 
               onClick={() => {
@@ -66,7 +66,7 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({ form,
           >
             <Add/>
           </IconButton>
-        </>
+        </div>
       }
     </div>
   )

@@ -1,9 +1,19 @@
+@use '../../../scss/mixins';
+
 .driver-group-picker {
   width: 100%;
   height: 340px;
   position: relative;
   z-index: 1;
   margin-top: 10px;
+  @include mixins.flexbox-column;
+
+  .driver-group-list {
+    width: 100%;
+    height: 100%;
+    @include mixins.flexbox-start-column;
+    overflow-y: scroll;
+  }
 
   .add-button {
     position: absolute;

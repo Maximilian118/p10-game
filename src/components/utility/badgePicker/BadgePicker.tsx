@@ -45,7 +45,10 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({ form, setForm, us
       setForm={setForm}
     /> : (
     <div className="badge-picker">
-      {loading ? <CircularProgress/> :
+      {loading ? 
+        <div className="badge-picker-spinner-wrapper">
+          <CircularProgress/>
+        </div> :
         <>
           <div className="badge-list">
             {form.champBadges
