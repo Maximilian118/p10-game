@@ -15,6 +15,7 @@ import { getTeams } from "../../../../shared/requests/teamRequests"
 import { useNavigate } from "react-router-dom"
 import { userType } from "../../../../shared/localStorage"
 import { initDriver } from "../../driverGroupPicker/driverGroupEdit/DriverGroupEdit"
+import TeamEdit from "../../teamEdit/TeamEdit"
 
 interface driverEditType {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -54,9 +55,23 @@ interface editFormErrType {
   [key: string]: string
 }
 
+export const initTeam = {
+  url: "",
+  name: "",
+  driverGroups: [],
+  drivers: [],
+  stats: {
+    inceptionDate: "",
+    locationHQ: "",
+    nationality: "",
+  },
+}
+
 const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriver, user, setUser, backendErr, setBackendErr }) => {
   const [ reqSent, setReqSent ] = useState<boolean>(false)
   const [ teams, setTeams ] = useState<teamType[]>([])
+  const [ isEdit, setIsEdit ] = useState<boolean>(false) // Render TeamEdit or not.
+  const [ team, setTeam ] = useState<teamType>(initTeam) // If we're editing a team rather than making a new one, populate.
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ editForm, setEditForm ] = useState<editFormType>({
     url: driver.url ? driver.url : "",
@@ -98,7 +113,14 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     // Convert strings to numbers
   }
 
-  return (
+  return isEdit ? 
+    <TeamEdit
+      setIsEdit={setIsEdit}
+      team={team}
+      setTeam={setTeam}
+      backendErr={backendErr}
+      setBackendErr={setBackendErr}
+    /> : (
     <div className="driver-edit">
       <h4>{`${!driver.name ? `New` : `Edit`} Driver`}</h4>
       <DropZone<editFormType, editFormErrType>
@@ -125,9 +147,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
       <MUIAutocomplete
         label={inputLabel("team", editFormErr, backendErr)}
         displayNew="always"
-        onNewMouseDown={() => {
-          // setState to display TeamEdit.
-        }}
+        onNewMouseDown={() => setIsEdit(true)}
         className="mui-el"
         options={teams.map((team: teamType) => team.name)}
         value={editForm.team}

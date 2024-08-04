@@ -84,8 +84,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
       setUser={setUser}
       backendErr={backendErr}
       setBackendErr={setBackendErr}
-    />
-  : (
+    /> : (
     <div className="driver-group-edit">
       <h4>{`${!group.name ? `New` : `Edit`} Group`}</h4>
       <DropZone<editFormType, editFormErrType>

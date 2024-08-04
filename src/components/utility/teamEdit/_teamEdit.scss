@@ -1,0 +1,37 @@
+@use '../../../scss/mixins';
+@use '../../../scss/variables';
+
+.team-edit {
+  width: 100%;
+  height: 340px;
+  position: relative;
+  z-index: 1;
+  margin-top: 10px;
+  @include mixins.flexbox-start-column;
+  overflow-y: scroll;
+
+  h4 {
+    width: 100%;
+    color: variables.$colour-6;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  .mui-el, .button-bar {
+    width: calc(100% - 20px);
+    margin-bottom: 20px;
+  }
+
+  .button-bar {
+    @include mixins.flexbox;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    position: relative;
+    z-index: 99;
+
+    .mui-button-back {
+      background: variables.$colour-4;
+      color: white;
+    }
+  }
+}

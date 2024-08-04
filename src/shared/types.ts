@@ -56,7 +56,7 @@ export interface badgeType {
 }
 
 export interface teamType {
-  _id: string
+  _id?: string
   url: string
   name: string
   driverGroups: driverGroupType[]
@@ -66,10 +66,10 @@ export interface teamType {
     locationHQ: string
     nationality: string
   }
-  created_at: string
-  updated_at: string
-  tokens: string[]
-  _doc: teamType
+  created_at?: string
+  updated_at?: string
+  tokens?: string[]
+  _doc?: teamType
 }
 
 export interface driverType {

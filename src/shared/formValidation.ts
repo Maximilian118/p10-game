@@ -7,6 +7,7 @@ interface formStateType {
   driverName?: string
   groupName?: string
   champName?: string
+  teamName?: string
   email?: string
   password?: string
   passConfirm?: string
@@ -243,6 +244,9 @@ export const inputLabel = (
       label = "Name"
       break
     case "driverName":
+      label = "Name"
+      break
+    case "teamName":
       label = "Name"
       break
     case "heightCM":

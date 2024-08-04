@@ -52,6 +52,7 @@ const DriverPicker = <U extends { drivers: string }>({
       <MUIAutocomplete
         label={inputLabel("drivers", editFormErr, backendErr)}
         displayNew="noOptions"
+        onNewMouseDown={() => setIsDriverEdit(true)}
         customNewLabel="Driver"
         options={drivers.map((driver: driverType) => driver.name)}
         value={value}
