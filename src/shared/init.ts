@@ -14,6 +14,7 @@ export const initDriver: driverType = {
   team: null,
   driverGroups: [],
   stats: {
+    nationality: null,
     heightCM: null,
     weightKG: null,
     birthday: null,

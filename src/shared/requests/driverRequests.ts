@@ -29,6 +29,7 @@ export const getDrivers = async (
                   name
                   driverGroups
                   stats {
+                    nationality
                     heightCM
                     weightKG
                     age

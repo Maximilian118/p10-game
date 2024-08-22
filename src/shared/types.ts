@@ -79,6 +79,7 @@ export interface driverType {
   team: teamType | null
   driverGroups: driverGroupType[]
   stats: {
+    nationality: string | null
     heightCM: number | null
     weightKG: number | null
     birthday: string | null

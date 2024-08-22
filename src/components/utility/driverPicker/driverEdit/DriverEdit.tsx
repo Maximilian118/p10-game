@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom"
 import { userType } from "../../../../shared/localStorage"
 import TeamEdit from "../../teamEdit/TeamEdit"
 import { initDriver, initTeam } from "../../../../shared/init"
+import MUICountrySelect, { CountryType } from "../../muiCountrySelect/MUICountrySelect"
 
 interface driverEditType {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -32,6 +33,7 @@ interface editFormType {
   driverName: string
   driverID: `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}` | ""
   team: string | null
+  nationality: CountryType | null
   heightCM: string | null
   weightKG: string | null
   birthday: Moment | null
@@ -46,6 +48,7 @@ interface editFormErrType {
   driverName: string
   driverID: string
   team: string
+  nationality: string
   heightCM: string
   weightKG: string
   birthday: string
@@ -66,6 +69,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     driverName: driver.name ? driver.name : "",
     driverID: driver.driverID ? driver.driverID : "",
     team: driver.team ? driver.team.name : null,
+    nationality: null,
     heightCM: driver.stats.heightCM ? `${driver.stats.heightCM}cm` : null,
     weightKG: driver.stats.weightKG ? `${driver.stats.weightKG}kg` : null,
     birthday: null,
@@ -79,6 +83,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     driverName: "",
     driverID: "",
     team: "",
+    nationality: "",
     heightCM: "",
     weightKG: "",
     birthday: "",
@@ -131,6 +136,17 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         onChange={e => updateForm<editFormType, editFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
         value={editForm.driverName}
         error={editFormErr.driverName || backendErr.type === "driverName" ? true : false}
+      />
+      <MUICountrySelect
+        label="Nationality"
+        onChange={(e, val) => {
+          setEditForm(prevForm => {
+            return {
+              ...prevForm,
+              nationality: val
+            }
+          })
+        }}
       />
       <MUIAutocomplete
         label={inputLabel("team", editFormErr, backendErr)}
