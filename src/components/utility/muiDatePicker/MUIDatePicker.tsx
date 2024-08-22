@@ -4,15 +4,18 @@ import { Moment } from "moment"
 import React from "react"
 
 interface MUIDatePickerType {
+  label: string
   value: Moment | null
   onChange: (newValue: Moment | null) => void
+  className?: string
 }
 
-const MUIDatePicker: React.FC<MUIDatePickerType> = ({ value, onChange }) => {
+const MUIDatePicker: React.FC<MUIDatePickerType> = ({ label, value, onChange, className }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <DatePicker
-        label="DOB"
+        label={label}
+        className={className}
         slotProps={{ textField: { variant: "filled" } }}
         value={value}
         format="DD/MM/YYYY"

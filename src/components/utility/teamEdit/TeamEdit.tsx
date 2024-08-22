@@ -7,6 +7,8 @@ import { Button, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../shared/formValidation"
 import MUICountrySelect, { CountryType } from "../muiCountrySelect/MUICountrySelect"
 import { initTeam } from "../../../shared/init"
+import MUIDatePicker from "../muiDatePicker/MUIDatePicker"
+import { Moment } from "moment"
 
 interface teamEditType {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -18,7 +20,7 @@ interface teamEditType {
 
 interface editFormType {
   teamName: string
-  inceptionDate: string | null
+  inceptionDate: Moment | null
   nationality: CountryType | null
   icon: File | null
   profile_picture: File | null
@@ -48,7 +50,7 @@ const TeamEdit: React.FC<teamEditType> = ({ setIsEdit, team, setTeam, backendErr
   })
 
   const onSubmitHandler = () => {
-    // Update team. 
+    // Update team.
   }
 
   return (
@@ -82,6 +84,19 @@ const TeamEdit: React.FC<teamEditType> = ({ setIsEdit, team, setTeam, backendErr
             return {
               ...prevForm,
               nationality: val
+            }
+          })
+        }}
+      />
+      <MUIDatePicker
+        label="Founded"
+        value={editForm.inceptionDate as null}
+        className="mui-el"
+        onChange={(newValue: Moment | null) => {
+          setEditForm(prevForm => {
+            return {
+              ...prevForm,
+              inceptionDate: newValue
             }
           })
         }}

@@ -216,6 +216,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
       </div>
       <div className="driver-edit-stats">
         <MUIDatePicker
+          label="DOB"
           value={editForm.birthday as null}
           onChange={(newValue: Moment | null) => {
             setEditForm(prevForm => {
