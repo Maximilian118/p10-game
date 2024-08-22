@@ -31,7 +31,6 @@ export const getTeams = async (
                   drivers
                   stats {
                     inceptionDate
-                    locationHQ
                     nationality
                   }
                   created_at

@@ -14,8 +14,8 @@ import MUICheckbox from "../../muiCheckbox/MUICheckbox"
 import { getTeams } from "../../../../shared/requests/teamRequests"
 import { useNavigate } from "react-router-dom"
 import { userType } from "../../../../shared/localStorage"
-import { initDriver } from "../../driverGroupPicker/driverGroupEdit/DriverGroupEdit"
 import TeamEdit from "../../teamEdit/TeamEdit"
+import { initDriver, initTeam } from "../../../../shared/init"
 
 interface driverEditType {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -53,18 +53,6 @@ interface editFormErrType {
   mullet: string
   dropzone: string
   [key: string]: string
-}
-
-export const initTeam = {
-  url: "",
-  name: "",
-  driverGroups: [],
-  drivers: [],
-  stats: {
-    inceptionDate: "",
-    locationHQ: "",
-    nationality: "",
-  },
 }
 
 const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriver, user, setUser, backendErr, setBackendErr }) => {

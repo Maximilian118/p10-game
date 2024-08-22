@@ -5,7 +5,8 @@ import DropZone from "../dropZone/DropZone"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import { Button, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../shared/formValidation"
-import { initTeam } from "../driverPicker/driverEdit/DriverEdit"
+import MUICountrySelect, { CountryType } from "../muiCountrySelect/MUICountrySelect"
+import { initTeam } from "../../../shared/init"
 
 interface teamEditType {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -17,12 +18,16 @@ interface teamEditType {
 
 interface editFormType {
   teamName: string
+  inceptionDate: string | null
+  nationality: CountryType | null
   icon: File | null
   profile_picture: File | null
 }
 
 interface editFormErrType {
   teamName: string
+  inceptionDate: string
+  nationality: string
   dropzone: string
   [key: string]: string
 }
@@ -30,11 +35,15 @@ interface editFormErrType {
 const TeamEdit: React.FC<teamEditType> = ({ setIsEdit, team, setTeam, backendErr, setBackendErr }) => {
   const [ editForm, setEditForm ] = useState<editFormType>({
     teamName: "",
+    inceptionDate: null,
+    nationality: null,
     icon: null,
     profile_picture: null,
   })
   const [ editFormErr, setEditFormErr ] = useState<editFormErrType>({
     teamName: "",
+    inceptionDate: "",
+    nationality: "",
     dropzone: "",
   })
 
@@ -65,6 +74,17 @@ const TeamEdit: React.FC<teamEditType> = ({ setIsEdit, team, setTeam, backendErr
         onChange={e => updateForm<editFormType, editFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
         value={editForm.teamName}
         error={editFormErr.teamName || backendErr.type === "teamName" ? true : false}
+      />
+      <MUICountrySelect
+        label="Nationality"
+        onChange={(e, val) => {
+          setEditForm(prevForm => {
+            return {
+              ...prevForm,
+              nationality: val
+            }
+          })
+        }}
       />
       <div className="button-bar">
         <Button

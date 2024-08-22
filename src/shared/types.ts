@@ -63,7 +63,6 @@ export interface teamType {
   drivers: driverType[]
   stats: {
     inceptionDate: string
-    locationHQ: string
     nationality: string
   }
   created_at?: string

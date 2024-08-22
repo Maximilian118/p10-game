@@ -4,11 +4,11 @@ import { driverGroupType, driverType } from "../../../../shared/types"
 import DropZone from "../../dropZone/DropZone"
 import { Button, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
-import { initDriverGroup } from "../DriverGroupPicker"
 import { graphQLErrorType, initGraphQLError } from "../../../../shared/requests/requestsUtility"
 import DriverEdit from '../../driverPicker/driverEdit/DriverEdit'
 import { userType } from "../../../../shared/localStorage"
 import DriverPicker from "../../driverPicker/DriverPicker"
+import { initDriver, initDriverGroup } from "../../../../shared/init"
 
 interface driverGroupEditType<T> {
   setForm: React.Dispatch<React.SetStateAction<T>>
@@ -31,21 +31,6 @@ interface editFormErrType {
   drivers: string
   dropzone: string
   [key: string]: string
-}
-
-export const initDriver: driverType = {
-  url: "",
-  name: "",
-  driverID: "",
-  team: null,
-  driverGroups: [],
-  stats: {
-    heightCM: null,
-    weightKG: null,
-    birthday: null,
-    moustache: false,
-    mullet: false,
-  },
 }
 
 const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({

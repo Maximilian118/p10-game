@@ -9,6 +9,7 @@ import { userType } from "../../../shared/localStorage"
 import { useNavigate } from "react-router-dom"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import DriverGroupEdit from "./driverGroupEdit/DriverGroupEdit"
+import { initDriverGroup } from "../../../shared/init"
 
 interface driverGroupPickerType<T> {
   form: T
@@ -16,13 +17,6 @@ interface driverGroupPickerType<T> {
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
-}
-
-export const initDriverGroup: driverGroupType = {
-  url: "",
-  name: "",
-  championships: [],
-  drivers: [],
 }
 
 const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({ form, setForm, user, setUser, setBackendErr }: driverGroupPickerType<T>) => {
