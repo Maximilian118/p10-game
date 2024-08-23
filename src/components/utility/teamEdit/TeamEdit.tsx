@@ -43,7 +43,7 @@ export interface teamEditFormErrType {
   [key: string]: string
 }
 
-const TeamEdit = <T extends { team: string | null }>({ setIsEdit, setForm, user, setUser, team, setTeam, teams, setTeams, backendErr, setBackendErr }: teamEditType<T>) => {
+const TeamEdit = <T extends { team: teamType | null }>({ setIsEdit, setForm, user, setUser, team, setTeam, teams, setTeams, backendErr, setBackendErr }: teamEditType<T>) => {
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ editForm, setEditForm ] = useState<teamEditFormType>({
     teamName: "",

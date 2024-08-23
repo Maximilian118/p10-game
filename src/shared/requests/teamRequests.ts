@@ -8,7 +8,7 @@ import { uplaodS3 } from "./bucketRequests"
 import moment from "moment"
 import { populateTeam } from "./requestPopulation"
 
-export const newTeam = async <T extends { team: string | null }>(
+export const newTeam = async <T extends { team: teamType | null }>(
   editForm: teamEditFormType,
   setForm: React.Dispatch<React.SetStateAction<T>>,
   setTeams: React.Dispatch<React.SetStateAction<teamType[]>>,
@@ -68,7 +68,7 @@ export const newTeam = async <T extends { team: string | null }>(
           setForm((prevForm) => {
             return {
               ...prevForm,
-              team: team.name,
+              team,
             }
           })
 

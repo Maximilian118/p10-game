@@ -2,14 +2,16 @@ import { Autocomplete, CircularProgress, Paper, TextField } from "@mui/material"
 import React, { SyntheticEvent } from "react"
 import './_muiAutocomplete.scss'
 import { Add } from "@mui/icons-material"
+import Icon from "../icon/Icon"
 
-interface muiAutocompleteType {
+interface muiAutocompleteType<T> {
   label: string
-  options: string[] // Array items to choose from.
+  options: T[] | string[] // Array items to choose from.
   value: string | null // The current value selected.
-  setValue: React.Dispatch<React.SetStateAction<string | null>> // setState function to mutate value.
   error: boolean
   onChange: () => void // Can be used for any change. My use case is for removing error for error prop on value change.
+  setValue?: React.Dispatch<React.SetStateAction<string | null>> // setState function to mutate value.
+  setObjValue?: React.Dispatch<React.SetStateAction<T | null>>
   loading?: boolean // Enables async behaviour with spinner if loading = true.
   variant?: "standard" | "filled" // Style of Textarea.
   className?: string
@@ -49,13 +51,14 @@ const displayCreateNew = (
   return null
 }
 
-const MUIAutocomplete: React.FC<muiAutocompleteType> = ({ 
+const MUIAutocomplete = <T extends { url: string, name: string }>({ 
   label, 
   options, 
   value, 
-  setValue, 
   error, 
-  onChange, 
+  onChange,
+  setValue,
+  setObjValue,
   loading, 
   variant, 
   className, 
@@ -63,55 +66,82 @@ const MUIAutocomplete: React.FC<muiAutocompleteType> = ({
   displayNew,
   onNewMouseDown,
   style 
-}) => (
-  <Autocomplete
-    id="combo-box-demo"
-    className={`mui-autocomplete ${className}`}
-    style={style}
-    value={value}
-    onChange={(e: SyntheticEvent<Element, Event>, value: string | null) => {
-      setValue(value)
-      onChange()
-    }}
-    options={options as readonly string[]}
-    loading={loading}
-    PaperComponent={({ children }) => {
-      let hasOptions = true
+}: muiAutocompleteType<T>) => {
+  const findValueString = (value: T | string | null): string | null => {
+    if (!value) {
+      return null
+    }
 
-      if (React.isValidElement(children)) {
-        const { className } = children.props
-        hasOptions = className !== "MuiAutocomplete-noOptions"
-      }
+    if (typeof value === "string") {
+      return value
+    } else {
+      return value.name
+    }
+  }
+  
+  return (
+    <Autocomplete
+      id="combo-box-demo"
+      className={`mui-autocomplete ${className}`}
+      style={style}
+      value={value}
+      onChange={(e: SyntheticEvent<Element, Event>, value: T | string | null) => {
+        setValue && setValue(findValueString(value))
 
-      return (
-        <Paper>
-          {hasOptions && children}
-          {displayCreateNew(label, hasOptions, onNewMouseDown, customNewLabel, displayNew)}
-        </Paper>  
-      )
-    }}
-    renderInput={(params) => (
-      <TextField 
-        {...params} 
-        variant={variant ? variant : "filled"} 
-        label={label} 
-        error={error}
-        InputProps={{
-          ...params.InputProps,
-          endAdornment: (
-            <React.Fragment>
-              {loading ? (
-                <div className="spinner">
-                  <CircularProgress color="inherit" size={20} />
-                </div>
-              ) : null}
-              {params.InputProps.endAdornment}
-            </React.Fragment>
-          ),
-        }}
-      />
-    )}
-  />
-)
+        if (setObjValue && typeof value !== "string") {
+          setObjValue(value)
+        }
+
+        onChange()
+      }}
+      options={options as any}
+      isOptionEqualToValue={(option, value) => findValueString(option) === findValueString(value)}
+      getOptionLabel={(option: T | string | null) => findValueString(option) as string}
+      renderOption={(props: object, option: T | string | null, state: { index: number }) => (
+        <li key={state.index} {...props}>
+          {typeof option !== "string" && !!option && <Icon src={option.url} style={{ marginRight: 16 }}/>}
+          <p>{findValueString(option)}</p>
+        </li>
+      )}
+      loading={loading}
+      PaperComponent={({ children }) => {
+        let hasOptions = true
+
+        if (React.isValidElement(children)) {
+          const { className } = children.props
+          hasOptions = className !== "MuiAutocomplete-noOptions"
+        }
+
+        return (
+          <Paper>
+            {hasOptions && children}
+            {displayCreateNew(label, hasOptions, onNewMouseDown, customNewLabel, displayNew)}
+          </Paper>  
+        )
+      }}
+      renderInput={(params) => (
+        <TextField 
+          {...params} 
+          variant={variant ? variant : "filled"} 
+          label={label} 
+          error={error}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <React.Fragment>
+                {loading ? (
+                  <div className="spinner">
+                    <CircularProgress color="inherit" size={20} />
+                  </div>
+                ) : null}
+                {params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
+        />
+      )}
+    />
+  )
+}
 
 export default MUIAutocomplete

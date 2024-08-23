@@ -1,0 +1,19 @@
+@use '../../../scss/variables';
+@use '../../../scss/mixins';
+
+.icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  box-shadow: variables.$shadow-close;
+  @include mixins.flexbox;
+  overflow: hidden;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+  }
+}

@@ -1,6 +1,12 @@
 @use '../../../scss/mixins';
 @use '../../../scss/variables';
 
+.MuiAutocomplete-option {
+  p {
+    font-size: 14px;
+  }
+}
+
 .mui-autocomplete {
   width: 100%;
 
@@ -14,12 +20,14 @@
 }
 
 .mui-autocomplete-no-options {
+  height: 44px;
   @include mixins.flexbox-start;
   background: variables.$mui-success;
   color: white;
   cursor: pointer;
   box-sizing: border-box;
-  padding: 10px 12px;
+  padding: 10px 16px;
+  font-size: 14px;
 
   svg {
     margin-right: 8px;

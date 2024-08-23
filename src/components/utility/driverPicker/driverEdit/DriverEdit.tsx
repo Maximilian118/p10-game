@@ -32,7 +32,7 @@ interface editFormType {
   url: string
   driverName: string
   driverID: `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}` | ""
-  team: string | null
+  team: teamType | null
   nationality: CountryType | null
   heightCM: string | null
   weightKG: string | null
@@ -68,7 +68,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     url: driver.url ? driver.url : "",
     driverName: driver.name ? driver.name : "",
     driverID: driver.driverID ? driver.driverID : "",
-    team: driver.team ? driver.team.name : null,
+    team: driver.team ? driver.team : null,
     nationality: null,
     heightCM: driver.stats.heightCM ? `${driver.stats.heightCM}cm` : null,
     weightKG: driver.stats.weightKG ? `${driver.stats.weightKG}kg` : null,
@@ -158,24 +158,26 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         displayNew="always"
         onNewMouseDown={() => setIsEdit(true)}
         className="mui-el"
-        options={teams.map((team: teamType) => team.name)}
-        value={editForm.team}
+        options={teams}
+        value={editForm.team ? editForm.team.name : null}
         loading={loading}
         error={editFormErr.team || backendErr.type === "team" ? true : false}
-        setValue={(value) => {
+        setObjValue={(value) => {
           setEditForm(prevForm => {
             return {
               ...prevForm,
-              team: value as string
+              team: value as teamType | null,
             }
           })
         }}
-        onChange={() => setEditFormErr(prevErrs => {
-          return {
-            ...prevErrs,
-            team: "",
+        onChange={() => 
+          setEditFormErr(prevErrs => {
+            return {
+              ...prevErrs,
+              team: "",
+            }
           }
-        })}
+        )}
       />
       <div className="driver-edit-stats">
         <MUIAutocomplete
