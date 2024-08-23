@@ -21,3 +21,17 @@ export const populateUser = `
     guest
   }
 `
+// Team population template literal.
+export const populateTeam = `
+  _id
+  url
+  name
+  driverGroups
+  drivers
+  stats {
+    inceptionDate
+    nationality
+  }
+  created_at
+  updated_at
+`

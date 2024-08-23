@@ -18,6 +18,7 @@ export const createUser = async (
   navigate: NavigateFunction,
 ): Promise<void> => {
   setLoading(true)
+
   let iconURL = ""
   let ppURL = ""
 

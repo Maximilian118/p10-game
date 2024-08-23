@@ -3,22 +3,29 @@ import './_teamEdit.scss'
 import { teamType } from "../../../shared/types"
 import DropZone from "../dropZone/DropZone"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
-import { Button, TextField } from "@mui/material"
+import { Button, CircularProgress, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../shared/formValidation"
 import MUICountrySelect, { CountryType } from "../muiCountrySelect/MUICountrySelect"
 import { initTeam } from "../../../shared/init"
 import MUIDatePicker from "../muiDatePicker/MUIDatePicker"
 import { Moment } from "moment"
+import { newTeam } from "../../../shared/requests/teamRequests"
+import { useNavigate } from "react-router-dom"
+import { userType } from "../../../shared/localStorage"
+import { teamEditErrors } from "./teamEditUtility"
 
 interface teamEditType {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
+  user: userType
+  setUser: React.Dispatch<React.SetStateAction<userType>>
   team: teamType
   setTeam: React.Dispatch<React.SetStateAction<teamType>>
+  teams: teamType[]
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
 }
 
-interface editFormType {
+export interface teamEditFormType {
   teamName: string
   inceptionDate: Moment | null
   nationality: CountryType | null
@@ -26,7 +33,7 @@ interface editFormType {
   profile_picture: File | null
 }
 
-interface editFormErrType {
+export interface teamEditFormErrType {
   teamName: string
   inceptionDate: string
   nationality: string
@@ -34,29 +41,37 @@ interface editFormErrType {
   [key: string]: string
 }
 
-const TeamEdit: React.FC<teamEditType> = ({ setIsEdit, team, setTeam, backendErr, setBackendErr }) => {
-  const [ editForm, setEditForm ] = useState<editFormType>({
+const TeamEdit: React.FC<teamEditType> = ({ setIsEdit, user, setUser, team, setTeam, teams, backendErr, setBackendErr }) => {
+  const [ loading, setLoading ] = useState<boolean>(false)
+  const [ editForm, setEditForm ] = useState<teamEditFormType>({
     teamName: "",
     inceptionDate: null,
     nationality: null,
     icon: null,
     profile_picture: null,
   })
-  const [ editFormErr, setEditFormErr ] = useState<editFormErrType>({
+  const [ editFormErr, setEditFormErr ] = useState<teamEditFormErrType>({
     teamName: "",
     inceptionDate: "",
     nationality: "",
     dropzone: "",
   })
 
-  const onSubmitHandler = () => {
-    // Update team.
+  const navigate = useNavigate()
+
+  const onSubmitHandler = async () => {
+    // Check for Errors
+    if (teamEditErrors(editForm, setEditFormErr, teams)) {
+      return
+    }
+
+    await newTeam(editForm, user, setUser, navigate, setLoading, setBackendErr)
   }
 
   return (
     <div className="team-edit">
       <h4>{`${!team.name ? `New` : `Edit`} Team`}</h4>
-      <DropZone<editFormType, editFormErrType>
+      <DropZone<teamEditFormType, teamEditFormErrType>
         form={editForm}
         setForm={setEditForm}
         formErr={editFormErr}
@@ -73,7 +88,7 @@ const TeamEdit: React.FC<teamEditType> = ({ setIsEdit, team, setTeam, backendErr
         className="mui-el"
         label={inputLabel("teamName", editFormErr, backendErr)}
         variant="filled" 
-        onChange={e => updateForm<editFormType, editFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
+        onChange={e => updateForm<teamEditFormType, teamEditFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
         value={editForm.teamName}
         error={editFormErr.teamName || backendErr.type === "teamName" ? true : false}
       />
@@ -114,6 +129,7 @@ const TeamEdit: React.FC<teamEditType> = ({ setIsEdit, team, setTeam, backendErr
         <Button
           variant="contained"
           onClick={e => onSubmitHandler()}
+          startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
         >Submit</Button>
       </div>
     </div>

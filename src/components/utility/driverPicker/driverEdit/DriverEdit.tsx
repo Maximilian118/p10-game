@@ -60,7 +60,7 @@ interface editFormErrType {
 
 const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriver, user, setUser, backendErr, setBackendErr }) => {
   const [ reqSent, setReqSent ] = useState<boolean>(false)
-  const [ teams, setTeams ] = useState<teamType[]>([])
+  const [ teams, setTeams ] = useState<teamType[]>([]) // Team objects requested from backend.
   const [ isEdit, setIsEdit ] = useState<boolean>(false) // Render TeamEdit or not.
   const [ team, setTeam ] = useState<teamType>(initTeam) // If we're editing a team rather than making a new one, populate.
   const [ loading, setLoading ] = useState<boolean>(false)
@@ -109,8 +109,11 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
   return isEdit ? 
     <TeamEdit
       setIsEdit={setIsEdit}
+      user={user}
+      setUser={setUser}
       team={team}
       setTeam={setTeam}
+      teams={teams}
       backendErr={backendErr}
       setBackendErr={setBackendErr}
     /> : (
