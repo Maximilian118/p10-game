@@ -109,11 +109,13 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
   return isEdit ? 
     <TeamEdit
       setIsEdit={setIsEdit}
+      setForm={setEditForm}
       user={user}
       setUser={setUser}
       team={team}
       setTeam={setTeam}
       teams={teams}
+      setTeams={setTeams}
       backendErr={backendErr}
       setBackendErr={setBackendErr}
     /> : (

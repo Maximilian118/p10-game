@@ -14,13 +14,15 @@ import { useNavigate } from "react-router-dom"
 import { userType } from "../../../shared/localStorage"
 import { teamEditErrors } from "./teamEditUtility"
 
-interface teamEditType {
+interface teamEditType<T> {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
+  setForm: React.Dispatch<React.SetStateAction<T>>
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
-  team: teamType
+  team: teamType // The team in question.
   setTeam: React.Dispatch<React.SetStateAction<teamType>>
-  teams: teamType[]
+  teams: teamType[] // Array of teams from the backend.
+  setTeams: React.Dispatch<React.SetStateAction<teamType[]>>
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
 }
@@ -41,7 +43,7 @@ export interface teamEditFormErrType {
   [key: string]: string
 }
 
-const TeamEdit: React.FC<teamEditType> = ({ setIsEdit, user, setUser, team, setTeam, teams, backendErr, setBackendErr }) => {
+const TeamEdit = <T extends { team: string | null }>({ setIsEdit, setForm, user, setUser, team, setTeam, teams, setTeams, backendErr, setBackendErr }: teamEditType<T>) => {
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ editForm, setEditForm ] = useState<teamEditFormType>({
     teamName: "",
@@ -65,7 +67,7 @@ const TeamEdit: React.FC<teamEditType> = ({ setIsEdit, user, setUser, team, setT
       return
     }
 
-    await newTeam(editForm, user, setUser, navigate, setLoading, setBackendErr)
+    await newTeam(editForm, setForm, setTeams, user, setUser, navigate, setLoading, setBackendErr, setIsEdit)
   }
 
   return (

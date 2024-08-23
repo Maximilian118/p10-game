@@ -8,20 +8,23 @@ import { uplaodS3 } from "./bucketRequests"
 import moment from "moment"
 import { populateTeam } from "./requestPopulation"
 
-export const newTeam = async (
-  form: teamEditFormType,
+export const newTeam = async <T extends { team: string | null }>(
+  editForm: teamEditFormType,
+  setForm: React.Dispatch<React.SetStateAction<T>>,
+  setTeams: React.Dispatch<React.SetStateAction<teamType[]>>,
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   navigate: NavigateFunction,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+  setIsEdit?: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<void> => {
   setLoading(true)
 
   let iconURL = ""
 
-  if (form.icon) {
-    iconURL = await uplaodS3(form.teamName, "icon", form.icon, setBackendErr)
+  if (editForm.icon) {
+    iconURL = await uplaodS3(editForm.teamName, "icon", editForm.icon, setBackendErr)
 
     if (!iconURL) {
       console.error("Error: Failed to upload image.")
@@ -37,9 +40,9 @@ export const newTeam = async (
         {
           variables: {
             url: iconURL,
-            name: form.teamName,
-            nationality: form.nationality?.label,
-            inceptionDate: moment(form.inceptionDate).format(),
+            name: editForm.teamName,
+            nationality: editForm.nationality?.label,
+            inceptionDate: moment(editForm.inceptionDate).format(),
           },
           query: `
             mutation NewTeam( $url: String!, $name: String!, $nationality: String!, $inceptionDate: String!) {
@@ -56,7 +59,22 @@ export const newTeam = async (
         if (res.data.errors) {
           graphQLErrors("newTeam", res, setUser, navigate, setBackendErr, true)
         } else {
-          graphQLResponse("newTeam", res, user, setUser, true)
+          const team = graphQLResponse("newTeam", res, user, setUser, false) as teamType
+
+          setTeams((prevTeams) => {
+            return [...prevTeams, team]
+          })
+
+          setForm((prevForm) => {
+            return {
+              ...prevForm,
+              team: team.name,
+            }
+          })
+
+          if (setIsEdit) {
+            setIsEdit(false)
+          }
         }
       })
       .catch((err: any) => {
