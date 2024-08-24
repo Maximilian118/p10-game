@@ -116,8 +116,6 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
       setTeam={setTeam}
       teams={teams}
       setTeams={setTeams}
-      backendErr={backendErr}
-      setBackendErr={setBackendErr}
     /> : (
     <div className="driver-edit">
       <h4>{`${!driver.name ? `New` : `Edit`} Driver`}</h4>

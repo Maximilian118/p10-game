@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import './_teamEdit.scss'
 import { teamType } from "../../../shared/types"
 import DropZone from "../dropZone/DropZone"
-import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
+import { graphQLErrorType, initGraphQLError } from "../../../shared/requests/requestsUtility"
 import { Button, CircularProgress, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../shared/formValidation"
 import MUICountrySelect, { CountryType } from "../muiCountrySelect/MUICountrySelect"
@@ -23,8 +23,6 @@ interface teamEditType<T> {
   setTeam: React.Dispatch<React.SetStateAction<teamType>>
   teams: teamType[] // Array of teams from the backend.
   setTeams: React.Dispatch<React.SetStateAction<teamType[]>>
-  backendErr: graphQLErrorType
-  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
 }
 
 export interface teamEditFormType {
@@ -43,7 +41,8 @@ export interface teamEditFormErrType {
   [key: string]: string
 }
 
-const TeamEdit = <T extends { team: teamType | null }>({ setIsEdit, setForm, user, setUser, team, setTeam, teams, setTeams, backendErr, setBackendErr }: teamEditType<T>) => {
+const TeamEdit = <T extends { team: teamType | null }>({ setIsEdit, setForm, user, setUser, team, setTeam, teams, setTeams }: teamEditType<T>) => {
+  const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ editForm, setEditForm ] = useState<teamEditFormType>({
     teamName: "",
