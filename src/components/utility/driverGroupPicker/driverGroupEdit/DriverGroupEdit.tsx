@@ -43,6 +43,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
 }: driverGroupEditType<T>) => {
   const [ isDriverEdit, setIsDriverEdit ] = useState<boolean>(false) // Render isDriverEdit or not.
   const [ driver, setDriver ] = useState<driverType>(initDriver) // If we're editing a driver rather than making a new one, populate.
+  const [ drivers, setDrivers ] = useState<driverType[]>([]) // Driver objects requested from backend.
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ editForm, setEditForm ] = useState<editFormType>({
     groupName: group.name ? group.name : "",
@@ -69,6 +70,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
       setUser={setUser}
       backendErr={backendErr}
       setBackendErr={setBackendErr}
+      drivers={drivers}
     /> : (
     <div className="driver-group-edit">
       <h4>{`${!group.name ? `New` : `Edit`} Group`}</h4>
@@ -102,6 +104,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
         setEditFormErr={setEditFormErr}
         backendErr={backendErr}
         setBackendErr={setBackendErr}
+        setDrivers={setDrivers}
       />
       <div className="button-bar">
         <Button

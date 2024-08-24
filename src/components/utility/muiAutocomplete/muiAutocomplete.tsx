@@ -18,6 +18,7 @@ interface muiAutocompleteType<T> {
   customNewLabel?: string // Change the name of the label for createNew.
   displayNew?: "always" | "noOptions" | "never" // Choose the behaviour of adding a list item that can navigate to creating a new item to be listed.
   onNewMouseDown?: React.MouseEventHandler<HTMLDivElement> // When user clicks on createNew, do something.
+  onLiClick?: (value: string | T | null) => void // Custom onClick functionality for options. NOTE: Stops textArea from retaining clicked option. Useful for adding option to a list.
   style?: {}
 }
 
@@ -65,6 +66,7 @@ const MUIAutocomplete = <T extends { url: string, name: string }>({
   customNewLabel, 
   displayNew,
   onNewMouseDown,
+  onLiClick,
   style 
 }: muiAutocompleteType<T>) => {
   const findValueString = (value: T | string | null): string | null => {
@@ -78,18 +80,25 @@ const MUIAutocomplete = <T extends { url: string, name: string }>({
       return value.name
     }
   }
+
+  const id = `${label}-autocomplete`
   
   return (
     <Autocomplete
-      id="combo-box-demo"
+      id={id}
       className={`mui-autocomplete ${className}`}
       style={style}
       value={value}
       onChange={(e: SyntheticEvent<Element, Event>, value: T | string | null) => {
         setValue && setValue(findValueString(value))
 
-        if (setObjValue && typeof value !== "string") {
+        if (setObjValue && typeof value !== "string" && !onLiClick) {
           setObjValue(value)
+        }
+        
+        if (onLiClick) {
+          onLiClick(value)
+          document.getElementById(id)?.blur()
         }
 
         onChange()
@@ -121,7 +130,7 @@ const MUIAutocomplete = <T extends { url: string, name: string }>({
       }}
       renderInput={(params) => (
         <TextField 
-          {...params} 
+          {...params}
           variant={variant ? variant : "filled"} 
           label={label} 
           error={error}

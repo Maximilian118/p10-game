@@ -76,7 +76,7 @@ export interface driverType {
   url: string
   name: string
   driverID: `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}` | ""
-  team: teamType | null
+  teams: teamType[]
   driverGroups: driverGroupType[]
   stats: {
     nationality: string | null

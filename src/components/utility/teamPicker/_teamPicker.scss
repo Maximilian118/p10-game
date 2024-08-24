@@ -1,0 +1,28 @@
+@use '../../../scss/mixins';
+
+.team-picker {
+  width: calc(100% - 20px);
+  height: 240px;
+  border-radius: 4px;
+  @include mixins.flexbox-start-column;
+  flex-shrink: 0;
+  margin-bottom: 20px;
+  overflow: hidden;
+  position: relative;
+
+  .team-picker-list {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.06);
+    flex-grow: 1;
+    @include mixins.flexbox-start-column;
+    overflow-y: scroll;
+    padding: 8px 0;
+    box-sizing: border-box;
+  }
+
+  .add-button {
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+  }
+}

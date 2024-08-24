@@ -1,4 +1,4 @@
-import { teamType } from "../../../shared/types"
+import { teamType } from "../../../../shared/types"
 import { teamEditFormErrType, teamEditFormType } from "./TeamEdit"
 
 export const teamEditErrors = (

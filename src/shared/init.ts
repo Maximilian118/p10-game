@@ -11,7 +11,7 @@ export const initDriver: driverType = {
   url: "",
   name: "",
   driverID: "",
-  team: null,
+  teams: [],
   driverGroups: [],
   stats: {
     nationality: null,

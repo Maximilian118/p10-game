@@ -3,15 +3,14 @@ import { teamType } from "../types"
 import { userType } from "../localStorage"
 import { graphQLErrors, graphQLErrorType, graphQLResponse, headers } from "./requestsUtility"
 import { NavigateFunction } from "react-router-dom"
-import { teamEditFormType } from "../../components/utility/teamEdit/TeamEdit"
+import { teamEditFormType } from "../../components/utility/teamPicker/teamEdit/TeamEdit"
 import { uplaodS3 } from "./bucketRequests"
 import moment from "moment"
 import { populateTeam } from "./requestPopulation"
 
-export const newTeam = async <T extends { team: teamType | null }>(
+export const newTeam = async <T extends { teams: teamType[] }>(
   editForm: teamEditFormType,
   setForm: React.Dispatch<React.SetStateAction<T>>,
-  setTeams: React.Dispatch<React.SetStateAction<teamType[]>>,
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   navigate: NavigateFunction,
@@ -61,14 +60,10 @@ export const newTeam = async <T extends { team: teamType | null }>(
         } else {
           const team = graphQLResponse("newTeam", res, user, setUser, false) as teamType
 
-          setTeams((prevTeams) => {
-            return [...prevTeams, team]
-          })
-
           setForm((prevForm) => {
             return {
               ...prevForm,
-              team,
+              teams: [...prevForm.teams, team],
             }
           })
 

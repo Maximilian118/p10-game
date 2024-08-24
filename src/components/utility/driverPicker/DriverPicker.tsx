@@ -20,6 +20,7 @@ interface driverPickerType<U> {
   setEditFormErr: React.Dispatch<React.SetStateAction<U>>
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
+  setDrivers?: React.Dispatch<React.SetStateAction<driverType[]>>
 }
 
 const DriverPicker = <U extends { drivers: string }>({
@@ -31,8 +32,9 @@ const DriverPicker = <U extends { drivers: string }>({
   setEditFormErr, 
   backendErr, 
   setBackendErr,
+  setDrivers,
 }: driverPickerType<U>) => {
-  const [ drivers, setDrivers ] = useState<driverType[]>([]) // All drivers in db.
+  const [ localDrivers, setLocalDrivers ] = useState<driverType[]>([]) // All drivers in db.
   const [ value, setValue ] = useState<string | null>(null) // Current value of Autocomplete.
   const [ reqSent, setReqSent ] = useState<boolean>(false)
   const [ loading, setLoading ] = useState<boolean>(false)
@@ -40,12 +42,18 @@ const DriverPicker = <U extends { drivers: string }>({
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (drivers.length === 0 && !reqSent) {
+    if (localDrivers.length === 0 && !reqSent) {
       // Get all drivers in the database so the user can select existing drivers for the group.
-      getDrivers(setDrivers, user, setUser, navigate, setLoading, setBackendErr)
+      getDrivers(setLocalDrivers, user, setUser, navigate, setLoading, setBackendErr)
     }
     setReqSent(true)
-  }, [drivers, setDrivers, reqSent, user, setUser, navigate, setBackendErr])
+  }, [localDrivers, setLocalDrivers, reqSent, user, setUser, navigate, setBackendErr])
+
+  useEffect(() => { // Expose drivers to a higher state.
+    if (setDrivers && !reqSent) {
+      setDrivers(localDrivers)
+    }
+  }, [localDrivers, setDrivers, reqSent])
 
   return (
     <div className="driver-picker">
@@ -54,7 +62,7 @@ const DriverPicker = <U extends { drivers: string }>({
         displayNew="noOptions"
         onNewMouseDown={() => setIsDriverEdit(true)}
         customNewLabel="Driver"
-        options={drivers.map((driver: driverType) => driver.name)}
+        options={localDrivers.map((driver: driverType) => driver.name)}
         value={value}
         setValue={setValue}
         error={editFormErr.drivers || backendErr.type === "drivers" ? true : false}
@@ -67,7 +75,7 @@ const DriverPicker = <U extends { drivers: string }>({
         })}
       />
       <div className="driver-picker-list">
-        {drivers
+        {localDrivers
           // Add filter to remove all drivers already in the group
           .map((driver: driverType, i: number) => (
             <DriverCard 

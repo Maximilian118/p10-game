@@ -1,28 +1,27 @@
 import React, { useState } from "react"
 import './_teamEdit.scss'
-import { teamType } from "../../../shared/types"
-import DropZone from "../dropZone/DropZone"
-import { graphQLErrorType, initGraphQLError } from "../../../shared/requests/requestsUtility"
+import { teamType } from "../../../../shared/types"
+import DropZone from "../../dropZone/DropZone"
+import { graphQLErrorType, initGraphQLError } from "../../../../shared/requests/requestsUtility"
 import { Button, CircularProgress, TextField } from "@mui/material"
-import { inputLabel, updateForm } from "../../../shared/formValidation"
-import MUICountrySelect, { CountryType } from "../muiCountrySelect/MUICountrySelect"
-import { initTeam } from "../../../shared/init"
-import MUIDatePicker from "../muiDatePicker/MUIDatePicker"
+import { inputLabel, updateForm } from "../../../../shared/formValidation"
+import MUICountrySelect, { CountryType } from "../../muiCountrySelect/MUICountrySelect"
+import { initTeam } from "../../../../shared/init"
+import MUIDatePicker from "../../muiDatePicker/MUIDatePicker"
 import { Moment } from "moment"
-import { newTeam } from "../../../shared/requests/teamRequests"
+import { newTeam } from "../../../../shared/requests/teamRequests"
 import { useNavigate } from "react-router-dom"
-import { userType } from "../../../shared/localStorage"
+import { userType } from "../../../../shared/localStorage"
 import { teamEditErrors } from "./teamEditUtility"
 
 interface teamEditType<T> {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
+  form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
   team: teamType // The team in question.
   setTeam: React.Dispatch<React.SetStateAction<teamType>>
-  teams: teamType[] // Array of teams from the backend.
-  setTeams: React.Dispatch<React.SetStateAction<teamType[]>>
 }
 
 export interface teamEditFormType {
@@ -41,7 +40,7 @@ export interface teamEditFormErrType {
   [key: string]: string
 }
 
-const TeamEdit = <T extends { team: teamType | null }>({ setIsEdit, setForm, user, setUser, team, setTeam, teams, setTeams }: teamEditType<T>) => {
+const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, user, setUser, team, setTeam }: teamEditType<T>) => {
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ editForm, setEditForm ] = useState<teamEditFormType>({
@@ -62,11 +61,11 @@ const TeamEdit = <T extends { team: teamType | null }>({ setIsEdit, setForm, use
 
   const onSubmitHandler = async () => {
     // Check for Errors
-    if (teamEditErrors(editForm, setEditFormErr, teams)) {
+    if (teamEditErrors(editForm, setEditFormErr, form.teams)) {
       return
     }
 
-    await newTeam(editForm, setForm, setTeams, user, setUser, navigate, setLoading, setBackendErr, setIsEdit)
+    await newTeam(editForm, setForm, user, setUser, navigate, setLoading, setBackendErr, setIsEdit)
   }
 
   return (

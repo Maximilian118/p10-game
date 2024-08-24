@@ -35,3 +35,20 @@ export const populateTeam = `
   created_at
   updated_at
 `
+// Driver population template literal.
+export const populateDriver = `
+  _id
+  url
+  name
+  driverGroups
+  stats {
+    nationality
+    heightCM
+    weightKG
+    birthday
+    moustache
+    mullet
+  }
+  created_at
+  updated_at
+`
