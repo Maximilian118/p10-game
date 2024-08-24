@@ -77,7 +77,7 @@ const DropZone = <T extends formType, U extends formErrType>({
   // Then, setThumb with a url string for the thumbnail.
   // Then, setForm with compressed Files.
   useEffect(() => {
-    if (acceptedFiles.length > 0 && fileRejections.length === 0) {
+    if (acceptedFiles.length > 0 && fileRejections.length === 0 && acceptedFiles[0].name !== form.icon?.name) {
       setLoading(true)
 
       if (backendErr && setBackendErr && hasBackendErr(errTypes, backendErr)) {
@@ -137,7 +137,7 @@ const DropZone = <T extends formType, U extends formErrType>({
 
       setLoading(false)
     }
-  }, [acceptedFiles, fileRejections, setForm, setFormErr, backendErr, setBackendErr])
+  }, [form.icon?.name, acceptedFiles, fileRejections, setForm, setFormErr, backendErr, setBackendErr])
 
   // If formErr is passed, display the dropzone error if there is one.
   useEffect(() => {
