@@ -16,7 +16,7 @@ export const teamEditErrors = (
   // Loop through all of the existing teams.
   for (const team of teams) {
     // If teamName already exists in teams array.
-    if (team.name === editForm.teamName) {
+    if (team.name.toLowerCase() === editForm.teamName.toLowerCase()) {
       errors.teamName = "Duplicate Team Name."
       break
     }

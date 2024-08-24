@@ -54,7 +54,7 @@ export const badgePickerErrors = (
       }
     }
 
-    if (b.name === badge.name) {
+    if (b.name.toLowerCase() === badge.name.toLowerCase()) {
       errors.badgeName = "Duplicate name."
       break
     }
