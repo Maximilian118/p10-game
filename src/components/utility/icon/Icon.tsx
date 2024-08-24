@@ -13,7 +13,11 @@ const Icon: React.FC<iconType> = ({ src, style }) => {
     if (!error) {
       return <img alt="Icon" onError={() => setError(true)} src={src}/>
     } else {
-      return <p>{`err`}</p>
+      return (
+        <div className="image-error">
+          <p>{`err`}</p>
+        </div>
+      )
     }
   }
 
