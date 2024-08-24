@@ -81,7 +81,7 @@ const TeamEdit = <T extends { team: teamType | null }>({ setIsEdit, setForm, use
         setBackendErr={setBackendErr}
         purposeText="Team Logo"
         thumbImg={team.url ? team.url : false}
-        style={{ marginBottom: 30 }}
+        style={{ marginBottom: 40 }}
       />
       <TextField
         name="teamName"

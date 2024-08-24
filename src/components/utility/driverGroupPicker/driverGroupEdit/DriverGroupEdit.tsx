@@ -81,7 +81,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
         setBackendErr={setBackendErr}
         purposeText="Group Image"
         thumbImg={group.url ? group.url : false}
-        style={{ marginBottom: 30 }}
+        style={{ marginBottom: 40 }}
       />
       <TextField
         name="groupName"

@@ -10,8 +10,8 @@ const BadgeSpinner: React.FC<badgeSpinnerType> = ({ thickness, style }) => (
   <div 
     className="badge-spinner" 
     style={{ 
-      borderTop: `${thickness ? thickness : 2}px solid rgba(255, 255, 255, 0.2)`,
-      borderBottom: `${thickness ? thickness : 2}px solid rgba(255, 255, 255, 0.2)`,
+      borderTop: `${thickness ? thickness : 2}px solid rgba(255, 255, 255, 0.4)`,
+      borderBottom: `${thickness ? thickness : 2}px solid rgba(255, 255, 255, 0.4)`,
       borderLeft: `${thickness ? thickness : 2}px solid transparent`,
       borderRight: `${thickness ? thickness : 2}px solid transparent`,
       ...style

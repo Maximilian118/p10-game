@@ -128,7 +128,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         setBackendErr={setBackendErr}
         purposeText="Driver Image"
         thumbImg={driver.url ? driver.url : false}
-        style={{ marginBottom: 30 }}
+        style={{ marginBottom: 40 }}
       />
       <TextField
         name="driverName"
