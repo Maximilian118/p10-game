@@ -21,9 +21,21 @@ interface teamPickerType<T, U> {
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
+  setTeam: React.Dispatch<React.SetStateAction<teamType>>
 }
 
-const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }>({ user, setUser, editForm, setEditForm, editFormErr, setEditFormErr, backendErr, setBackendErr, setIsEdit }: teamPickerType<T, U>) => {
+const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }>({ 
+  user, 
+  setUser, 
+  editForm, 
+  setEditForm, 
+  editFormErr, 
+  setEditFormErr, 
+  backendErr, 
+  setBackendErr, 
+  setIsEdit, 
+  setTeam 
+  }: teamPickerType<T, U>) => {
   const [ localTeams, setLocalTeams ] = useState<teamType[]>([]) // All teams in db.
   const [ value, setValue ] = useState<teamType | null>(null) // Current value of Autocomplete.
   const [ reqSent, setReqSent ] = useState<boolean>(false)
@@ -78,7 +90,8 @@ const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }
             <TeamCard 
               key={i} 
               team={team}
-              onClick={() => {
+              onClick={(team) => {
+                setTeam(team)
                 setIsEdit(true)
               }}
             />

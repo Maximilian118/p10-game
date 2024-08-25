@@ -5,10 +5,10 @@ import DropZone from "../../dropZone/DropZone"
 import { graphQLErrorType, initGraphQLError } from "../../../../shared/requests/requestsUtility"
 import { Button, CircularProgress, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
-import MUICountrySelect, { CountryType } from "../../muiCountrySelect/MUICountrySelect"
+import MUICountrySelect, { countryType, findCountryByString } from "../../muiCountrySelect/MUICountrySelect"
 import { initTeam } from "../../../../shared/init"
 import MUIDatePicker from "../../muiDatePicker/MUIDatePicker"
-import { Moment } from "moment"
+import moment, { Moment } from "moment"
 import { newTeam } from "../../../../shared/requests/teamRequests"
 import { useNavigate } from "react-router-dom"
 import { userType } from "../../../../shared/localStorage"
@@ -27,7 +27,7 @@ interface teamEditType<T> {
 export interface teamEditFormType {
   teamName: string
   inceptionDate: Moment | null
-  nationality: CountryType | null
+  nationality: countryType | null
   icon: File | null
   profile_picture: File | null
 }
@@ -44,9 +44,9 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ editForm, setEditForm ] = useState<teamEditFormType>({
-    teamName: "",
-    inceptionDate: null,
-    nationality: null,
+    teamName: team.name ? team.name : "",
+    inceptionDate: team.stats.inceptionDate ? moment(team.stats.inceptionDate) : null,
+    nationality: team.stats.nationality ? findCountryByString(team.stats.nationality) : null,
     icon: null,
     profile_picture: null,
   })
@@ -66,6 +66,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
     }
 
     await newTeam(editForm, setForm, user, setUser, navigate, setLoading, setBackendErr, setIsEdit)
+    setTeam(initTeam(user))
   }
 
   return (
@@ -94,6 +95,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
       />
       <MUICountrySelect
         label="Nationality"
+        value={editForm.nationality}
         onChange={(e, val) => {
           setEditForm(prevForm => {
             return {
@@ -122,8 +124,8 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
           variant="contained" 
           color="inherit"
           onClick={e => {
-            setIsEdit(false)
             setTeam(initTeam(user))
+            setIsEdit(false)
           }}
         >Back</Button>
         <Button

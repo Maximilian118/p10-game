@@ -3,14 +3,15 @@ import { TextField, Autocomplete, Box } from "@mui/material"
 
 interface MUICountrySelectType {
   label: string
-  onChange?: (event: SyntheticEvent<Element, Event>, value: CountryType | null) => void
+  value: countryType | null // The current value selected.
+  onChange?: (event: SyntheticEvent<Element, Event>, value: countryType | null) => void
 }
 
 interface renderOptionProps extends React.HTMLAttributes<HTMLLIElement> {
   key: string
 }
 
-const MUICountrySelect: React.FC<MUICountrySelectType> = ({ label, onChange }) => {
+const MUICountrySelect: React.FC<MUICountrySelectType> = ({ label, value, onChange }) => {
   return (
     <Autocomplete
       id="country-select-demo"
@@ -19,6 +20,7 @@ const MUICountrySelect: React.FC<MUICountrySelectType> = ({ label, onChange }) =
       autoHighlight
       getOptionLabel={(option) => option.label}
       onChange={onChange}
+      value={value}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props as renderOptionProps
 
@@ -57,7 +59,7 @@ const MUICountrySelect: React.FC<MUICountrySelectType> = ({ label, onChange }) =
 
 export default MUICountrySelect
 
-export interface CountryType {
+export interface countryType {
   code: string
   label: string
   phone: string
@@ -65,7 +67,7 @@ export interface CountryType {
 }
 
 // From https://bitbucket.org/atlassian/atlaskit-mk-2/raw/4ad0e56649c3e6c973e226b7efaeb28cb240ccb0/packages/core/select/src/data/countries.js
-const countries: readonly CountryType[] = [
+const countries: readonly countryType[] = [
   { code: 'AD', label: 'Andorra', phone: '376' },
   {
     code: 'AE',
@@ -489,3 +491,16 @@ const countries: readonly CountryType[] = [
   { code: 'ZM', label: 'Zambia', phone: '260' },
   { code: 'ZW', label: 'Zimbabwe', phone: '263' },
 ]
+
+export const findCountryByString = (countryStr: string): countryType | null => {
+  let country = null
+
+  for (const c of countries) {
+    if (c.label === countryStr) {
+      country = c
+      break
+    }
+  }
+
+  return country
+}

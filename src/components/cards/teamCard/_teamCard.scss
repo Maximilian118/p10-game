@@ -8,9 +8,15 @@
   flex-shrink: 0;
   padding: 6px 16px;
   box-sizing: border-box;
+  cursor: pointer;
+  transition: variables.$trans-speed;
 
   p {
     color: variables.$colour-9;
     font-size: 14px;
+  }
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.06);
   }
 }

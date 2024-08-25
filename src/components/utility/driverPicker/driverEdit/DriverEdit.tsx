@@ -7,13 +7,13 @@ import { graphQLErrorType } from "../../../../shared/requests/requestsUtility"
 import { driverType, teamType } from "../../../../shared/types"
 import MUIAutocomplete from "../../muiAutocomplete/muiAutocomplete"
 import { heightCMOptions, weightKGOptions } from "../../../../shared/utility"
-import { Moment } from "moment"
+import moment, { Moment } from "moment"
 import MUIDatePicker from "../../muiDatePicker/MUIDatePicker"
 import { Abc } from "@mui/icons-material"
 import MUICheckbox from "../../muiCheckbox/MUICheckbox"
 import { userType } from "../../../../shared/localStorage"
 import { initDriver, initTeam } from "../../../../shared/init"
-import MUICountrySelect, { CountryType } from "../../muiCountrySelect/MUICountrySelect"
+import MUICountrySelect, { countryType, findCountryByString } from "../../muiCountrySelect/MUICountrySelect"
 import { driverEditErrors } from "../driverPickerUtility"
 import TeamEdit from "../../teamPicker/teamEdit/TeamEdit"
 import TeamPicker from "../../teamPicker/TeamPicker"
@@ -34,7 +34,7 @@ export interface driverEditFormType {
   driverName: string
   driverID: `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}` | ""
   teams: teamType[]
-  nationality: CountryType | null
+  nationality: countryType | null
   heightCM: string | null
   weightKG: string | null
   birthday: Moment | null
@@ -67,12 +67,12 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     driverName: driver.name ? driver.name : "",
     driverID: driver.driverID ? driver.driverID : "",
     teams: driver.teams ? driver.teams : [],
-    nationality: null,
+    nationality: driver.stats.nationality ? findCountryByString(driver.stats.nationality) : null,
     heightCM: driver.stats.heightCM ? `${driver.stats.heightCM}cm` : null,
     weightKG: driver.stats.weightKG ? `${driver.stats.weightKG}kg` : null,
-    birthday: null,
-    moustache: false,
-    mullet: false,
+    birthday: driver.stats.birthday ? moment(driver.stats.birthday) : null,
+    moustache: driver.stats.moustache ? driver.stats.moustache : false,
+    mullet: driver.stats.mullet ? driver.stats.mullet : false,
     icon: null,
     profile_picture: null,
   })
@@ -136,6 +136,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
       />
       <MUICountrySelect
         label="Nationality"
+        value={editForm.nationality}
         onChange={(e, val) => {
           setEditForm(prevForm => {
             return {
@@ -155,6 +156,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         backendErr={backendErr}
         setBackendErr={setBackendErr}
         setIsEdit={setIsEdit}
+        setTeam={setTeam}
       />
       <div className="driver-edit-stats">
         <MUIAutocomplete
