@@ -17,7 +17,7 @@ interface regsAndRulesEditType<T> {
 const initruleReg = (user: userType, ruleReg?: ruleOrRegType | null) => {
   return {
     text: ruleReg ? ruleReg.text : "",
-    createdBy: user,
+    created_by: user,
     created_at: ruleReg ? ruleReg.created_at : moment().format(),
     histroy: [],
     subsections: ruleReg ? ruleReg.subsections : [],

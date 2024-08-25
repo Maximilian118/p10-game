@@ -42,7 +42,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
   setGroup,
 }: driverGroupEditType<T>) => {
   const [ isDriverEdit, setIsDriverEdit ] = useState<boolean>(false) // Render isDriverEdit or not.
-  const [ driver, setDriver ] = useState<driverType>(initDriver) // If we're editing a driver rather than making a new one, populate.
+  const [ driver, setDriver ] = useState<driverType>(initDriver(user)) // If we're editing a driver rather than making a new one, populate.
   const [ drivers, setDrivers ] = useState<driverType[]>([]) // Driver objects requested from backend.
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ editForm, setEditForm ] = useState<editFormType>({
@@ -113,7 +113,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
           color="inherit"
           onClick={e => {
             setIsEdit(false)
-            setGroup(initDriverGroup)
+            setGroup(initDriverGroup(user))
           }}
         >Back</Button>
         <Button

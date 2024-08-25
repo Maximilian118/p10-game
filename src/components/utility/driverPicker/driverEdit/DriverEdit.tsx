@@ -61,7 +61,7 @@ export interface driverEditFormErrType {
 
 const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriver, user, setUser, backendErr, setBackendErr, drivers }) => {
   const [ isEdit, setIsEdit ] = useState<boolean>(false) // Render TeamEdit or not.
-  const [ team, setTeam ] = useState<teamType>(initTeam) // If we're editing a team rather than making a new one, populate.
+  const [ team, setTeam ] = useState<teamType>(initTeam(user)) // If we're editing a team rather than making a new one, populate.
   const [ editForm, setEditForm ] = useState<driverEditFormType>({
     url: driver.url ? driver.url : "",
     driverName: driver.name ? driver.name : "",
@@ -259,7 +259,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
           color="inherit"
           onClick={e => {
             setIsDriverEdit(false)
-            setDriver(initDriver)
+            setDriver(initDriver(user))
           }}
         >Back</Button>
         <Button

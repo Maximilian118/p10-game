@@ -123,7 +123,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
           color="inherit"
           onClick={e => {
             setIsEdit(false)
-            setTeam(initTeam)
+            setTeam(initTeam(user))
           }}
         >Back</Button>
         <Button

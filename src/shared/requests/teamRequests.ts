@@ -38,14 +38,15 @@ export const newTeam = async <T extends { teams: teamType[] }>(
         "",
         {
           variables: {
+            created_by: user._id,
             url: iconURL,
             name: editForm.teamName,
             nationality: editForm.nationality?.label,
             inceptionDate: moment(editForm.inceptionDate).format(),
           },
           query: `
-            mutation NewTeam( $url: String!, $name: String!, $nationality: String!, $inceptionDate: String!) {
-              newTeam(teamInput: { url: $url, name: $name, nationality: $nationality, inceptionDate: $inceptionDate }) {
+            mutation NewTeam( $created_by: ID!, $url: String!, $name: String!, $nationality: String!, $inceptionDate: String!) {
+              newTeam(teamInput: { created_by: $created_by, url: $url, name: $name, nationality: $nationality, inceptionDate: $inceptionDate }) {
                 ${populateTeam}
                 tokens
               }

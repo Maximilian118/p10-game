@@ -9,7 +9,7 @@ export const newRuleOrReg = (
 ): ruleOrRegType => {
   const ruleOrReg: ruleOrRegType = {
     text,
-    createdBy: user,
+    created_by: user,
     created_at: moment().format(),
     histroy: [],
     subsections: [],
@@ -19,7 +19,7 @@ export const newRuleOrReg = (
     ruleOrReg.subsections = subsections.map((subText: string): ruleOrRegType => {
       return {
         text: subText,
-        createdBy: user,
+        created_by: user,
         created_at: moment().format(),
         histroy: [],
       }

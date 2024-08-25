@@ -22,7 +22,7 @@ export type pointsStructureType = {
 
 export type ruleOrRegType = {
   text: string
-  createdBy: userType
+  created_by: userType
   created_at: string
   histroy: {
     text: string
@@ -65,6 +65,7 @@ export interface teamType {
     inceptionDate: string
     nationality: string
   }
+  created_by?: userType | string
   created_at?: string
   updated_at?: string
   tokens?: string[]
@@ -86,6 +87,7 @@ export interface driverType {
     moustache: boolean
     mullet: boolean
   }
+  created_by?: userType | string
   created_at?: string
   updated_at?: string
 }
@@ -96,6 +98,7 @@ export interface driverGroupType {
   name: string
   championships: champType[]
   drivers: driverType[]
+  created_by?: userType | string
   created_at?: string
   updated_at?: string
   tokens?: string[]
@@ -241,6 +244,7 @@ export interface champType {
       }[]
     }
   }
+  created_by?: userType | string
   created_at: string
   updated_at: string
   tokens: string
@@ -249,7 +253,6 @@ export interface champType {
 export interface protestType {
   _id: string
   championship: champType
-  createdBy: userType
   title: string
   description: string
   vote: boolean
@@ -257,6 +260,7 @@ export interface protestType {
     user: userType
     approve: boolean
   }[]
+  created_by?: userType | string
   created_at: string
   updated_at: string
   tokens: string
@@ -265,7 +269,6 @@ export interface protestType {
 export interface ruleChangeType {
   _id: string
   championship: champType
-  createdBy: userType
   title: string
   description: string
   vote: boolean
@@ -274,6 +277,7 @@ export interface ruleChangeType {
     approve: boolean
   }[]
   voteExipiry: string
+  created_by?: userType | string
   created_at: string
   updated_at: string
   tokens: string

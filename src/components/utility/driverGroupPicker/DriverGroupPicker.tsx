@@ -21,7 +21,7 @@ interface driverGroupPickerType<T> {
 
 const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({ form, setForm, user, setUser, setBackendErr }: driverGroupPickerType<T>) => {
   const [ isEdit, setIsEdit ] = useState<boolean>(false) // Render DriverGroupEdit or not.
-  const [ group, setGroup ] = useState<driverGroupType>(initDriverGroup) // If we're editing a driver group rather than making a new one, populate.
+  const [ group, setGroup ] = useState<driverGroupType>(initDriverGroup(user)) // If we're editing a driver group rather than making a new one, populate.
   const [ groups, setGroups ] = useState<driverGroupType[]>([]) // Stores all driver groups from getDriverGroups response.
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ reqSent, setReqSent ] = useState<boolean>(false)

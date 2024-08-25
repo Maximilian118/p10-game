@@ -32,6 +32,7 @@ export const populateTeam = `
     inceptionDate
     nationality
   }
+  created_by
   created_at
   updated_at
 `
@@ -49,6 +50,7 @@ export const populateDriver = `
     moustache
     mullet
   }
+  created_by
   created_at
   updated_at
 `
