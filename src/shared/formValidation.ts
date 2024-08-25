@@ -258,6 +258,9 @@ export const inputLabel = (
     case "driverID":
       label = "Driver ID"
       break
+    case "inceptionDate":
+      label = "Founded"
+      break
     default:
       break
   }

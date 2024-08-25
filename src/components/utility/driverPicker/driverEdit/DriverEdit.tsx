@@ -135,13 +135,21 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         error={editFormErr.driverName || backendErr.type === "driverName" ? true : false}
       />
       <MUICountrySelect
-        label="Nationality"
+        label={inputLabel("nationality", editFormErr, backendErr)}
         value={editForm.nationality}
+        error={editFormErr.nationality || backendErr.type === "nationality" ? true : false}
         onChange={(e, val) => {
           setEditForm(prevForm => {
             return {
               ...prevForm,
               nationality: val
+            }
+          })
+
+          setEditFormErr(prevErrs => {
+            return {
+              ...prevErrs,
+              nationality: "",
             }
           })
         }}
@@ -204,11 +212,19 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         <MUIDatePicker
           label="DOB"
           value={editForm.birthday as null}
+          error={editFormErr.birthday || backendErr.type === "birthday" ? true : false}
           onChange={(newValue: Moment | null) => {
             setEditForm(prevForm => {
               return {
                 ...prevForm,
                 birthday: newValue
+              }
+            })
+
+            setEditFormErr(prevErrs => {
+              return {
+                ...prevErrs,
+                birthday: "",
               }
             })
           }}

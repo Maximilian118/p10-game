@@ -19,6 +19,7 @@ interface dropZoneType<T, U> {
   purposeText?: string
   zoom?: number
   thumbImg?: string | false
+  disabled?: boolean
 }
 
 interface compressedImagesType {
@@ -37,7 +38,8 @@ const DropZone = <T extends formType, U extends formErrType>({
   style, 
   purposeText, 
   zoom, 
-  thumbImg 
+  thumbImg,
+  disabled,
 }: dropZoneType<T, U>) => {
   const [ thumb, setThumb ] = useState<string>("")
   const [ error, setError ] = useState<string>("")
@@ -174,7 +176,11 @@ const DropZone = <T extends formType, U extends formErrType>({
 
   return (
     <div style={style} {...getRootProps({
-      className: `dropzone ${displayError(error, loading, backendErr) ? "dropzone-error" : ""}`
+      className: `
+        dropzone 
+        ${disabled ? "dropzone-disabled" : ""} 
+        ${displayError(error, loading, backendErr) ? "dropzone-error" : ""}
+      `
     })}>
       <div className={`inside-border ${isDragActive ? "drag-active" : ""}`}>
         <input {...getInputProps()} />

@@ -86,3 +86,11 @@
   font-size: 32px;
   color: variables.$colour-9;
 }
+
+.dropzone-disabled {
+  pointer-events: none;
+  filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+  -webkit-filter: grayscale(1);
+  filter: grayscale(1);
+  opacity: 0.8;
+}

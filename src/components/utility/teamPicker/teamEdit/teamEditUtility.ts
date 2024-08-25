@@ -13,6 +13,22 @@ export const teamEditErrors = (
     dropzone: "",
   }
 
+  if (!editForm.teamName) {
+    errors.teamName = "Please enter a name."
+  }
+
+  if (!editForm.inceptionDate) {
+    errors.inceptionDate = "Please enter a date."
+  }
+
+  if (!editForm.nationality) {
+    errors.nationality = "Please enter a nationality."
+  }
+
+  if (!editForm.icon) {
+    errors.dropzone = "Please enter an image."
+  }
+
   // Loop through all of the existing teams.
   for (const team of teams) {
     // If teamName already exists in teams array.
@@ -30,4 +46,14 @@ export const teamEditErrors = (
   })
 
   return Object.values(errors).some((error) => error !== "")
+}
+
+// Determine what privilages the user has to edit this team.
+export const canEditTeam = (team: teamType): boolean => {
+  // If any drivers belong to this team.
+  if (team.drivers.length > 0) {
+    return true
+  }
+
+  return false
 }

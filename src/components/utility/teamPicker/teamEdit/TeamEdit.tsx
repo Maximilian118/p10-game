@@ -12,7 +12,7 @@ import moment, { Moment } from "moment"
 import { newTeam } from "../../../../shared/requests/teamRequests"
 import { useNavigate } from "react-router-dom"
 import { userType } from "../../../../shared/localStorage"
-import { teamEditErrors } from "./teamEditUtility"
+import { canEditTeam, teamEditErrors } from "./teamEditUtility"
 
 interface teamEditType<T> {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -59,13 +59,17 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
 
   const navigate = useNavigate()
 
+  const deleteTeamHandler = () => {
+    // Delete this team
+  }
+
   const onSubmitHandler = async () => {
     // Check for Errors
     if (teamEditErrors(editForm, setEditFormErr, form.teams)) {
       return
     }
 
-    await newTeam(editForm, setForm, user, setUser, navigate, setLoading, setBackendErr, setIsEdit)
+    await newTeam(editForm, setForm, setEditFormErr, user, setUser, navigate, setLoading, setBackendErr, setIsEdit)
     setTeam(initTeam(user))
   }
 
@@ -82,6 +86,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
         purposeText="Team Logo"
         thumbImg={team.url ? team.url : false}
         style={{ marginBottom: 40 }}
+        disabled={canEditTeam(team)}
       />
       <TextField
         name="teamName"
@@ -92,10 +97,13 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
         onChange={e => updateForm<teamEditFormType, teamEditFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
         value={editForm.teamName}
         error={editFormErr.teamName || backendErr.type === "teamName" ? true : false}
+        disabled={canEditTeam(team)}
       />
       <MUICountrySelect
-        label="Nationality"
+        label={inputLabel("nationality", editFormErr, backendErr)}
         value={editForm.nationality}
+        disabled={canEditTeam(team)}
+        error={editFormErr.nationality || backendErr.type === "nationality" ? true : false}
         onChange={(e, val) => {
           setEditForm(prevForm => {
             return {
@@ -103,17 +111,33 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
               nationality: val
             }
           })
+
+          setEditFormErr(prevErrs => {
+            return {
+              ...prevErrs,
+              nationality: "",
+            }
+          })
         }}
       />
       <MUIDatePicker
-        label="Founded"
+        label={inputLabel("inceptionDate", editFormErr, backendErr)}
         value={editForm.inceptionDate as null}
+        disabled={canEditTeam(team)}
+        error={editFormErr.inceptionDate || backendErr.type === "inceptionDate" ? true : false}
         className="mui-el"
         onChange={(newValue: Moment | null) => {
           setEditForm(prevForm => {
             return {
               ...prevForm,
               inceptionDate: newValue
+            }
+          })
+
+          setEditFormErr(prevErrs => {
+            return {
+              ...prevErrs,
+              inceptionDate: "",
             }
           })
         }}
@@ -128,9 +152,15 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
             setIsEdit(false)
           }}
         >Back</Button>
+        {!canEditTeam(team) && team._id && <Button
+          variant="contained" 
+          color="error"
+          onClick={e => deleteTeamHandler()}
+        >Delete</Button>}
         <Button
           variant="contained"
           onClick={e => onSubmitHandler()}
+          disabled={canEditTeam(team)}
           startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
         >Submit</Button>
       </div>

@@ -10,6 +10,7 @@ import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import { IconButton } from "@mui/material"
 import { Add } from "@mui/icons-material"
 import TeamCard from "../../cards/teamCard/TeamCard"
+import { canEditTeam } from "./teamEdit/teamEditUtility"
 
 interface teamPickerType<T, U> {
   user: userType,
@@ -90,6 +91,7 @@ const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }
             <TeamCard 
               key={i} 
               team={team}
+              canEdit={!canEditTeam(team)}
               onClick={(team) => {
                 setTeam(team)
                 setIsEdit(true)

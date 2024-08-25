@@ -10,12 +10,13 @@ import { forgotFormType } from "../../page/Forgot"
 import { formType } from "../types"
 import { passFormType } from "../../page/Password"
 
-export const createUser = async (
+export const createUser = async <U extends { dropzone: string }>(
   form: createFormType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
   navigate: NavigateFunction,
+  setFormErr: React.Dispatch<React.SetStateAction<U>>,
 ): Promise<void> => {
   setLoading(true)
 
@@ -27,7 +28,13 @@ export const createUser = async (
     ppURL = await uplaodS3(form.name, "profile_picture", form.profile_picture, setBackendErr)
 
     if (!iconURL || !ppURL) {
-      console.error("Error: Failed to upload image.")
+      setFormErr((prevErrs) => {
+        return {
+          ...prevErrs,
+          dropzone: "Failed to upload image.",
+        }
+      })
+
       setLoading(false)
       return
     }

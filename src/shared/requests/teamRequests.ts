@@ -8,9 +8,10 @@ import { uplaodS3 } from "./bucketRequests"
 import moment from "moment"
 import { populateTeam } from "./requestPopulation"
 
-export const newTeam = async <T extends { teams: teamType[] }>(
+export const newTeam = async <T extends { teams: teamType[] }, U extends { dropzone: string }>(
   editForm: teamEditFormType,
   setForm: React.Dispatch<React.SetStateAction<T>>,
+  setFormErr: React.Dispatch<React.SetStateAction<U>>,
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   navigate: NavigateFunction,
@@ -26,7 +27,13 @@ export const newTeam = async <T extends { teams: teamType[] }>(
     iconURL = await uplaodS3(editForm.teamName, "icon", editForm.icon, setBackendErr)
 
     if (!iconURL) {
-      console.error("Error: Failed to upload image.")
+      setFormErr((prevErrs) => {
+        return {
+          ...prevErrs,
+          dropzone: "Failed to upload image.",
+        }
+      })
+
       setLoading(false)
       return
     }

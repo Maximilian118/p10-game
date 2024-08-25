@@ -4,6 +4,8 @@ import { TextField, Autocomplete, Box } from "@mui/material"
 interface MUICountrySelectType {
   label: string
   value: countryType | null // The current value selected.
+  error: boolean
+  disabled?: boolean
   onChange?: (event: SyntheticEvent<Element, Event>, value: countryType | null) => void
 }
 
@@ -11,11 +13,12 @@ interface renderOptionProps extends React.HTMLAttributes<HTMLLIElement> {
   key: string
 }
 
-const MUICountrySelect: React.FC<MUICountrySelectType> = ({ label, value, onChange }) => {
+const MUICountrySelect: React.FC<MUICountrySelectType> = ({ label, value, error, disabled, onChange }) => {
   return (
     <Autocomplete
       id="country-select-demo"
       className="mui-el"
+      disabled={disabled}
       options={countries}
       autoHighlight
       getOptionLabel={(option) => option.label}
@@ -45,6 +48,8 @@ const MUICountrySelect: React.FC<MUICountrySelectType> = ({ label, value, onChan
       renderInput={(params) => (
         <TextField
           {...params}
+          disabled={disabled}
+          error={error}
           label={label}
           variant="filled"
           inputProps={{

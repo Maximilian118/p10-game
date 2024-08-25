@@ -9,6 +9,7 @@
   @include mixins.flexbox;
   overflow: hidden;
   position: relative;
+  flex-shrink: 0;
 
   img {
     width: 100%;

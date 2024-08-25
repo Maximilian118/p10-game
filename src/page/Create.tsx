@@ -48,7 +48,7 @@ const Create: React.FC = () => {
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>, navigate: NavigateFunction) => {
     e.preventDefault()
-    createUser(form, setUser, setLoading, setBackendErr, navigate)
+    createUser(form, setUser, setLoading, setBackendErr, navigate, setFormErr)
   }
 
   return (
