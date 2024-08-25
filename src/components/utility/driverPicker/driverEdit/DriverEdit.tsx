@@ -210,7 +210,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
       </div>
       <div className="driver-edit-stats">
         <MUIDatePicker
-          label="DOB"
+          label={inputLabel("birthday", editFormErr, backendErr)}
           value={editForm.birthday as null}
           error={editFormErr.birthday || backendErr.type === "birthday" ? true : false}
           onChange={(newValue: Moment | null) => {

@@ -1,3 +1,4 @@
+import moment from "moment"
 import { driverType } from "../../../shared/types"
 import { isThreeLettersUppercase } from "../../../shared/utility"
 import { driverEditFormErrType, driverEditFormType } from "./driverEdit/DriverEdit"
@@ -21,8 +22,8 @@ export const driverEditErrors = (
     dropzone: "",
   }
 
-  if (!editForm.url) {
-    errors.awardedHow = "An image is required."
+  if (!editForm.icon) {
+    errors.dropzone = "Please enter an image."
   }
 
   if (!editForm.driverName) {
@@ -33,6 +34,24 @@ export const driverEditErrors = (
     errors.driverID = "Please enter a name."
   } else if (!isThreeLettersUppercase(editForm.driverID)) {
     errors.driverID = "Must be three uppercase letters."
+  }
+
+  if (!editForm.nationality) {
+    errors.nationality = "Please enter a nationality."
+  }
+
+  if (!editForm.heightCM) {
+    errors.heightCM = "Please enter a height."
+  }
+
+  if (!editForm.weightKG) {
+    errors.weightKG = "Please enter a weight."
+  }
+
+  if (!editForm.birthday) {
+    errors.birthday = "Please enter a date."
+  } else if (moment(editForm.birthday).isAfter(moment())) {
+    errors.birthday = "Date can not be in the future dummy."
   }
 
   // Loop through all of the existing teams.

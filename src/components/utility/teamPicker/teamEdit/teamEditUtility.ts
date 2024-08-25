@@ -1,3 +1,4 @@
+import moment from "moment"
 import { teamType } from "../../../../shared/types"
 import { teamEditFormErrType, teamEditFormType } from "./TeamEdit"
 
@@ -19,6 +20,8 @@ export const teamEditErrors = (
 
   if (!editForm.inceptionDate) {
     errors.inceptionDate = "Please enter a date."
+  } else if (moment(editForm.inceptionDate).isAfter(moment())) {
+    errors.inceptionDate = "Date can not be in the future dummy."
   }
 
   if (!editForm.nationality) {

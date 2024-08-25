@@ -261,6 +261,9 @@ export const inputLabel = (
     case "inceptionDate":
       label = "Founded"
       break
+    case "birthday":
+      label = "DOB"
+      break
     default:
       break
   }
