@@ -54,9 +54,9 @@ export const driverEditErrors = (
     errors.birthday = "Date can not be in the future dummy."
   }
 
-  // Loop through all of the existing teams.
+  // Loop through all of the existing drivers.
   for (const driver of drivers) {
-    // If teamName already exists in teams array.
+    // If driverName already exists in drivers array.
     if (driver.name.toLowerCase() === editForm.driverName.toLowerCase()) {
       errors.driverName = "Duplicate Driver Name."
       break
@@ -71,4 +71,14 @@ export const driverEditErrors = (
   })
 
   return Object.values(errors).some((error) => error !== "")
+}
+
+// Determine what privilages the user has to edit this driver.
+export const canEditDriver = (driver: driverType): boolean => {
+  // If this driver belongs to any teams.
+  if (driver.teams.length > 0) {
+    return true
+  }
+
+  return false
 }

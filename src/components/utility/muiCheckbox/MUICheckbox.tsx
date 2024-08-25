@@ -8,14 +8,16 @@ interface MUICheckboxType {
   onClick: (e: MouseEvent) => void
   checkedColour?: string
   textRight?: boolean
+  disabled?: boolean
 }
 
-const MUICheckbox: React.FC<MUICheckboxType> = ({ text, checked, onClick, checkedColour, textRight }) => {
+const MUICheckbox: React.FC<MUICheckboxType> = ({ text, checked, onClick, checkedColour, textRight, disabled }) => {
   return (
     <div className="checkbox-container">
       {text && !textRight && <p>{text}</p>}
       <Checkbox
         checked={checked}
+        disabled={disabled}
         inputProps={{ 'aria-label': 'Badge filter checkbox' }}
         onClick={onClick}
         sx={checkedColour ? {

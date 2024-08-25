@@ -19,6 +19,7 @@ interface muiAutocompleteType<T> {
   displayNew?: "always" | "noOptions" | "never" // Choose the behaviour of adding a list item that can navigate to creating a new item to be listed.
   onNewMouseDown?: React.MouseEventHandler<HTMLDivElement> // When user clicks on createNew, do something.
   onLiClick?: (value: string | T | null) => void // Custom onClick functionality for options. NOTE: Stops textArea from retaining clicked option. Useful for adding option to a list.
+  disabled?: boolean
   style?: {}
 }
 
@@ -67,6 +68,7 @@ const MUIAutocomplete = <T extends { url: string, name: string }>({
   displayNew,
   onNewMouseDown,
   onLiClick,
+  disabled,
   style 
 }: muiAutocompleteType<T>) => {
   const findValueString = (value: T | string | null): string | null => {
@@ -89,6 +91,7 @@ const MUIAutocomplete = <T extends { url: string, name: string }>({
       className={`mui-autocomplete ${className}`}
       style={style}
       value={value}
+      disabled={disabled}
       onChange={(e: SyntheticEvent<Element, Event>, value: T | string | null) => {
         setValue && setValue(findValueString(value))
 
@@ -134,6 +137,7 @@ const MUIAutocomplete = <T extends { url: string, name: string }>({
           variant={variant ? variant : "filled"} 
           label={label} 
           error={error}
+          disabled={disabled}
           InputProps={{
             ...params.InputProps,
             endAdornment: (

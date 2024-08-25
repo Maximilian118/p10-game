@@ -14,7 +14,7 @@ import MUICheckbox from "../../muiCheckbox/MUICheckbox"
 import { userType } from "../../../../shared/localStorage"
 import { initDriver, initTeam } from "../../../../shared/init"
 import MUICountrySelect, { countryType, findCountryByString } from "../../muiCountrySelect/MUICountrySelect"
-import { driverEditErrors } from "../driverPickerUtility"
+import { canEditDriver, driverEditErrors } from "../driverPickerUtility"
 import TeamEdit from "../../teamPicker/teamEdit/TeamEdit"
 import TeamPicker from "../../teamPicker/TeamPicker"
 
@@ -90,6 +90,10 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     dropzone: "",
   })
 
+  const deleteDriverHandler = () => {
+    // Delete driver
+  }
+
   const onSubmitHandler = () => {
     // Check for Errors
     if (driverEditErrors(editForm, setEditFormErr, drivers)) {
@@ -123,6 +127,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         purposeText="Driver Image"
         thumbImg={driver.url ? driver.url : false}
         style={{ marginBottom: 40 }}
+        disabled={canEditDriver(driver)}
       />
       <TextField
         name="driverName"
@@ -133,11 +138,13 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         onChange={e => updateForm<driverEditFormType, driverEditFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
         value={editForm.driverName}
         error={editFormErr.driverName || backendErr.type === "driverName" ? true : false}
+        disabled={canEditDriver(driver)}
       />
       <MUICountrySelect
         label={inputLabel("nationality", editFormErr, backendErr)}
         value={editForm.nationality}
         error={editFormErr.nationality || backendErr.type === "nationality" ? true : false}
+        disabled={canEditDriver(driver)}
         onChange={(e, val) => {
           setEditForm(prevForm => {
             return {
@@ -172,6 +179,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
           options={heightCMOptions()}
           value={editForm.heightCM}
           error={editFormErr.heightCM || backendErr.type === "heightCM" ? true : false}
+          disabled={canEditDriver(driver)}
           setValue={(value) => {
             setEditForm(prevForm => {
               return {
@@ -192,6 +200,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
           options={weightKGOptions()}
           value={editForm.weightKG}
           error={editFormErr.weightKG || backendErr.type === "weightKG" ? true : false}
+          disabled={canEditDriver(driver)}
           setValue={(value) => {
             setEditForm(prevForm => {
               return {
@@ -213,6 +222,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
           label={inputLabel("birthday", editFormErr, backendErr)}
           value={editForm.birthday as null}
           error={editFormErr.birthday || backendErr.type === "birthday" ? true : false}
+          disabled={canEditDriver(driver)}
           onChange={(newValue: Moment | null) => {
             setEditForm(prevForm => {
               return {
@@ -236,6 +246,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
           onChange={e => updateForm<driverEditFormType, driverEditFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
           value={editForm.driverID}
           error={editFormErr.driverID || backendErr.type === "driverID" ? true : false}
+          disabled={canEditDriver(driver)}
           inputProps={{ maxLength: 3 }}
           InputProps={{
             endAdornment: (
@@ -250,6 +261,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         <MUICheckbox
           text="Moustache"
           checked={editForm.moustache}
+          disabled={canEditDriver(driver)}
           onClick={() => setEditForm(prevForm => {
             return {
               ...prevForm,
@@ -261,6 +273,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         <MUICheckbox
           text="Mullet"
           checked={editForm.mullet}
+          disabled={canEditDriver(driver)}
           onClick={() => setEditForm(prevForm => {
             return {
               ...prevForm,
@@ -280,6 +293,11 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
             setDriver(initDriver(user))
           }}
         >Back</Button>
+        {!canEditDriver(driver) && driver._id && <Button
+          variant="contained" 
+          color="error"
+          onClick={e => deleteDriverHandler()}
+        >Delete</Button>}
         <Button
           variant="contained"
           onClick={e => onSubmitHandler()}
