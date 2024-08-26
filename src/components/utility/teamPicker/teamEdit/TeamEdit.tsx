@@ -9,10 +9,10 @@ import MUICountrySelect, { countryType, findCountryByString } from "../../muiCou
 import { initTeam } from "../../../../shared/init"
 import MUIDatePicker from "../../muiDatePicker/MUIDatePicker"
 import moment, { Moment } from "moment"
-import { newTeam } from "../../../../shared/requests/teamRequests"
+import { deleteTeam, newTeam } from "../../../../shared/requests/teamRequests"
 import { useNavigate } from "react-router-dom"
 import { userType } from "../../../../shared/localStorage"
-import { canEditTeam, teamEditErrors } from "./teamEditUtility"
+import { teamDeleteErrors, canEditTeam, teamEditErrors } from "./teamEditUtility"
 
 interface teamEditType<T> {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -43,6 +43,7 @@ export interface teamEditFormErrType {
 const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, user, setUser, team, setTeam }: teamEditType<T>) => {
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ loading, setLoading ] = useState<boolean>(false)
+  const [ delLoading, setDelLoading ] = useState<boolean>(false)
   const [ editForm, setEditForm ] = useState<teamEditFormType>({
     teamName: team.name ? team.name : "",
     inceptionDate: team.stats.inceptionDate ? moment(team.stats.inceptionDate) : null,
@@ -59,8 +60,23 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
 
   const navigate = useNavigate()
 
-  const deleteTeamHandler = () => {
-    // Delete this team
+  const deleteTeamHandler = async () => {
+    // Check for Errors
+    if (teamDeleteErrors(team, setEditFormErr)) {
+      return
+    }
+    // Send request to delete from DB
+    await deleteTeam(team, user, setUser, navigate, setDelLoading, setBackendErr)
+    // Remove this team from the teams array
+    setForm(prevForm => {
+      return {
+        ...prevForm,
+        teams: prevForm.teams.filter((t) => t._id !== team._id)
+      }
+    })
+    // Redirect back to previous page and clear team information
+    setIsEdit(false)
+    setTeam(initTeam(user))
   }
 
   const onSubmitHandler = async () => {
@@ -68,8 +84,10 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
     if (teamEditErrors(editForm, setEditFormErr, form.teams)) {
       return
     }
-
-    await newTeam(editForm, setForm, setEditFormErr, user, setUser, navigate, setLoading, setBackendErr, setIsEdit)
+    // Send request to add a new team to the DB
+    await newTeam(editForm, setForm, setEditFormErr, user, setUser, navigate, setLoading, setBackendErr)
+    // Redirect back to previous page and clear team information
+    setIsEdit(false)
     setTeam(initTeam(user))
   }
 
@@ -156,6 +174,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
           variant="contained" 
           color="error"
           onClick={e => deleteTeamHandler()}
+          startIcon={delLoading && <CircularProgress size={20} color={"inherit"}/>}
         >Delete</Button>}
         <Button
           variant="contained"

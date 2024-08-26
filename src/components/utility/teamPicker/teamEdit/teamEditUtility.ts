@@ -51,6 +51,31 @@ export const teamEditErrors = (
   return Object.values(errors).some((error) => error !== "")
 }
 
+export const teamDeleteErrors = (
+  team: teamType,
+  setEditFormErr: React.Dispatch<React.SetStateAction<teamEditFormErrType>>,
+): boolean => {
+  const errors: teamEditFormErrType = {
+    teamName: "",
+    inceptionDate: "",
+    nationality: "",
+    dropzone: "",
+  }
+
+  if (team.drivers.length > 0) {
+    errors.teamName = "This team still has drivers."
+  }
+
+  setEditFormErr((prevErrs) => {
+    return {
+      ...prevErrs,
+      ...errors,
+    }
+  })
+
+  return Object.values(errors).some((error) => error !== "")
+}
+
 // Determine what privilages the user has to edit this team.
 export const canEditTeam = (team: teamType): boolean => {
   // If any drivers belong to this team.

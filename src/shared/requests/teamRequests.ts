@@ -17,7 +17,6 @@ export const newTeam = async <T extends { teams: teamType[] }, U extends { dropz
   navigate: NavigateFunction,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
-  setIsEdit?: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<void> => {
   setLoading(true)
 
@@ -74,10 +73,6 @@ export const newTeam = async <T extends { teams: teamType[] }, U extends { dropz
               teams: [...prevForm.teams, team],
             }
           })
-
-          if (setIsEdit) {
-            setIsEdit(false)
-          }
         }
       })
       .catch((err: any) => {
@@ -139,6 +134,52 @@ export const getTeams = async (
       })
   } catch (err: any) {
     graphQLErrors("getTeams", err, setUser, navigate, setBackendErr, true)
+  }
+
+  setLoading(false)
+}
+
+export const deleteTeam = async (
+  team: teamType,
+  user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  navigate: NavigateFunction,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+): Promise<void> => {
+  setLoading(true)
+
+  try {
+    await axios
+      .post(
+        "",
+        {
+          variables: {
+            _id: team._id,
+          },
+          query: `
+            mutation DeleteTeam( $_id: ID! ) {
+              deleteTeam( _id: $_id ) {
+                ${populateTeam}
+                tokens
+              }
+            }
+          `,
+        },
+        { headers: headers(user.token) },
+      )
+      .then((res: any) => {
+        if (res.data.errors) {
+          graphQLErrors("deleteTeam", res, setUser, navigate, setBackendErr, true)
+        } else {
+          graphQLResponse("deleteTeam", res, user, setUser, false)
+        }
+      })
+      .catch((err: any) => {
+        graphQLErrors("deleteTeam", err, setUser, navigate, setBackendErr, true)
+      })
+  } catch (err: any) {
+    graphQLErrors("deleteTeam", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)
