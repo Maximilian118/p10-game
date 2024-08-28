@@ -8,35 +8,26 @@ import moment from "moment"
 import { formErrType, formType } from "../../../shared/types"
 import { Button, CircularProgress } from "@mui/material"
 import { updatePP } from "../../../shared/requests/userRequests"
-import { NavigateFunction, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 interface profileCardType<T, U> {
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>
   form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
+  formErr: U
   setFormErr: React.Dispatch<React.SetStateAction<U>>
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
 }
 
-const ProfileCard = <T extends formType, U extends formErrType>({ user, setUser, form, setForm, setFormErr, backendErr, setBackendErr }: profileCardType<T, U>) => {
+const ProfileCard = <T extends formType, U extends formErrType>({ user, setUser, form, setForm, formErr, setFormErr, backendErr, setBackendErr }: profileCardType<T, U>) => {
   const [ loading, setLoading ] = useState<boolean>(false)
 
   const navigate = useNavigate()
 
-  const uploadPPHandler = async (
-    e: React.FormEvent<HTMLButtonElement>, 
-    form: T, 
-    setForm: React.Dispatch<React.SetStateAction<T>>,
-    user: userType,
-    setUser: React.Dispatch<React.SetStateAction<userType>>,
-    navigate: NavigateFunction,
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-    setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
-  ): Promise<void> => {
-    e.preventDefault()
-    await updatePP<T>(form, setForm, user, setUser, navigate, setLoading, setBackendErr)
+  const uploadPPHandler = async () => {
+    await updatePP(form, setForm, user, setUser, navigate, setLoading, setBackendErr)
   }
 
   const filesInForm = (form: T): JSX.Element => {
@@ -55,11 +46,10 @@ const ProfileCard = <T extends formType, U extends formErrType>({ user, setUser,
           <p>Are you sure?</p>
           <Button
             variant="contained" 
-            type="submit"
             className="mui-form-btn"
             style={{ margin: "5px 0 0 0" }}
             startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
-            onClick={e => uploadPPHandler(e, form, setForm, user, setUser, navigate, setLoading, setBackendErr)}
+            onClick={e => uploadPPHandler()}
           >Confirm</Button>
         </>
       )
@@ -68,13 +58,15 @@ const ProfileCard = <T extends formType, U extends formErrType>({ user, setUser,
 
   return (
     <div className="profile-card">
-      <DropZone<T, U> 
-        form={form} 
+      <DropZone<T, U>
+        form={form}
         setForm={setForm}
+        formErr={formErr}
         setFormErr={setFormErr}
-        backendErr={backendErr} 
+        backendErr={backendErr}
         setBackendErr={setBackendErr}
-        user={user}
+        purposeText="User"
+        thumbImg={user.icon}
         style={{ width: 100, margin: 20 }}
       />
       <div className="profile-info">

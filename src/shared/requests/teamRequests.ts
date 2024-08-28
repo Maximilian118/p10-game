@@ -23,7 +23,7 @@ export const newTeam = async <T extends { teams: teamType[] }, U extends { dropz
   let iconURL = ""
 
   if (editForm.icon) {
-    iconURL = await uplaodS3(editForm.teamName, "icon", editForm.icon, setBackendErr)
+    iconURL = await uplaodS3(editForm.teamName, "icon", editForm.icon, setBackendErr) // prettier-ignore
 
     if (!iconURL) {
       setFormErr((prevErrs) => {
@@ -85,6 +85,65 @@ export const newTeam = async <T extends { teams: teamType[] }, U extends { dropz
   setLoading(false)
 }
 
+export const updateTeam = async <T extends { teams: teamType[] }>(
+  team: teamType,
+  setForm: React.Dispatch<React.SetStateAction<T>>,
+  user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  navigate: NavigateFunction,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+): Promise<void> => {
+  setLoading(true)
+
+  try {
+    await axios
+      .post(
+        "",
+        {
+          variables: team,
+          query: `
+            mutation updateTeam( ) {
+              updateTeam( ) {
+                ${populateTeam}
+                tokens
+              }
+            }
+          `,
+        },
+        { headers: headers(user.token) },
+      )
+      .then((res: any) => {
+        if (res.data.errors) {
+          graphQLErrors("updateTeam", res, setUser, navigate, setBackendErr, true)
+        } else {
+          graphQLResponse("updateTeam", res, user, setUser, false)
+
+          // Update this team in the teams array
+          setForm((prevForm) => {
+            return {
+              ...prevForm,
+              teams: prevForm.teams.map((t) => {
+                if (t._id === team._id) {
+                  return team
+                } else {
+                  return t
+                }
+              }),
+            }
+          })
+        }
+      })
+      .catch((err: any) => {
+        graphQLErrors("updateTeam", err, setUser, navigate, setBackendErr, true)
+      })
+  } catch (err: any) {
+    graphQLErrors("updateTeam", err, setUser, navigate, setBackendErr, true)
+  }
+
+  setLoading(false)
+}
+
 export const getTeams = async (
   setTeams: React.Dispatch<React.SetStateAction<teamType[]>>,
   user: userType,
@@ -139,8 +198,9 @@ export const getTeams = async (
   setLoading(false)
 }
 
-export const deleteTeam = async (
+export const deleteTeam = async <T extends { teams: teamType[] }>(
   team: teamType,
+  setForm: React.Dispatch<React.SetStateAction<T>>,
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   navigate: NavigateFunction,
@@ -172,7 +232,15 @@ export const deleteTeam = async (
         if (res.data.errors) {
           graphQLErrors("deleteTeam", res, setUser, navigate, setBackendErr, true)
         } else {
-          graphQLResponse("deleteTeam", res, user, setUser, false)
+          graphQLResponse("deleteTeam", res, user, setUser)
+
+          // Remove this team from the teams array
+          setForm((prevForm) => {
+            return {
+              ...prevForm,
+              teams: prevForm.teams.filter((t) => t._id !== team._id),
+            }
+          })
         }
       })
       .catch((err: any) => {

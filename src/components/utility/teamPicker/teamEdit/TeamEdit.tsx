@@ -9,7 +9,7 @@ import MUICountrySelect, { countryType, findCountryByString } from "../../muiCou
 import { initTeam } from "../../../../shared/init"
 import MUIDatePicker from "../../muiDatePicker/MUIDatePicker"
 import moment, { Moment } from "moment"
-import { deleteTeam, newTeam } from "../../../../shared/requests/teamRequests"
+import { deleteTeam, newTeam, updateTeam } from "../../../../shared/requests/teamRequests"
 import { useNavigate } from "react-router-dom"
 import { userType } from "../../../../shared/localStorage"
 import { teamDeleteErrors, canEditTeam, teamEditErrors } from "./teamEditUtility"
@@ -65,15 +65,21 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
     if (teamDeleteErrors(team, setEditFormErr)) {
       return
     }
-    // Send request to delete from DB
-    await deleteTeam(team, user, setUser, navigate, setDelLoading, setBackendErr)
-    // Remove this team from the teams array
-    setForm(prevForm => {
-      return {
-        ...prevForm,
-        teams: prevForm.teams.filter((t) => t._id !== team._id)
-      }
-    })
+    // Send request to delete from DB and mutate form state
+    await deleteTeam(team, setForm, user, setUser, navigate, setDelLoading, setBackendErr)
+    // Redirect back to previous page and clear team information
+    setIsEdit(false)
+    setTeam(initTeam(user))
+  }
+
+  const updateTeamHandler = async () => {
+    // Check for Errors
+    // if (updateTeamHandler(team, setEditFormErr)) {
+    //   return
+    // }
+
+    // Send request to update the team in DB and mutate form state
+    await updateTeam(team, setForm, user, setUser, navigate, setLoading, setBackendErr)
     // Redirect back to previous page and clear team information
     setIsEdit(false)
     setTeam(initTeam(user))
@@ -84,7 +90,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
     if (teamEditErrors(editForm, setEditFormErr, form.teams)) {
       return
     }
-    // Send request to add a new team to the DB
+    // Send request to add a new team to the DB and mutate form state
     await newTeam(editForm, setForm, setEditFormErr, user, setUser, navigate, setLoading, setBackendErr)
     // Redirect back to previous page and clear team information
     setIsEdit(false)

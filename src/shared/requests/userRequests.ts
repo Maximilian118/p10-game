@@ -1,6 +1,6 @@
 import axios from "axios"
 import { createFormType } from "../../page/Create"
-import { userType, logInSuccess, logout, tokensHandler } from "../localStorage"
+import { userType, logInSuccess, logout } from "../localStorage"
 import { populateUser } from "./requestPopulation"
 import { uplaodS3 } from "./bucketRequests"
 import { graphQLErrors, graphQLErrorType, graphQLResponse, headers } from "./requestsUtility"
@@ -179,11 +179,10 @@ export const updatePP = async <T extends formType>(
   let ppURL = ""
 
   if (form.icon && form.profile_picture) {
-    iconURL = await uplaodS3(user.name, "icon", form.icon, setBackendErr)
-    ppURL = await uplaodS3(user.name, "profile_picture", form.profile_picture, setBackendErr)
+    iconURL = await uplaodS3(user.name, "icon", form.icon, setBackendErr, user, setUser, navigate, 2) // prettier-ignore
+    ppURL = await uplaodS3(user.name, "profile_picture", form.profile_picture, setBackendErr, user, setUser, navigate, 2) // prettier-ignore
 
     if (!iconURL || !ppURL) {
-      console.error("Error: Failed to upload image.")
       setLoading(false)
       return
     }
@@ -215,14 +214,13 @@ export const updatePP = async <T extends formType>(
         if (res.data.errors) {
           graphQLErrors("updatePP", res, setUser, navigate, setBackendErr, true)
         } else {
-          const response = graphQLResponse("updatePP", res) as userType
+          const response = graphQLResponse("updatePP", res, user, setUser) as userType
 
           setUser((prevUser) => {
             return {
               ...prevUser,
               icon: response.icon,
               profile_picture: response.profile_picture,
-              token: tokensHandler(user, response.tokens),
             }
           })
 
@@ -233,6 +231,9 @@ export const updatePP = async <T extends formType>(
               profile_picture: null,
             }
           })
+
+          localStorage.setItem("icon", response.icon)
+          localStorage.setItem("profile_picture", response.profile_picture)
         }
       })
       .catch((err: any) => {
@@ -278,13 +279,12 @@ export const updateEmail = async <T extends formType>(
         if (res.data.errors) {
           graphQLErrors("updateEmail", res, setUser, navigate, setBackendErr, true)
         } else {
-          const response = graphQLResponse("updateEmail", res) as userType
+          const response = graphQLResponse("updateEmail", res, user, setUser) as userType
 
           setUser((prevUser) => {
             return {
               ...prevUser,
               email: response.email,
-              token: tokensHandler(user, response.tokens),
             }
           })
 
@@ -342,13 +342,12 @@ export const updateName = async <T extends formType>(
         if (res.data.errors) {
           graphQLErrors("updateName", res, setUser, navigate, setBackendErr, true)
         } else {
-          const response = graphQLResponse("updateName", res) as userType
+          const response = graphQLResponse("updateName", res, user, setUser) as userType
 
           setUser((prevUser) => {
             return {
               ...prevUser,
               name: response.name,
-              token: tokensHandler(user, response.tokens),
             }
           })
 
@@ -404,7 +403,7 @@ export const updatePassword = async <T extends passFormType>(
         if (res.data.errors) {
           graphQLErrors("updatePassword", res, setUser, navigate, setBackendErr, true)
         } else {
-          graphQLResponse("updatePassword", res) as userType
+          graphQLResponse("updatePassword", res, user, setUser) as userType
           setSuccess(true)
           logout(setUser)
           navigate("/pass-success")

@@ -31,6 +31,7 @@ const Profile: React.FC = () => {
         setUser={setUser}
         form={form}
         setForm={setForm}
+        formErr={formErr}
         setFormErr={setFormErr}
         backendErr={backendErr}
         setBackendErr={setBackendErr}

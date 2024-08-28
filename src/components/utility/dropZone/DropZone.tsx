@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { compressImage, displayError, dropZoneThumb, errTypes, formatError } from "./dropZoneUtility"
 import { graphQLErrorType, hasBackendErr, initGraphQLError } from "../../../shared/requests/requestsUtility"
@@ -45,6 +45,7 @@ const DropZone = <T extends formType, U extends formErrType>({
   const [ error, setError ] = useState<string>("")
   const [ imgErr, setImgErr ] = useState<boolean>(false)
   const [ loading, setLoading ] = useState<boolean>(false)
+  const [ myFiles, setMyFiles ] = useState<File[]>([])
 
   // On component mount, check for a profile_picture File and setThumb if truthy.
   useEffect(() => {
@@ -65,23 +66,30 @@ const DropZone = <T extends formType, U extends formErrType>({
     return (('draggable' in testDiv) || ('ondragstart' in testDiv && 'ondrop' in testDiv)) && 'FormData' in window && 'FileReader' in window
   }
 
+  // Add acceptedFiles to myFiles state. 
+  // This allows us to be able to remove files from the component state and not call acceptedFilesHandler unnecessarily.
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setMyFiles([...myFiles, ...acceptedFiles])
+  }, [myFiles])
+
   // Init DropZone with the necessary arguments.
-  const { acceptedFiles, fileRejections, getRootProps, getInputProps, isDragActive } = useDropzone({ 
+  const { fileRejections, getRootProps, getInputProps, isDragActive } = useDropzone({ 
     accept: { // Only allow these file types.
       'image/jpeg': [],
       'image/png': [],
     },
     multiple: false, // Only 1 file.
     maxSize: 10000000, // Maximum file size = 10mb.
+    onDrop, // onDrop use own state instead of accaptedFiles.
   })
 
   // When a file is accepted, compress into two different sizes.
   // Then, setThumb with a url string for the thumbnail.
   // Then, setForm with compressed Files.
   useEffect(() => {
-    if (acceptedFiles.length > 0 && fileRejections.length === 0 && acceptedFiles[0].name !== form.icon?.name) {
+    if (myFiles.length > 0 && fileRejections.length === 0 && myFiles[0].name !== form.icon?.name) {
       setLoading(true)
-
+      // If files have been accepted, remove any backend errors.
       if (backendErr && setBackendErr && hasBackendErr(errTypes, backendErr)) {
         setBackendErr(prevErr => {
           return {
@@ -90,7 +98,7 @@ const DropZone = <T extends formType, U extends formErrType>({
           }
         })
       }
-
+      // Compress files, remove errors and update form state with the compressed files.
       const acceptedFilesHandler = async (
         setForm: React.Dispatch<React.SetStateAction<T>>,
         setError: React.Dispatch<React.SetStateAction<string>>,
@@ -103,7 +111,7 @@ const DropZone = <T extends formType, U extends formErrType>({
           }
         }
 
-        const compressedImages = await compressImages(acceptedFiles[0])
+        const compressedImages = await compressImages(myFiles[0])
 
         setImgErr(false)
         setThumb(URL.createObjectURL(compressedImages.profile_picture))
@@ -121,6 +129,7 @@ const DropZone = <T extends formType, U extends formErrType>({
           }
         })
 
+        setMyFiles([])
         setLoading(false)
       }
 
@@ -139,7 +148,7 @@ const DropZone = <T extends formType, U extends formErrType>({
 
       setLoading(false)
     }
-  }, [form.icon?.name, acceptedFiles, fileRejections, setForm, setFormErr, backendErr, setBackendErr])
+  }, [form.icon?.name, myFiles, fileRejections, setForm, setFormErr, backendErr, setBackendErr])
 
   // If formErr is passed, display the dropzone error if there is one.
   useEffect(() => {
