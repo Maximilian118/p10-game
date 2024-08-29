@@ -25,6 +25,7 @@ interface teamEditType<T> {
 }
 
 export interface teamEditFormType {
+  _id: string | null
   teamName: string
   inceptionDate: Moment | null
   nationality: countryType | null
@@ -45,6 +46,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ delLoading, setDelLoading ] = useState<boolean>(false)
   const [ editForm, setEditForm ] = useState<teamEditFormType>({
+    _id: team._id ? team._id : null,
     teamName: team.name ? team.name : "",
     inceptionDate: team.stats.inceptionDate ? moment(team.stats.inceptionDate) : null,
     nationality: team.stats.nationality ? findCountryByString(team.stats.nationality) : null,
@@ -66,23 +68,24 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
       return
     }
     // Send request to delete from DB and mutate form state
-    await deleteTeam(team, setForm, user, setUser, navigate, setDelLoading, setBackendErr)
-    // Redirect back to previous page and clear team information
-    setIsEdit(false)
-    setTeam(initTeam(user))
+    if (await deleteTeam(team, setForm, user, setUser, navigate, setDelLoading, setBackendErr)) {
+      // Redirect back to previous page and clear team information
+      setIsEdit(false)
+      setTeam(initTeam(user))
+    }
   }
 
   const updateTeamHandler = async () => {
     // Check for Errors
-    // if (updateTeamHandler(team, setEditFormErr)) {
-    //   return
-    // }
-
+    if (teamEditErrors(editForm, setEditFormErr, form.teams, true)) {
+      return
+    }
     // Send request to update the team in DB and mutate form state
-    await updateTeam(team, setForm, user, setUser, navigate, setLoading, setBackendErr)
-    // Redirect back to previous page and clear team information
-    setIsEdit(false)
-    setTeam(initTeam(user))
+    if (await updateTeam(team, editForm, setForm, user, setUser, navigate, setLoading, setBackendErr)) {
+      // Redirect back to previous page and clear team information
+      setIsEdit(false)
+      setTeam(initTeam(user))
+    }
   }
 
   const onSubmitHandler = async () => {
@@ -91,10 +94,11 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
       return
     }
     // Send request to add a new team to the DB and mutate form state
-    await newTeam(editForm, setForm, setEditFormErr, user, setUser, navigate, setLoading, setBackendErr)
-    // Redirect back to previous page and clear team information
-    setIsEdit(false)
-    setTeam(initTeam(user))
+    if (await newTeam(editForm, setForm, user, setUser, navigate, setLoading, setBackendErr)) {
+      // Redirect back to previous page and clear team information
+      setIsEdit(false)
+      setTeam(initTeam(user))
+    }
   }
 
   return (
@@ -184,10 +188,10 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
         >Delete</Button>}
         <Button
           variant="contained"
-          onClick={e => onSubmitHandler()}
+          onClick={e => editForm._id ? updateTeamHandler() : onSubmitHandler()}
           disabled={canEditTeam(team)}
           startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
-        >Submit</Button>
+        >{editForm._id ? "Update" : "Submit"}</Button>
       </div>
     </div>
   )

@@ -66,7 +66,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     url: driver.url ? driver.url : "",
     driverName: driver.name ? driver.name : "",
     driverID: driver.driverID ? driver.driverID : "",
-    teams: driver.teams ? driver.teams : [],
+    teams: driver.teams ? driver.teams : [], // All the teams the driver currently belongs to.
     nationality: driver.stats.nationality ? findCountryByString(driver.stats.nationality) : null,
     heightCM: driver.stats.heightCM ? `${driver.stats.heightCM}cm` : null,
     weightKG: driver.stats.weightKG ? `${driver.stats.weightKG}kg` : null,

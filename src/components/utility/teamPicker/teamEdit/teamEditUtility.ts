@@ -6,6 +6,7 @@ export const teamEditErrors = (
   editForm: teamEditFormType,
   setEditFormErr: React.Dispatch<React.SetStateAction<teamEditFormErrType>>,
   teams: teamType[],
+  update?: boolean,
 ): boolean => {
   const errors: teamEditFormErrType = {
     teamName: "",
@@ -18,17 +19,17 @@ export const teamEditErrors = (
     errors.teamName = "Please enter a name."
   }
 
+  if (!editForm.nationality) {
+    errors.nationality = "Please enter a nationality."
+  }
+
   if (!editForm.inceptionDate) {
     errors.inceptionDate = "Please enter a date."
   } else if (moment(editForm.inceptionDate).isAfter(moment())) {
     errors.inceptionDate = "Date can not be in the future dummy."
   }
 
-  if (!editForm.nationality) {
-    errors.nationality = "Please enter a nationality."
-  }
-
-  if (!editForm.icon) {
+  if (!editForm.icon && !update) {
     errors.dropzone = "Please enter an image."
   }
 
@@ -37,7 +38,18 @@ export const teamEditErrors = (
     // If teamName already exists in teams array.
     if (team.name.toLowerCase() === editForm.teamName.toLowerCase()) {
       errors.teamName = "Duplicate Team Name."
-      break
+    }
+
+    if (update && team._id === editForm._id) {
+      // If nothing has changed
+      if (
+        team.name === editForm.teamName &&
+        team.stats.nationality === editForm.nationality?.label &&
+        team.stats.inceptionDate === moment(editForm.inceptionDate).format() &&
+        !editForm.icon
+      ) {
+        errors.teamName = "No changes have been made."
+      }
     }
   }
 

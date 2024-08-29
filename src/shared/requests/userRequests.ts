@@ -143,10 +143,10 @@ export const forgot = async (
       .post("", {
         variables: form,
         query: `
-        mutation Forgot($email: String!) {
-          forgot(email: $email)
-        }
-      `,
+          mutation Forgot($email: String!) {
+            forgot(email: $email)
+          }
+        `,
       })
       .then((res: any) => {
         if (res.data.errors) {
@@ -199,14 +199,14 @@ export const updatePP = async <T extends formType>(
             profile_picture: ppURL,
           },
           query: `
-          mutation UpdatePP($icon: String!, $profile_picture: String!) {
-            updatePP(icon: $icon, profile_picture: $profile_picture) {
-              icon
-              profile_picture
-              tokens
+            mutation UpdatePP($icon: String!, $profile_picture: String!) {
+              updatePP(icon: $icon, profile_picture: $profile_picture) {
+                icon
+                profile_picture
+                tokens
+              }
             }
-          }
-        `,
+          `,
         },
         { headers: headers(user.token) },
       )

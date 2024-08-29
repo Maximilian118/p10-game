@@ -8,33 +8,25 @@ import { uplaodS3 } from "./bucketRequests"
 import moment from "moment"
 import { populateTeam } from "./requestPopulation"
 
-export const newTeam = async <T extends { teams: teamType[] }, U extends { dropzone: string }>(
+export const newTeam = async <T extends { teams: teamType[] }>(
   editForm: teamEditFormType,
   setForm: React.Dispatch<React.SetStateAction<T>>,
-  setFormErr: React.Dispatch<React.SetStateAction<U>>,
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   navigate: NavigateFunction,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
-): Promise<void> => {
+): Promise<boolean> => {
   setLoading(true)
-
   let iconURL = ""
+  let success = false
 
   if (editForm.icon) {
     iconURL = await uplaodS3(editForm.teamName, "icon", editForm.icon, setBackendErr) // prettier-ignore
 
     if (!iconURL) {
-      setFormErr((prevErrs) => {
-        return {
-          ...prevErrs,
-          dropzone: "Failed to upload image.",
-        }
-      })
-
       setLoading(false)
-      return
+      return false
     }
   }
 
@@ -73,6 +65,8 @@ export const newTeam = async <T extends { teams: teamType[] }, U extends { dropz
               teams: [...prevForm.teams, team],
             }
           })
+
+          success = true
         }
       })
       .catch((err: any) => {
@@ -83,28 +77,51 @@ export const newTeam = async <T extends { teams: teamType[] }, U extends { dropz
   }
 
   setLoading(false)
+  return success
 }
 
 export const updateTeam = async <T extends { teams: teamType[] }>(
   team: teamType,
+  editForm: teamEditFormType,
   setForm: React.Dispatch<React.SetStateAction<T>>,
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   navigate: NavigateFunction,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
-): Promise<void> => {
+): Promise<boolean> => {
   setLoading(true)
+  let iconURL = ""
+  let success = false
+
+  if (editForm.icon) {
+    iconURL = await uplaodS3(editForm.teamName, "icon", editForm.icon, setBackendErr, user, setUser, navigate, 0) // prettier-ignore
+
+    if (!iconURL) {
+      setLoading(false)
+      return false
+    }
+  }
+
+  const updatedTeam = {
+    name: editForm.teamName,
+    url: iconURL ? iconURL : team.url,
+    nationality: editForm.nationality?.label,
+    inceptionDate: moment(editForm.inceptionDate).format(),
+  }
 
   try {
     await axios
       .post(
         "",
         {
-          variables: team,
+          variables: {
+            ...editForm,
+            ...updatedTeam,
+          },
           query: `
-            mutation updateTeam( ) {
-              updateTeam( ) {
+            mutation UpdateTeam( $_id: ID!, $url: String!, $name: String!, $nationality: String!, $inceptionDate: String!) {
+              updateTeam(teamInput: { _id: $_id, url: $url, name: $name, nationality: $nationality, inceptionDate: $inceptionDate }) {
                 ${populateTeam}
                 tokens
               }
@@ -125,13 +142,18 @@ export const updateTeam = async <T extends { teams: teamType[] }>(
               ...prevForm,
               teams: prevForm.teams.map((t) => {
                 if (t._id === team._id) {
-                  return team
+                  return {
+                    ...team,
+                    ...updatedTeam,
+                  }
                 } else {
                   return t
                 }
               }),
             }
           })
+
+          success = true
         }
       })
       .catch((err: any) => {
@@ -142,6 +164,7 @@ export const updateTeam = async <T extends { teams: teamType[] }>(
   }
 
   setLoading(false)
+  return success
 }
 
 export const getTeams = async (
@@ -206,8 +229,9 @@ export const deleteTeam = async <T extends { teams: teamType[] }>(
   navigate: NavigateFunction,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
-): Promise<void> => {
+): Promise<boolean> => {
   setLoading(true)
+  let success = false
 
   try {
     await axios
@@ -241,6 +265,8 @@ export const deleteTeam = async <T extends { teams: teamType[] }>(
               teams: prevForm.teams.filter((t) => t._id !== team._id),
             }
           })
+
+          success = true
         }
       })
       .catch((err: any) => {
@@ -251,4 +277,5 @@ export const deleteTeam = async <T extends { teams: teamType[] }>(
   }
 
   setLoading(false)
+  return success
 }

@@ -101,13 +101,13 @@ export const deleteS3 = async (
             depth,
           },
           query: `
-          mutation DeleteS3( $url: String!, $depth: Int ) {
-            deleteS3( url: $url, depth: $depth ) {
-              url
-              tokens
+            mutation DeleteS3( $url: String!, $depth: Int ) {
+              deleteS3( url: $url, depth: $depth ) {
+                url
+                tokens
+              }
             }
-          }
-        `,
+          `,
         },
         { headers: headers(user.token) },
       )
