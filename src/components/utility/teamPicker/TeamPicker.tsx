@@ -22,7 +22,8 @@ interface teamPickerType<T, U> {
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
-  setTeam: React.Dispatch<React.SetStateAction<teamType>>
+  setTeam: React.Dispatch<React.SetStateAction<teamType>>,
+  setTeams?: React.Dispatch<React.SetStateAction<teamType[]>>, // Teams requested from DB in a state of parent.
 }
 
 const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }>({ 
@@ -35,7 +36,8 @@ const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }
   backendErr, 
   setBackendErr, 
   setIsEdit, 
-  setTeam 
+  setTeam,
+  setTeams,
   }: teamPickerType<T, U>) => {
   const [ localTeams, setLocalTeams ] = useState<teamType[]>([]) // All teams in db.
   const [ value, setValue ] = useState<teamType | null>(null) // Current value of Autocomplete.
@@ -51,6 +53,10 @@ const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }
     }
     setReqSent(true)
   }, [localTeams, setLocalTeams, reqSent, user, setUser, navigate, setBackendErr])
+
+  useEffect(() => { // Expose requested teams to a higher state.
+    setTeams && setTeams(localTeams)
+  }, [localTeams, setTeams])
 
   return (
     <div className="team-picker">

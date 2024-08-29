@@ -41,6 +41,10 @@ export const populateDriver = `
   _id
   url
   name
+  driverID
+  teams {
+    ${populateTeam}
+  }
   driverGroups
   stats {
     nationality

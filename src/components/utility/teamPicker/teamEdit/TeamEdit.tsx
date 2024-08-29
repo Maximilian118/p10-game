@@ -16,12 +16,12 @@ import { teamDeleteErrors, canEditTeam, teamEditErrors } from "./teamEditUtility
 
 interface teamEditType<T> {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
-  form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
   team: teamType // The team in question.
   setTeam: React.Dispatch<React.SetStateAction<teamType>>
+  teams: teamType[] // Teams requested from DB.
 }
 
 export interface teamEditFormType {
@@ -41,7 +41,7 @@ export interface teamEditFormErrType {
   [key: string]: string
 }
 
-const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, user, setUser, team, setTeam }: teamEditType<T>) => {
+const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, setForm, user, setUser, team, setTeam, teams }: teamEditType<T>) => {
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ delLoading, setDelLoading ] = useState<boolean>(false)
@@ -77,7 +77,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
 
   const updateTeamHandler = async () => {
     // Check for Errors
-    if (teamEditErrors(editForm, setEditFormErr, form.teams, true)) {
+    if (teamEditErrors(editForm, setEditFormErr, teams, true)) {
       return
     }
     // Send request to update the team in DB and mutate form state
@@ -90,7 +90,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, form, setForm, u
 
   const onSubmitHandler = async () => {
     // Check for Errors
-    if (teamEditErrors(editForm, setEditFormErr, form.teams)) {
+    if (teamEditErrors(editForm, setEditFormErr, teams)) {
       return
     }
     // Send request to add a new team to the DB and mutate form state

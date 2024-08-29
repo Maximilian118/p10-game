@@ -43,11 +43,11 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
 }: driverGroupEditType<T>) => {
   const [ isDriverEdit, setIsDriverEdit ] = useState<boolean>(false) // Render isDriverEdit or not.
   const [ driver, setDriver ] = useState<driverType>(initDriver(user)) // If we're editing a driver rather than making a new one, populate.
-  const [ drivers, setDrivers ] = useState<driverType[]>([]) // Driver objects requested from backend.
+  const [ drivers, setDrivers ] = useState<driverType[]>([]) // Drivers requested from DB.
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ editForm, setEditForm ] = useState<editFormType>({
     groupName: group.name ? group.name : "",
-    drivers: group.drivers ? group.drivers : [],
+    drivers: group.drivers ? group.drivers : [], // All the drivers that belong to the driver group.
     icon: null,
     profile_picture: null,
   })
@@ -64,6 +64,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
   return isDriverEdit ? 
     <DriverEdit
       setIsDriverEdit={setIsDriverEdit}
+      setForm={setEditForm}
       driver={driver}
       setDriver={setDriver}
       user={user}
@@ -96,14 +97,16 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
         error={editFormErr.groupName || backendErr.type === "groupName" ? true : false}
       />
       <DriverPicker
-        setIsDriverEdit={setIsDriverEdit}
-        setDriver={setDriver}
         user={user}
         setUser={setUser}
+        editForm={editForm}
+        setEditForm={setEditForm}
         editFormErr={editFormErr}
         setEditFormErr={setEditFormErr}
         backendErr={backendErr}
         setBackendErr={setBackendErr}
+        setIsDriverEdit={setIsDriverEdit}
+        setDriver={setDriver}
         setDrivers={setDrivers}
       />
       <div className="button-bar">

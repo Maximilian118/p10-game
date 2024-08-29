@@ -10,32 +10,37 @@ import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import { IconButton } from "@mui/material"
 import { Add } from "@mui/icons-material"
 import DriverCard from "../../cards/driverCard/DriverCard"
+import { canEditDriver } from "./driverPickerUtility"
 
-interface driverPickerType<U> {
-  setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
-  setDriver: React.Dispatch<React.SetStateAction<driverType>>
+interface driverPickerType<T, U> {
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
+  editForm: T
+  setEditForm: React.Dispatch<React.SetStateAction<T>>
   editFormErr: U
   setEditFormErr: React.Dispatch<React.SetStateAction<U>>
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
-  setDrivers?: React.Dispatch<React.SetStateAction<driverType[]>>
+  setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
+  setDriver: React.Dispatch<React.SetStateAction<driverType>>
+  setDrivers?: React.Dispatch<React.SetStateAction<driverType[]>> // Drivers requested from DB in a state of parent.
 }
 
-const DriverPicker = <U extends { drivers: string }>({
+const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: string }>({
+  user,
+  setUser,
+  editForm,
+  setEditForm,
+  editFormErr,
+  setEditFormErr,
+  backendErr,
+  setBackendErr,
   setIsDriverEdit,
   setDriver,
-  user, 
-  setUser,
-  editFormErr,
-  setEditFormErr, 
-  backendErr, 
-  setBackendErr,
   setDrivers,
-}: driverPickerType<U>) => {
+}: driverPickerType<T, U>) => {
   const [ localDrivers, setLocalDrivers ] = useState<driverType[]>([]) // All drivers in db.
-  const [ value, setValue ] = useState<string | null>(null) // Current value of Autocomplete.
+  const [ value, setValue ] = useState<driverType | null>(null) // Current value of Autocomplete.
   const [ reqSent, setReqSent ] = useState<boolean>(false)
   const [ loading, setLoading ] = useState<boolean>(false)
 
@@ -49,45 +54,56 @@ const DriverPicker = <U extends { drivers: string }>({
     setReqSent(true)
   }, [localDrivers, setLocalDrivers, reqSent, user, setUser, navigate, setBackendErr])
 
-  useEffect(() => { // Expose drivers to a higher state.
-    if (setDrivers && !reqSent) {
-      setDrivers(localDrivers)
-    }
-  }, [localDrivers, setDrivers, reqSent])
+  useEffect(() => { // Expose requested drivers to a higher state.
+    setDrivers && setDrivers(localDrivers)
+  }, [localDrivers, setDrivers])
 
   return (
     <div className="driver-picker">
       <MUIAutocomplete
         label={inputLabel("drivers", editFormErr, backendErr)}
-        displayNew="noOptions"
-        onNewMouseDown={() => setIsDriverEdit(true)}
+        displayNew="always"
         customNewLabel="Driver"
-        options={localDrivers.map((driver: driverType) => driver.name)}
-        value={value}
-        setValue={setValue}
-        error={editFormErr.drivers || backendErr.type === "drivers" ? true : false}
+        onNewMouseDown={() => setIsDriverEdit(true)}
+        options={localDrivers.filter(driver => !editForm.drivers.some(d => d._id === driver._id))}
+        value={value ? value.name : null}
         loading={loading}
-        onChange={() => setEditFormErr(prevErrs => {
-          return {
-            ...prevErrs,
-            drivers: "",
+        error={editFormErr.drivers || backendErr.type === "drivers" ? true : false}
+        setObjValue={(value) => {
+          setValue(value)
+        }}
+        onLiClick={(value) => {
+          setEditForm(prevForm => {
+            return {
+              ...prevForm,
+              drivers: [
+                value,
+                ...prevForm.drivers,
+              ],
+            }
+          })
+        }}
+        onChange={() => 
+          setEditFormErr(prevErrs => {
+            return {
+              ...prevErrs,
+              drivers: "",
+            }
           }
-        })}
+        )}
       />
       <div className="driver-picker-list">
-        {localDrivers
-          // Add filter to remove all drivers already in the group
-          .map((driver: driverType, i: number) => (
-            <DriverCard 
-              key={i} 
-              driver={driver}
-              onClick={() => {
-                setDriver(driver)
-                setIsDriverEdit(true)
-              }}
-            />
-          ))
-        }
+        {editForm.drivers.map((driver: driverType, i: number) => (
+          <DriverCard 
+            key={i} 
+            driver={driver}
+            canEdit={!canEditDriver(driver)}
+            onClick={() => {
+              setDriver(driver)
+              setIsDriverEdit(true)
+            }}
+          />
+        ))}
         <IconButton 
           className="add-button" 
           onClick={() => {

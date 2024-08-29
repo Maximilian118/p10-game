@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import './_driverEdit.scss'
 import DropZone from "../../dropZone/DropZone"
-import { Button, InputAdornment, TextField } from "@mui/material"
+import { Button, CircularProgress, InputAdornment, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
 import { graphQLErrorType } from "../../../../shared/requests/requestsUtility"
 import { driverType, teamType } from "../../../../shared/types"
@@ -17,9 +17,12 @@ import MUICountrySelect, { countryType, findCountryByString } from "../../muiCou
 import { canEditDriver, driverEditErrors } from "../driverPickerUtility"
 import TeamEdit from "../../teamPicker/teamEdit/TeamEdit"
 import TeamPicker from "../../teamPicker/TeamPicker"
+import { newDriver } from "../../../../shared/requests/driverRequests"
+import { useNavigate } from "react-router-dom"
 
-interface driverEditType {
+interface driverEditType<T> {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
+  setForm: React.Dispatch<React.SetStateAction<T>>
   driver: driverType
   setDriver: React.Dispatch<React.SetStateAction<driverType>>
   user: userType,
@@ -30,6 +33,7 @@ interface driverEditType {
 }
 
 export interface driverEditFormType {
+  _id: string | null
   url: string
   driverName: string
   driverID: `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}` | ""
@@ -59,10 +63,24 @@ export interface driverEditFormErrType {
   [key: string]: string
 }
 
-const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriver, user, setUser, backendErr, setBackendErr, drivers }) => {
+const DriverEdit = <T extends { drivers: driverType[] }>({ 
+  setIsDriverEdit, 
+  setForm, 
+  driver, 
+  setDriver, 
+  user, 
+  setUser, 
+  backendErr, 
+  setBackendErr, 
+  drivers,
+  }: driverEditType<T>) => {
   const [ isEdit, setIsEdit ] = useState<boolean>(false) // Render TeamEdit or not.
   const [ team, setTeam ] = useState<teamType>(initTeam(user)) // If we're editing a team rather than making a new one, populate.
+  const [ teams, setTeams ] = useState<teamType[]>([]) // Teams requested from DB.
+  const [ loading, setLoading ] = useState<boolean>(false)
+  const [ delLoading, setDelLoading ] = useState<boolean>(false)
   const [ editForm, setEditForm ] = useState<driverEditFormType>({
+    _id: driver._id ? driver._id : null,
     url: driver.url ? driver.url : "",
     driverName: driver.name ? driver.name : "",
     driverID: driver.driverID ? driver.driverID : "",
@@ -90,30 +108,38 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
     dropzone: "",
   })
 
+  const navigate = useNavigate()
+
   const deleteDriverHandler = () => {
     // Delete driver
+    console.log(setDelLoading)
   }
 
-  const onSubmitHandler = () => {
+  const updateDriverHandler = () => {
+    // Update driver
+  }
+
+  const onSubmitHandler = async () => {
     // Check for Errors
     if (driverEditErrors(editForm, setEditFormErr, drivers)) {
       return
     }
-
-    // request...
-    // Update group. Group will update form on submission.
-    // Convert strings to numbers
+    // Send request to add a new driver to the DB and mutate form state
+    if (await newDriver(editForm, setForm, user, setUser, navigate, setLoading, setBackendErr)) {
+      setIsDriverEdit(false)
+      setDriver(initDriver(user))
+    }
   }
 
   return isEdit ? 
     <TeamEdit
       setIsEdit={setIsEdit}
-      form={editForm}
       setForm={setEditForm}
       user={user}
       setUser={setUser}
       team={team}
       setTeam={setTeam}
+      teams={teams}
     /> : (
     <div className="driver-edit">
       <h4>{`${!driver.name ? `New` : `Edit`} Driver`}</h4>
@@ -172,6 +198,7 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
         setBackendErr={setBackendErr}
         setIsEdit={setIsEdit}
         setTeam={setTeam}
+        setTeams={setTeams}
       />
       <div className="driver-edit-stats">
         <MUIAutocomplete
@@ -297,11 +324,14 @@ const DriverEdit: React.FC<driverEditType> = ({ setIsDriverEdit, driver, setDriv
           variant="contained" 
           color="error"
           onClick={e => deleteDriverHandler()}
+          startIcon={delLoading && <CircularProgress size={20} color={"inherit"}/>}
         >Delete</Button>}
         <Button
           variant="contained"
-          onClick={e => onSubmitHandler()}
-        >Submit</Button>
+          disabled={canEditDriver(driver)}
+          onClick={e => editForm._id ? updateDriverHandler() : onSubmitHandler()}
+          startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
+        >{editForm._id ? "Update" : "Submit"}</Button>
       </div>
     </div>
   )

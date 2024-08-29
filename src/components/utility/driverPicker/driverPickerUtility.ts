@@ -7,6 +7,7 @@ export const driverEditErrors = (
   editForm: driverEditFormType,
   setEditFormErr: React.Dispatch<React.SetStateAction<driverEditFormErrType>>,
   drivers: driverType[],
+  update?: boolean,
 ): boolean => {
   const errors: driverEditFormErrType = {
     url: "",
@@ -22,7 +23,7 @@ export const driverEditErrors = (
     dropzone: "",
   }
 
-  if (!editForm.icon) {
+  if (!editForm.icon && !update) {
     errors.dropzone = "Please enter an image."
   }
 
@@ -58,8 +59,26 @@ export const driverEditErrors = (
   for (const driver of drivers) {
     // If driverName already exists in drivers array.
     if (driver.name.toLowerCase() === editForm.driverName.toLowerCase()) {
-      errors.driverName = "Duplicate Driver Name."
+      errors.driverName = "A driver by that name already exists!"
       break
+    }
+
+    if (update && driver._id === editForm._id) {
+      // If nothing has changed
+      if (
+        !editForm.icon &&
+        driver.name === editForm.driverName &&
+        driver.driverID === editForm.driverID &&
+        driver.teams === editForm.teams &&
+        driver.stats.nationality === editForm.nationality?.label &&
+        driver.stats.heightCM === editForm.heightCM &&
+        driver.stats.weightKG === editForm.weightKG &&
+        driver.stats.birthday === moment(editForm.birthday).format() &&
+        driver.stats.moustache === editForm.moustache &&
+        driver.stats.mullet === editForm.mullet
+      ) {
+        errors.driverName = "No changes have been made."
+      }
     }
   }
 

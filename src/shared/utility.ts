@@ -106,3 +106,6 @@ export const isThreeLettersUppercase = (
 
   return true
 }
+
+// Remove everything but numbers from a string.
+export const onlyNumbers = (str: string): number => Number(str.replace(/\D/g, ""))
