@@ -17,7 +17,7 @@ import MUICountrySelect, { countryType, findCountryByString } from "../../muiCou
 import { canEditDriver, driverEditErrors } from "../driverPickerUtility"
 import TeamEdit from "../../teamPicker/teamEdit/TeamEdit"
 import TeamPicker from "../../teamPicker/TeamPicker"
-import { newDriver } from "../../../../shared/requests/driverRequests"
+import { newDriver, updateDriver } from "../../../../shared/requests/driverRequests"
 import { useNavigate } from "react-router-dom"
 
 interface driverEditType<T> {
@@ -115,8 +115,15 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
     console.log(setDelLoading)
   }
 
-  const updateDriverHandler = () => {
-    // Update driver
+  const updateDriverHandler = async () => {
+    if (driverEditErrors(editForm, setEditFormErr, drivers, true)) {
+      return
+    }
+    // Send request to update a driver and mutate form state
+    if (await updateDriver(driver, editForm, setForm, user, setUser, navigate, setLoading, setBackendErr)) {
+      setIsDriverEdit(false)
+      setDriver(initDriver(user))
+    }
   }
 
   const onSubmitHandler = async () => {

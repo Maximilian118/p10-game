@@ -27,7 +27,9 @@ export const populateTeam = `
   url
   name
   driverGroups
-  drivers
+  drivers {
+    _id
+  }
   stats {
     inceptionDate
     nationality

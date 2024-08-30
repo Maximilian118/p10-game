@@ -54,9 +54,10 @@ export const driverEditErrors = (
   } else if (moment(editForm.birthday).isAfter(moment())) {
     errors.birthday = "Date can not be in the future dummy."
   }
-
+  // Remove the driver with this editForm._id from the drivers array for duplicate checking.
+  const newDrivers = drivers.filter((d) => d._id !== editForm._id)
   // Loop through all of the existing drivers.
-  for (const driver of drivers) {
+  for (const driver of newDrivers) {
     // If driverName already exists in drivers array.
     if (driver.name.toLowerCase() === editForm.driverName.toLowerCase()) {
       errors.driverName = "A driver by that name already exists!"

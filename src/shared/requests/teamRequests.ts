@@ -134,7 +134,7 @@ export const updateTeam = async <T extends { teams: teamType[] }>(
         if (res.data.errors) {
           graphQLErrors("updateTeam", res, setUser, navigate, setBackendErr, true)
         } else {
-          graphQLResponse("updateTeam", res, user, setUser, false)
+          const newTeam = graphQLResponse("updateTeam", res, user, setUser, false) as teamType
 
           // Update this team in the teams array
           setForm((prevForm) => {
@@ -142,10 +142,7 @@ export const updateTeam = async <T extends { teams: teamType[] }>(
               ...prevForm,
               teams: prevForm.teams.map((t) => {
                 if (t._id === team._id) {
-                  return {
-                    ...team,
-                    ...updatedTeam,
-                  }
+                  return newTeam
                 } else {
                   return t
                 }

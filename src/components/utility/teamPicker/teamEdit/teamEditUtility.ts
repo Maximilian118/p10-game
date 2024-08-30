@@ -32,9 +32,10 @@ export const teamEditErrors = (
   if (!editForm.icon && !update) {
     errors.dropzone = "Please enter an image."
   }
-
+  // Remove the team with this editForm._id from the teams array for duplicate checking.
+  const newTeams = teams.filter((t) => t._id !== editForm._id)
   // Loop through all of the existing teams.
-  for (const team of teams) {
+  for (const team of newTeams) {
     // If teamName already exists in teams array.
     if (team.name.toLowerCase() === editForm.teamName.toLowerCase()) {
       errors.teamName = "A team by that name already exists!"

@@ -95,7 +95,7 @@ export const newDriver = async <T extends { drivers: driverType[] }>(
           setForm((prevForm) => {
             return {
               ...prevForm,
-              teams: [...prevForm.drivers, driver],
+              drivers: [...prevForm.drivers, driver],
             }
           })
 
@@ -107,6 +107,119 @@ export const newDriver = async <T extends { drivers: driverType[] }>(
       })
   } catch (err: any) {
     graphQLErrors("newDriver", err, setUser, navigate, setBackendErr, true)
+  }
+
+  setLoading(false)
+  return success
+}
+
+export const updateDriver = async <T extends { drivers: driverType[] }>(
+  driver: driverType,
+  editForm: driverEditFormType,
+  setForm: React.Dispatch<React.SetStateAction<T>>,
+  user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  navigate: NavigateFunction,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+): Promise<boolean> => {
+  setLoading(true)
+  let iconURL = ""
+  let success = false
+
+  if (editForm.icon) {
+    iconURL = await uplaodS3(editForm.driverName, "icon", editForm.icon, setBackendErr, user, setUser, navigate, 0) // prettier-ignore
+
+    if (!iconURL) {
+      setLoading(false)
+      return false
+    }
+  }
+
+  const updatedDriver = {
+    url: iconURL ? iconURL : driver.url,
+    name: editForm.driverName,
+    nationality: editForm.nationality!.label,
+    heightCM: onlyNumbers(editForm.heightCM!),
+    weightKG: onlyNumbers(editForm.weightKG!),
+    birthday: moment(editForm.birthday).format(),
+  }
+
+  try {
+    await axios
+      .post(
+        "",
+        {
+          variables: {
+            ...editForm,
+            ...updatedDriver,
+            teams: editForm.teams.map((team) => team._id!),
+          },
+          query: `
+            mutation UpdateDriver(
+              $_id: ID,
+              $url: String,
+              $name: String!,
+              $driverID: String!,
+              $teams: [ID!],
+              $nationality: String!,
+              $heightCM: Int!,
+              $weightKG: Int!,
+              $birthday: String!,
+              $moustache: Boolean!,
+              $mullet: Boolean!,
+            ) {
+              updateDriver(
+                driverInput: { 
+                  _id: $_id,
+                  url: $url,
+                  name: $name,
+                  driverID: $driverID,
+                  teams: $teams,
+                  nationality: $nationality,
+                  heightCM: $heightCM,
+                  weightKG: $weightKG,
+                  birthday: $birthday,
+                  moustache: $moustache,
+                  mullet: $mullet,
+                }
+              ) {
+                ${populateDriver}
+                tokens
+              }
+            }
+          `,
+        },
+        { headers: headers(user.token) },
+      )
+      .then((res: any) => {
+        if (res.data.errors) {
+          graphQLErrors("updateDriver", res, setUser, navigate, setBackendErr, true)
+        } else {
+          const newDriver = graphQLResponse("updateDriver", res, user, setUser, false) as driverType
+
+          // Update this driver in editForm.drivers
+          setForm((prevForm) => {
+            return {
+              ...prevForm,
+              drivers: prevForm.drivers.map((d) => {
+                if (d._id === driver._id) {
+                  return newDriver
+                } else {
+                  return d
+                }
+              }),
+            }
+          })
+
+          success = true
+        }
+      })
+      .catch((err: any) => {
+        graphQLErrors("updateDriver", err, setUser, navigate, setBackendErr, true)
+      })
+  } catch (err: any) {
+    graphQLErrors("updateDriver", err, setUser, navigate, setBackendErr, true)
   }
 
   setLoading(false)
