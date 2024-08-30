@@ -16,13 +16,13 @@
     flex-grow: 1;
     @include mixins.flexbox-start-column;
     overflow-y: scroll;
-    padding: 8px 0;
+    padding: 8px 0 50px;
     box-sizing: border-box;
   }
 
   .add-button {
     position: absolute;
-    bottom: 18px;
-    right: 18px;
+    bottom: 16px;
+    right: 16px;
   }
 }

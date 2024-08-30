@@ -39,12 +39,16 @@
       position: absolute;
       top: 5px;
       right: 15px;
-      background: variables.$delete-hover;
+      background: variables.$f1-red;
       color: white;
 
       svg {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
+      }
+
+      &:hover {
+        background: variables.$f1-red-hover;
       }
     }
   }

@@ -23,23 +23,44 @@
     background: rgba(0, 0, 0, 0.06);
   }
 
-  .edit-button {
-    width: 22px;
-    height: 22px;
-    border-radius: 22px;
-    transition: variables.$trans-speed;
-    background: variables.$mui-blue;
-    color: white;
+  .toolbar {
+    height: 100%;
+    @include mixins.flexbox-end;
     position: absolute;
     right: 16px;
 
-    svg {
-      width: 14px;
-      height: 14px;
+    .button {
+      width: 22px;
+      height: 22px;
+      border-radius: 22px;
+      transition: variables.$trans-speed;
+      color: white;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
     }
 
-    &:hover {
-      background: variables.$mui-blue-hover;
+    .button:not(:last-child) {
+      margin-right: 10px;
+    }
+
+    .edit {
+      background: variables.$mui-blue;
+
+      &:hover {
+        background: variables.$mui-blue-hover;
+      }
+    }
+
+    .remove {
+      background: variables.$delete-hover;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
     }
   }
 }

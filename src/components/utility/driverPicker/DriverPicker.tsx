@@ -58,6 +58,18 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
     setDrivers && setDrivers(localDrivers)
   }, [localDrivers, setDrivers])
 
+  const removeDriverHandler = (driver: driverType) => {
+    // Remove this driver from driver group form state.
+    setEditForm(prevForm => {
+      return {
+        ...prevForm,
+        drivers: prevForm.drivers.filter(d => d._id !== driver._id),
+      }
+    })
+    // Remove this driver from the driver group in db.
+    // Request
+  }
+
   return (
     <div className="driver-picker">
       <MUIAutocomplete
@@ -98,6 +110,7 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
             key={i} 
             driver={driver}
             canEdit={!canEditDriver(driver)}
+            onRemove={(driver) => removeDriverHandler(driver)}
             onClick={() => {
               setDriver(driver)
               setIsDriverEdit(true)

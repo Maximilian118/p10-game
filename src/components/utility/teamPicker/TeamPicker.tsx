@@ -58,6 +58,18 @@ const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }
     setTeams && setTeams(localTeams)
   }, [localTeams, setTeams])
 
+  const removeTeamHandler = (team: teamType) => {
+    // Remove this team from driver form state.
+    setEditForm(prevForm => {
+      return {
+        ...prevForm,
+        teams: prevForm.teams.filter(t => t._id !== team._id),
+      }
+    })
+    // Remove this team from the driver in db.
+    // Request
+  }
+
   return (
     <div className="team-picker">
       <MUIAutocomplete
@@ -98,6 +110,7 @@ const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }
               key={i} 
               team={team}
               canEdit={!canEditTeam(team)}
+              onRemove={(team) => removeTeamHandler(team)}
               onClick={(team) => {
                 setTeam(team)
                 setIsEdit(true)
