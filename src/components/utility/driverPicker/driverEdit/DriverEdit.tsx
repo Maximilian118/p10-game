@@ -14,11 +14,11 @@ import MUICheckbox from "../../muiCheckbox/MUICheckbox"
 import { userType } from "../../../../shared/localStorage"
 import { initDriver, initTeam } from "../../../../shared/init"
 import MUICountrySelect, { countryType, findCountryByString } from "../../muiCountrySelect/MUICountrySelect"
-import { canEditDriver, driverEditErrors } from "../driverPickerUtility"
 import TeamEdit from "../../teamPicker/teamEdit/TeamEdit"
 import TeamPicker from "../../teamPicker/TeamPicker"
-import { newDriver, updateDriver } from "../../../../shared/requests/driverRequests"
+import { deleteDriver, newDriver, updateDriver } from "../../../../shared/requests/driverRequests"
 import { useNavigate } from "react-router-dom"
+import { canEditDriver, driverDeleteErrors, driverEditErrors } from "./driverEditUtility"
 
 interface driverEditType<T> {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
@@ -110,9 +110,17 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
 
   const navigate = useNavigate()
 
-  const deleteDriverHandler = () => {
-    // Delete driver
-    console.log(setDelLoading)
+  const deleteDriverHandler = async () => {
+    // Check for Errors
+    if (driverDeleteErrors(driver, setEditFormErr)) {
+      return
+    }
+    // Send request to delete from DB and mutate form state
+    if (await deleteDriver(driver, setForm, user, setUser, navigate, setDelLoading, setBackendErr)) {
+      // Redirect back to previous page and clear driver information
+      setIsDriverEdit(false)
+      setDriver(initDriver(user))
+    }
   }
 
   const updateDriverHandler = async () => {
@@ -121,6 +129,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
     }
     // Send request to update a driver and mutate form state
     if (await updateDriver(driver, editForm, setForm, user, setUser, navigate, setLoading, setBackendErr)) {
+      // Redirect back to previous page and clear driver information
       setIsDriverEdit(false)
       setDriver(initDriver(user))
     }
@@ -133,6 +142,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
     }
     // Send request to add a new driver to the DB and mutate form state
     if (await newDriver(editForm, setForm, user, setUser, navigate, setLoading, setBackendErr)) {
+      // Redirect back to previous page and clear driver information
       setIsDriverEdit(false)
       setDriver(initDriver(user))
     }

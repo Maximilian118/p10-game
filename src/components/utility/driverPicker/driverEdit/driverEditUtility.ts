@@ -1,7 +1,7 @@
 import moment from "moment"
-import { driverType } from "../../../shared/types"
-import { isThreeLettersUppercase } from "../../../shared/utility"
-import { driverEditFormErrType, driverEditFormType } from "./driverEdit/DriverEdit"
+import { driverEditFormErrType, driverEditFormType } from "./DriverEdit"
+import { driverType } from "../../../../shared/types"
+import { isThreeLettersUppercase } from "../../../../shared/utility"
 
 export const driverEditErrors = (
   editForm: driverEditFormType,
@@ -81,6 +81,38 @@ export const driverEditErrors = (
         errors.driverName = "No changes have been made."
       }
     }
+  }
+
+  setEditFormErr((prevErrs) => {
+    return {
+      ...prevErrs,
+      ...errors,
+    }
+  })
+
+  return Object.values(errors).some((error) => error !== "")
+}
+
+export const driverDeleteErrors = (
+  driver: driverType,
+  setEditFormErr: React.Dispatch<React.SetStateAction<driverEditFormErrType>>,
+): boolean => {
+  const errors: driverEditFormErrType = {
+    url: "",
+    driverName: "",
+    driverID: "",
+    teams: "",
+    nationality: "",
+    heightCM: "",
+    weightKG: "",
+    birthday: "",
+    moustache: "",
+    mullet: "",
+    dropzone: "",
+  }
+
+  if (driver.teams.length > 0) {
+    errors.driverName = "This driver still belongs to a team."
   }
 
   setEditFormErr((prevErrs) => {

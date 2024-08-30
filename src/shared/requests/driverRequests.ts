@@ -279,3 +279,62 @@ export const getDrivers = async (
 
   setLoading(false)
 }
+
+export const deleteDriver = async <T extends { drivers: driverType[] }>(
+  driver: driverType,
+  setForm: React.Dispatch<React.SetStateAction<T>>,
+  user: userType,
+  setUser: React.Dispatch<React.SetStateAction<userType>>,
+  navigate: NavigateFunction,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+): Promise<boolean> => {
+  setLoading(true)
+  let success = false
+
+  try {
+    await axios
+      .post(
+        "",
+        {
+          variables: {
+            _id: driver._id,
+          },
+          query: `
+            mutation DeleteDriver( $_id: ID! ) {
+              deleteDriver( _id: $_id ) {
+                ${populateDriver}
+                tokens
+              }
+            }
+          `,
+        },
+        { headers: headers(user.token) },
+      )
+      .then((res: any) => {
+        if (res.data.errors) {
+          graphQLErrors("deleteDriver", res, setUser, navigate, setBackendErr, true)
+        } else {
+          graphQLResponse("deleteDriver", res, user, setUser)
+
+          // Remove this driver from the drivers array
+          setForm((prevForm) => {
+            return {
+              ...prevForm,
+              drivers: prevForm.drivers.filter((d) => d._id !== driver._id),
+            }
+          })
+
+          success = true
+        }
+      })
+      .catch((err: any) => {
+        graphQLErrors("deleteDriver", err, setUser, navigate, setBackendErr, true)
+      })
+  } catch (err: any) {
+    graphQLErrors("deleteDriver", err, setUser, navigate, setBackendErr, true)
+  }
+
+  setLoading(false)
+  return success
+}

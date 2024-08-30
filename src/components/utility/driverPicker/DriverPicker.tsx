@@ -10,7 +10,7 @@ import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import { IconButton } from "@mui/material"
 import { Add } from "@mui/icons-material"
 import DriverCard from "../../cards/driverCard/DriverCard"
-import { canEditDriver } from "./driverPickerUtility"
+import { canEditDriver } from "./driverEdit/driverEditUtility"
 
 interface driverPickerType<T, U> {
   user: userType
