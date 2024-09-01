@@ -10,8 +10,8 @@ import moment from "moment"
 import { onlyNumbers } from "../utility"
 
 export const newDriver = async <T extends { drivers: driverType[] }>(
-  editForm: driverEditFormType,
-  setForm: React.Dispatch<React.SetStateAction<T>>,
+  editForm: driverEditFormType, // form state of driver
+  setForm: React.Dispatch<React.SetStateAction<T>>, // form state of driver group
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   navigate: NavigateFunction,
@@ -114,16 +114,16 @@ export const newDriver = async <T extends { drivers: driverType[] }>(
 }
 
 export const updateDriver = async <T extends { drivers: driverType[] }>(
-  driver: driverType,
-  editForm: driverEditFormType,
-  setForm: React.Dispatch<React.SetStateAction<T>>,
+  driver: driverType, // driver that's being updated
+  editForm: driverEditFormType, // form state for driver
+  setForm: React.Dispatch<React.SetStateAction<T>>, // form state for driver group
   user: userType,
   setUser: React.Dispatch<React.SetStateAction<userType>>,
   navigate: NavigateFunction,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<boolean> => {
-  setLoading(true)
+  setLoading && setLoading(true)
   let iconURL = ""
   let success = false
 
@@ -131,7 +131,7 @@ export const updateDriver = async <T extends { drivers: driverType[] }>(
     iconURL = await uplaodS3(editForm.driverName, "icon", editForm.icon, setBackendErr, user, setUser, navigate, 0) // prettier-ignore
 
     if (!iconURL) {
-      setLoading(false)
+      setLoading && setLoading(false)
       return false
     }
   }
@@ -222,7 +222,7 @@ export const updateDriver = async <T extends { drivers: driverType[] }>(
     graphQLErrors("updateDriver", err, setUser, navigate, setBackendErr, true)
   }
 
-  setLoading(false)
+  setLoading && setLoading(false)
   return success
 }
 

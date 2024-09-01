@@ -22,10 +22,10 @@ import { canEditDriver, driverDeleteErrors, driverEditErrors } from "./driverEdi
 
 interface driverEditType<T> {
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
-  setForm: React.Dispatch<React.SetStateAction<T>>
-  driver: driverType
+  setForm: React.Dispatch<React.SetStateAction<T>> // form state for driver group
+  driver: driverType // driver that's being updated
   setDriver: React.Dispatch<React.SetStateAction<driverType>>
-  user: userType,
+  user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
@@ -128,7 +128,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
       return
     }
     // Send request to update a driver and mutate form state
-    if (await updateDriver(driver, editForm, setForm, user, setUser, navigate, setLoading, setBackendErr)) {
+    if (await updateDriver(driver, editForm, setForm, user, setUser, navigate, setBackendErr, setLoading)) {
       // Redirect back to previous page and clear driver information
       setIsDriverEdit(false)
       setDriver(initDriver(user))
@@ -170,7 +170,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
         purposeText="Driver Image"
         thumbImg={driver.url ? driver.url : false}
         style={{ marginBottom: 40 }}
-        disabled={canEditDriver(driver)}
+        disabled={!canEditDriver(driver, user)}
       />
       <TextField
         name="driverName"
@@ -181,13 +181,13 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
         onChange={e => updateForm<driverEditFormType, driverEditFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
         value={editForm.driverName}
         error={editFormErr.driverName || backendErr.type === "driverName" ? true : false}
-        disabled={canEditDriver(driver)}
+        disabled={!canEditDriver(driver, user)}
       />
       <MUICountrySelect
         label={inputLabel("nationality", editFormErr, backendErr)}
         value={editForm.nationality}
         error={editFormErr.nationality || backendErr.type === "nationality" ? true : false}
-        disabled={canEditDriver(driver)}
+        disabled={!canEditDriver(driver, user)}
         onChange={(e, val) => {
           setEditForm(prevForm => {
             return {
@@ -207,6 +207,8 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
       <TeamPicker
         user={user}
         setUser={setUser}
+        driver={driver}
+        setForm={setForm}
         editForm={editForm}
         setEditForm={setEditForm}
         editFormErr={editFormErr}
@@ -216,6 +218,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
         setIsEdit={setIsEdit}
         setTeam={setTeam}
         setTeams={setTeams}
+        setDriver={setDriver}
       />
       <div className="driver-edit-stats">
         <MUIAutocomplete
@@ -223,7 +226,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
           options={heightCMOptions()}
           value={editForm.heightCM}
           error={editFormErr.heightCM || backendErr.type === "heightCM" ? true : false}
-          disabled={canEditDriver(driver)}
+          disabled={!canEditDriver(driver, user)}
           setValue={(value) => {
             setEditForm(prevForm => {
               return {
@@ -244,7 +247,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
           options={weightKGOptions()}
           value={editForm.weightKG}
           error={editFormErr.weightKG || backendErr.type === "weightKG" ? true : false}
-          disabled={canEditDriver(driver)}
+          disabled={!canEditDriver(driver, user)}
           setValue={(value) => {
             setEditForm(prevForm => {
               return {
@@ -266,7 +269,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
           label={inputLabel("birthday", editFormErr, backendErr)}
           value={editForm.birthday as null}
           error={editFormErr.birthday || backendErr.type === "birthday" ? true : false}
-          disabled={canEditDriver(driver)}
+          disabled={!canEditDriver(driver, user)}
           onChange={(newValue: Moment | null) => {
             setEditForm(prevForm => {
               return {
@@ -290,7 +293,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
           onChange={e => updateForm<driverEditFormType, driverEditFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
           value={editForm.driverID}
           error={editFormErr.driverID || backendErr.type === "driverID" ? true : false}
-          disabled={canEditDriver(driver)}
+          disabled={!canEditDriver(driver, user)}
           inputProps={{ maxLength: 3 }}
           InputProps={{
             endAdornment: (
@@ -305,7 +308,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
         <MUICheckbox
           text="Moustache"
           checked={editForm.moustache}
-          disabled={canEditDriver(driver)}
+          disabled={!canEditDriver(driver, user)}
           onClick={() => setEditForm(prevForm => {
             return {
               ...prevForm,
@@ -317,7 +320,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
         <MUICheckbox
           text="Mullet"
           checked={editForm.mullet}
-          disabled={canEditDriver(driver)}
+          disabled={!canEditDriver(driver, user)}
           onClick={() => setEditForm(prevForm => {
             return {
               ...prevForm,
@@ -337,7 +340,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
             setDriver(initDriver(user))
           }}
         >Back</Button>
-        {!canEditDriver(driver) && driver._id && <Button
+        {canEditDriver(driver, user) === "delete" && driver._id && <Button
           variant="contained" 
           color="error"
           onClick={e => deleteDriverHandler()}
@@ -345,7 +348,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
         >Delete</Button>}
         <Button
           variant="contained"
-          disabled={canEditDriver(driver)}
+          disabled={!canEditDriver(driver, user)}
           onClick={e => editForm._id ? updateDriverHandler() : onSubmitHandler()}
           startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
         >{editForm._id ? "Update" : "Submit"}</Button>

@@ -11,6 +11,7 @@ import { IconButton } from "@mui/material"
 import { Add } from "@mui/icons-material"
 import DriverCard from "../../cards/driverCard/DriverCard"
 import { canEditDriver } from "./driverEdit/driverEditUtility"
+import { sortAlphabetically } from "../../../shared/utility"
 
 interface driverPickerType<T, U> {
   user: userType
@@ -105,11 +106,11 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
         )}
       />
       <div className="driver-picker-list">
-        {editForm.drivers.map((driver: driverType, i: number) => (
+        {sortAlphabetically(editForm.drivers).map((driver: driverType, i: number) => (
           <DriverCard 
             key={i} 
             driver={driver}
-            canEdit={!canEditDriver(driver)}
+            canEdit={!!canEditDriver(driver, user)}
             onRemove={(driver) => removeDriverHandler(driver)}
             onClick={() => {
               setDriver(driver)

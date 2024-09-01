@@ -10,9 +10,10 @@ interface teamCardType {
   onClick?: (team: teamType) => void
   canEdit?: boolean
   onRemove?: (team: teamType) => void
+  canRemove?: boolean
 }
 
-const TeamCard: React.FC<teamCardType> = ({ team, onClick, canEdit, onRemove }) => (
+const TeamCard: React.FC<teamCardType> = ({ team, onClick, canEdit, onRemove, canRemove }) => (
   <div className="team-card" onClick={() => onClick && onClick(team)}>
     <Icon src={team.url} style={{ marginRight: 16 }}/>
     <p>{team.name}</p>
@@ -22,15 +23,17 @@ const TeamCard: React.FC<teamCardType> = ({ team, onClick, canEdit, onRemove }) 
           <Edit/>
         </IconButton>
       )}
-      <IconButton
-        className="button remove"
-        onClick={(e) => {
-          e.stopPropagation()
-          onRemove && onRemove(team)
-        }}
-      >
-        <Remove/>
-      </IconButton>
+      {canRemove && (
+        <IconButton
+          className="button remove"
+          onClick={(e) => {
+            e.stopPropagation()
+            onRemove && onRemove(team)
+          }}
+        >
+          <Remove/>
+        </IconButton>
+      )}
     </div>
   </div>
 )

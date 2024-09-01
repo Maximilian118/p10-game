@@ -1,6 +1,7 @@
 import moment from "moment"
 import { teamType } from "../../../../shared/types"
 import { teamEditFormErrType, teamEditFormType } from "./TeamEdit"
+import { userType } from "../../../../shared/localStorage"
 
 export const teamEditErrors = (
   editForm: teamEditFormType,
@@ -90,11 +91,23 @@ export const teamDeleteErrors = (
 }
 
 // Determine what privilages the user has to edit this team.
-export const canEditTeam = (team: teamType): boolean => {
-  // If any drivers belong to this team.
-  if (team.drivers.length > 0) {
-    return true
+export const canEditTeam = (team: teamType, user: userType): "delete" | "edit" | "" => {
+  const noDrivers = team.drivers.length === 0
+  const creator = team.created_by === user._id
+  const authority = user.permissions.adjudicator || creator
+  // If user is admin, can do anything.
+  if (user.permissions.admin) {
+    return "delete"
   }
-
-  return false
+  // If user is an adjudicator or user created the team and
+  // the team has no drivers assigned to it, can delete.
+  if (authority && noDrivers) {
+    return "delete"
+  }
+  // If user has the authority to do so, can edit the team.
+  if (authority) {
+    return "edit"
+  }
+  // If user meets none of the criteria, cannot do anything.
+  return ""
 }

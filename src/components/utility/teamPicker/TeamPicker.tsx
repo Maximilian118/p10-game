@@ -3,7 +3,7 @@ import './_teamPicker.scss'
 import MUIAutocomplete from "../muiAutocomplete/muiAutocomplete"
 import { inputLabel } from "../../../shared/formValidation"
 import { getTeams } from "../../../shared/requests/teamRequests"
-import { teamType } from "../../../shared/types"
+import { driverType, teamType } from "../../../shared/types"
 import { userType } from "../../../shared/localStorage"
 import { useNavigate } from "react-router-dom"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
@@ -11,10 +11,16 @@ import { IconButton } from "@mui/material"
 import { Add } from "@mui/icons-material"
 import TeamCard from "../../cards/teamCard/TeamCard"
 import { canEditTeam } from "./teamEdit/teamEditUtility"
+import { canEditDriver } from "../driverPicker/driverEdit/driverEditUtility"
+import { sortAlphabetically } from "../../../shared/utility"
+import { updateDriver } from "../../../shared/requests/driverRequests"
+import { driverEditFormType } from "../driverPicker/driverEdit/DriverEdit"
 
-interface teamPickerType<T, U> {
-  user: userType,
+interface teamPickerType<T, U, V> {
+  user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
+  driver: driverType
+  setForm: React.Dispatch<React.SetStateAction<V>>
   editForm: T
   setEditForm: React.Dispatch<React.SetStateAction<T>>
   editFormErr: U
@@ -22,13 +28,16 @@ interface teamPickerType<T, U> {
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
-  setTeam: React.Dispatch<React.SetStateAction<teamType>>,
-  setTeams?: React.Dispatch<React.SetStateAction<teamType[]>>, // Teams requested from DB in a state of parent.
+  setTeam: React.Dispatch<React.SetStateAction<teamType>>
+  setTeams?: React.Dispatch<React.SetStateAction<teamType[]>> // Teams requested from DB in a state of parent.
+  setDriver?: React.Dispatch<React.SetStateAction<driverType>>
 }
 
-const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }>({ 
+const TeamPicker = <T extends driverEditFormType, U extends { teams: string }, V extends { drivers: driverType[] }>({ 
   user, 
-  setUser, 
+  setUser,
+  driver,
+  setForm,
   editForm, 
   setEditForm, 
   editFormErr, 
@@ -38,7 +47,8 @@ const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }
   setIsEdit, 
   setTeam,
   setTeams,
-  }: teamPickerType<T, U>) => {
+  setDriver,
+  }: teamPickerType<T, U, V>) => {
   const [ localTeams, setLocalTeams ] = useState<teamType[]>([]) // All teams in db.
   const [ value, setValue ] = useState<teamType | null>(null) // Current value of Autocomplete.
   const [ reqSent, setReqSent ] = useState<boolean>(false)
@@ -58,16 +68,54 @@ const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }
     setTeams && setTeams(localTeams)
   }, [localTeams, setTeams])
 
-  const removeTeamHandler = (team: teamType) => {
+  const removeTeamHandler = async (team: teamType) => {
+    const filteredTeams = editForm.teams.filter(t => t._id !== team._id)
+    const withoutTeam: T = {
+      ...editForm,
+      teams: filteredTeams,
+    }
     // Remove this team from driver form state.
-    setEditForm(prevForm => {
-      return {
-        ...prevForm,
-        teams: prevForm.teams.filter(t => t._id !== team._id),
+    setEditForm(() => withoutTeam)
+    // If we're editing an existing driver.
+    if (driver._id) {
+      // Remove this team from the driver in db.
+      if (await updateDriver(driver, withoutTeam, setForm, user, setUser, navigate, setBackendErr) && setDriver) {
+        // Update the driver we're editing.
+        setDriver(prevDriver => {
+          return {
+            ...prevDriver,
+            teams: filteredTeams
+          }
+        })
       }
-    })
-    // Remove this team from the driver in db.
-    // Request
+    }
+  }
+
+  const addTeamHandler = async (team: teamType) => {
+    const addedTeam = [
+      team,
+      ...editForm.teams,
+    ]
+
+    const withTeam: T = {
+      ...editForm,
+      teams: addedTeam
+    }
+    // Add this team to driver form state.
+    setEditForm(() => withTeam)
+    // If we're editing an existing driver.
+    if (driver._id) {
+      // Add this driver to the team in db.
+      if (await updateDriver(driver, withTeam, setForm, user, setUser, navigate, setBackendErr) && setDriver) {
+        // Update the driver we're editing.
+        setDriver(prevDriver => {
+          return {
+            ...prevDriver,
+            teams: addedTeam
+          }
+        })
+      }
+    }
   }
 
   return (
@@ -81,20 +129,8 @@ const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }
         value={value ? value.name : null}
         loading={loading}
         error={editFormErr.teams || backendErr.type === "teams" ? true : false}
-        setObjValue={(value) => {
-          setValue(value)
-        }}
-        onLiClick={(value) => {
-          setEditForm(prevForm => {
-            return {
-              ...prevForm,
-              teams: [
-                value,
-                ...prevForm.teams,
-              ],
-            }
-          })
-        }}
+        setObjValue={(value) => setValue(value)}
+        onLiClick={(team) => addTeamHandler(team)}
         onChange={() => 
           setEditFormErr(prevErrs => {
             return {
@@ -105,12 +141,13 @@ const TeamPicker = <T extends { teams: teamType[] }, U extends { teams: string }
         )}
       />
       <div className="team-picker-list">
-        {editForm.teams.map((team: teamType, i: number) => (
+        {sortAlphabetically(editForm.teams).map((team: teamType, i: number) => (
             <TeamCard 
               key={i} 
               team={team}
-              canEdit={!canEditTeam(team)}
+              canEdit={!!canEditTeam(team, user)}
               onRemove={(team) => removeTeamHandler(team)}
+              canRemove={!!canEditDriver(driver, user)}
               onClick={(team) => {
                 setTeam(team)
                 setIsEdit(true)

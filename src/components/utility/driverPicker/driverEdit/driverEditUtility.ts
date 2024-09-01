@@ -2,6 +2,7 @@ import moment from "moment"
 import { driverEditFormErrType, driverEditFormType } from "./DriverEdit"
 import { driverType } from "../../../../shared/types"
 import { isThreeLettersUppercase } from "../../../../shared/utility"
+import { userType } from "../../../../shared/localStorage"
 
 export const driverEditErrors = (
   editForm: driverEditFormType,
@@ -124,13 +125,24 @@ export const driverDeleteErrors = (
 
   return Object.values(errors).some((error) => error !== "")
 }
-
 // Determine what privilages the user has to edit this driver.
-export const canEditDriver = (driver: driverType): boolean => {
-  // If this driver belongs to any teams.
-  if (driver.teams.length > 0) {
-    return true
+export const canEditDriver = (driver: driverType, user: userType): "delete" | "edit" | "" => {
+  const noTeams = driver.teams.length === 0
+  const creator = driver.created_by === user._id
+  const authority = user.permissions.adjudicator || creator
+  // If user is admin, can do anything.
+  if (user.permissions.admin) {
+    return "delete"
   }
-
-  return false
+  // If user is an adjudicator or user created the driver and
+  // the driver has no teams assigned to it, can delete.
+  if (authority && noTeams) {
+    return "delete"
+  }
+  // If user has the authority to do so, can edit the driver.
+  if (authority) {
+    return "edit"
+  }
+  // If user meets none of the criteria, cannot do anything.
+  return ""
 }

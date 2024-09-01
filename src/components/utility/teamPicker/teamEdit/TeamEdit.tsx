@@ -114,7 +114,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, setForm, user, s
         purposeText="Team Logo"
         thumbImg={team.url ? team.url : false}
         style={{ marginBottom: 40 }}
-        disabled={canEditTeam(team)}
+        disabled={!canEditTeam(team, user)}
       />
       <TextField
         name="teamName"
@@ -125,12 +125,12 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, setForm, user, s
         onChange={e => updateForm<teamEditFormType, teamEditFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
         value={editForm.teamName}
         error={editFormErr.teamName || backendErr.type === "teamName" ? true : false}
-        disabled={canEditTeam(team)}
+        disabled={!canEditTeam(team, user)}
       />
       <MUICountrySelect
         label={inputLabel("nationality", editFormErr, backendErr)}
         value={editForm.nationality}
-        disabled={canEditTeam(team)}
+        disabled={!canEditTeam(team, user)}
         error={editFormErr.nationality || backendErr.type === "nationality" ? true : false}
         onChange={(e, val) => {
           setEditForm(prevForm => {
@@ -151,7 +151,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, setForm, user, s
       <MUIDatePicker
         label={inputLabel("inceptionDate", editFormErr, backendErr)}
         value={editForm.inceptionDate as null}
-        disabled={canEditTeam(team)}
+        disabled={!canEditTeam(team, user)}
         error={editFormErr.inceptionDate || backendErr.type === "inceptionDate" ? true : false}
         className="mui-el"
         onChange={(newValue: Moment | null) => {
@@ -180,7 +180,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, setForm, user, s
             setIsEdit(false)
           }}
         >Back</Button>
-        {!canEditTeam(team) && team._id && <Button
+        {canEditTeam(team, user) === "delete" && team._id && <Button
           variant="contained" 
           color="error"
           onClick={e => deleteTeamHandler()}
@@ -189,7 +189,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, setForm, user, s
         <Button
           variant="contained"
           onClick={e => editForm._id ? updateTeamHandler() : onSubmitHandler()}
-          disabled={canEditTeam(team)}
+          disabled={!canEditTeam(team, user)}
           startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
         >{editForm._id ? "Update" : "Submit"}</Button>
       </div>
