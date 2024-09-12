@@ -59,13 +59,16 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
       <div className="driver-group-list-container">
         {loading ? <CircularProgress/> : 
           <div className="driver-group-list">
-            {groups.map((driverGroup: driverGroupType) => 
-              <DriverGroup 
-                onClick={() => {
-                  setGroup(driverGroup)
-                  setIsEdit(!isEdit)
-                }}
-              />)}
+            {groups.length > 0 ? 
+              groups.map((driverGroup: driverGroupType) => 
+                <DriverGroup 
+                  onClick={() => {
+                    setGroup(driverGroup)
+                    setIsEdit(!isEdit)
+                  }}
+                />) :
+              <p>No Driver Groups found... That may be a problem.</p>
+            }
           </div>
         }
       </div>

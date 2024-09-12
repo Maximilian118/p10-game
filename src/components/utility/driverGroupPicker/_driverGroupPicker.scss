@@ -2,7 +2,6 @@
 
 .driver-group-picker {
   width: 100%;
-  min-height: 800px;
   @include mixins.flexbox-column;
   flex-shrink: 0;
   background: #ffffff;
@@ -11,14 +10,14 @@
     width: 100%;
     position: relative;
     flex-grow: 1;
-    padding: 0 7.5%;
-    box-sizing: border-box;
 
     .driver-group-list {
       width: 100%;
       height: 100%;
       @include mixins.flexbox-start-column;
       overflow-y: scroll;
+      padding: 20px 7.5%;
+      box-sizing: border-box;
     }
   }
 }

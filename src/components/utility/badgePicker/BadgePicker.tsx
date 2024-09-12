@@ -61,15 +61,18 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({
           <CircularProgress/>
         </div> :
         <div className="badge-list-container">
-          <div className="badge-list">
-            {form.champBadges
-              .filter((badge) => filtered.includes(badge.rarity))
-              .map((badge: badgeType, i: number) => (
-              <div key={i} className="list-item">
-                <Badge badge={badge} zoom={badge.zoom} onClick={() => setIsEdit(badge)}/>
-              </div>
-            ))}
-          </div>
+          {form.champBadges.length > 0 ? 
+            <div className="badge-list">
+              {form.champBadges
+                .filter((badge) => filtered.includes(badge.rarity))
+                .map((badge: badgeType, i: number) => (
+                <div key={i} className="list-item">
+                  <Badge badge={badge} zoom={badge.zoom} onClick={() => setIsEdit(badge)}/>
+                </div>
+              ))}
+            </div> :
+            <p>No Badges? Boring...</p>
+          }
         </div>
       }
       <BadgePickerToolbar

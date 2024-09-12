@@ -11,7 +11,8 @@
     width: 100%;
     position: relative;
     flex-grow: 1;
-    min-height: 800px;
+    padding: 20px 7.5%;
+    box-sizing: border-box;
 
     .badge-list {
       width: 100%;
@@ -19,8 +20,6 @@
       align-items: start;
       flex-flow: wrap;
       overflow-y: scroll;
-      padding: 20px 7.5%;
-      box-sizing: border-box;
     }
 
     .list-item {
