@@ -1,6 +1,6 @@
 import React, { MouseEvent, useState } from "react"
 import './_badgeFilterDraw.scss'
-import { Button } from "@mui/material"
+import { Button, ClickAwayListener } from "@mui/material"
 import { badgeType } from "../../../../shared/types"
 import { badgeRarities, badgeRarityType } from "../../../../shared/badges"
 import MUICheckbox from "../../muiCheckbox/MUICheckbox"
@@ -75,37 +75,38 @@ const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({
     }
   }
 
+  const handleClickAway = () => {
+    if (draw) {
+      setDraw(false)
+    }
+  }
+
   return (
-    <div className={`badge-filter-draw ${draw ? "badge-draw-open" : ""}`} style={style}>
-      <div className="badge-filter-options">
-        {badgeRarities().map((rarity: badgeRarityType, i: number) => (
-          <MUICheckbox
-            key={i}
-            text={rarity.rarityName}
-            checked={filtered.includes(rarity.rarity)}
-            onClick={(e: MouseEvent) => filterBadgesHandler(e, rarity)}
-            checkedColour={rarity.colour}
-          />
-        ))}
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <div className={`badge-filter-draw ${draw ? "badge-draw-open" : ""}`} style={style}>
+          <div className="badge-filter-options">
+            {badgeRarities().map((rarity: badgeRarityType, i: number) => (
+              <MUICheckbox
+                key={i}
+                text={rarity.rarityName}
+                checked={filtered.includes(rarity.rarity)}
+                onClick={(e: MouseEvent) => filterBadgesHandler(e, rarity)}
+                checkedColour={rarity.colour}
+              />
+            ))}
+          </div>
+          <div className="badge-filter-buttons">
+            <Button
+              variant="contained" 
+              size="small"
+              onClick={e => {
+                onDefaultClickHandler(form.champBadges, defaults, setForm, defs)
+                setDefs(!defs)
+              }}
+            >{`${defs ? "Add" : "Remove"} defaults`}</Button>
+          </div>
       </div>
-      <div className="badge-filter-buttons">
-        <Button
-          className="mui-button-back"
-          variant="contained" 
-          color="inherit"
-          size="small"
-          onClick={e => setDraw(!draw)}
-        >Close</Button>
-        <Button
-          variant="contained" 
-          size="small"
-          onClick={e => {
-            onDefaultClickHandler(form.champBadges, defaults, setForm, defs)
-            setDefs(!defs)
-          }}
-        >{`${defs ? "Add" : "Remove"} defaults`}</Button>
-      </div>
-    </div>
+    </ClickAwayListener>
   )
 }
 
