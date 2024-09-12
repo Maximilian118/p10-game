@@ -17,6 +17,7 @@ interface badgePickerEditType<T> {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean | badgeType>>
   form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
+  style?: React.CSSProperties
 }
 
 interface editFormType {
@@ -40,7 +41,7 @@ const initIcon = (isEdit: boolean | badgeType): File | null => {
   }
 }
 
-const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIsEdit, form, setForm }: badgePickerEditType<T>) => {
+const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIsEdit, form, setForm, style }: badgePickerEditType<T>) => {
   const isNewBadge = typeof isEdit === "boolean"
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ editForm, setEditForm ] = useState<editFormType>({
@@ -157,9 +158,9 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
   }
 
   return (
-    <div className="badge-picker-edit">
+    <div className="badge-picker-edit" style={style}>
       <h4>{`${isNewBadge ? `New` : `Edit`} Badge`}</h4>
-      <div className="badge-wrapper" style={{ width:"50%" }}>
+      <div className="badge-wrapper">
         <BadgeOverlay 
           rarity={rarity} 
           thickness={10} 
@@ -206,7 +207,7 @@ const BadgePickerEdit = <T extends { champBadges: badgeType[] }>({ isEdit, setIs
       <TextField
         name="badgeName"
         inputProps={{ maxLength: 30 }}
-        className="mui-el"
+        className="mui-form-el"
         label={inputLabel("badgeName", editFormErr, backendErr)}
         variant="filled" 
         onChange={e => updateForm<editFormType, editFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}

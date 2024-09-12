@@ -72,15 +72,62 @@ body {
         overflow-y: scroll;
         padding: 20px 0;
 
+        .form-background {
+          position: absolute;
+          top: 0;
+          width: 150%;
+          opacity: 0.7;
+          z-index: -1;
+          transition: variables.$trans-speed;
+        }
+
+        .form-title {
+          width: 85%;
+          @include mixins.flexbox-start-column;
+          align-items: start;
+          color: variables.$colour-6;
+
+          h2 {
+            @include mixins.flexbox-start;
+            transition: variables.$trans-speed;
+          }
+
+          .clickable {
+            cursor: pointer;
+            color: variables.$colour-4;
+
+            &:hover {
+              color: black;
+            }
+          }
+        }
+
         > *:last-child {
           margin-bottom: 0;
         }
+
+        .button-bar {
+          width: 100%;
+          position: absolute;
+          bottom: 0;
+          background: white;
+          @include mixins.flexbox;
+          justify-content: space-evenly;
+          z-index: 5;
+          border-top: 2px solid variables.$background;
+          padding: 20px 0;
+          box-sizing: border-box;
+        }
+
         .add-button {
           margin: 0;
           background: variables.$mui-success;
           color: white;
           width: 32px;
           height: 32px;
+          position: absolute;
+          bottom: 20px;
+          right: 20px;
       
           &:hover {
             background: variables.$mui-success-hover;
@@ -88,31 +135,12 @@ body {
         }
 
         .mui-form-el {
-          width: 85%;
+          width: 100%;
           margin-bottom: 20px;
-          background: white;
         }
 
         .mui-form-btn {
           margin-top: 20px;
-        }
-
-        .mui-form-pagination {
-          background: none;
-          width: 100%;
-          height: 32px;
-          @include mixins.flexbox;
-
-          ul {
-            width: 100%;
-            @include mixins.flexbox-space-between;
-            flex-wrap: nowrap;
-          }
-
-          li {
-            width: 11.1%;
-            @include mixins.flexbox;
-          }
         }
 
         .form-container {
@@ -125,36 +153,6 @@ body {
             width: 100%;
             @include mixins.flexbox-column;
             padding: 40px 0;
-          }
-  
-          .form-background {
-            position: absolute;
-            top: 0;
-            width: 150%;
-            opacity: 0.7;
-            z-index: -1;
-            transition: variables.$trans-speed;
-          }
-
-          .form-title {
-            width: 85%;
-            @include mixins.flexbox-start-column;
-            align-items: start;
-            color: variables.$colour-6;
-
-            h2 {
-              @include mixins.flexbox-start;
-              transition: variables.$trans-speed;
-            }
-  
-            .clickable {
-              cursor: pointer;
-              color: variables.$colour-4;
-
-              &:hover {
-                color: black;
-              }
-            }
           }
 
           .form-notification {

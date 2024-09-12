@@ -18,9 +18,19 @@ interface badgePickerType<T> {
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
+  stepperBtns?: JSX.Element
+  style?: React.CSSProperties
 }
 
-const BadgePicker = <T extends { champBadges: badgeType[] }>({ form, setForm, user, setUser, setBackendErr }: badgePickerType<T>) => {
+const BadgePicker = <T extends { champBadges: badgeType[] }>({ 
+  form, 
+  setForm, 
+  user, 
+  setUser, 
+  setBackendErr,
+  stepperBtns,
+  style,
+}: badgePickerType<T>) => {
   const [ isEdit, setIsEdit ] = useState<boolean | badgeType>(false)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ draw, setDraw ] = useState<boolean>(false)
@@ -43,13 +53,14 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({ form, setForm, us
       setIsEdit={setIsEdit}
       form={form}
       setForm={setForm}
+      style={style}
     /> : (
-    <div className="badge-picker">
+    <div className="badge-picker" style={style}>
       {loading ? 
         <div className="badge-picker-spinner-wrapper">
           <CircularProgress/>
         </div> :
-        <>
+        <div className="badge-list-container">
           <div className="badge-list">
             {form.champBadges
               .filter((badge) => filtered.includes(badge.rarity))
@@ -59,24 +70,29 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({ form, setForm, us
               </div>
             ))}
           </div>
-          <BadgePickerToolbar
-            setIsEdit={setIsEdit}
-            draw={draw}
-            setDraw={setDraw}
-          />
-          <BadgeFilterDraw
-            draw={draw}
-            setDraw={setDraw}
-            form={form}
-            setForm={setForm}
-            defaults={defaults}
-            filtered={filtered}
-            setFiltered={setFiltered}
-          />
-        </>
+        </div>
       }
+      <BadgePickerToolbar
+        setIsEdit={setIsEdit}
+        draw={draw}
+        setDraw={setDraw}
+        style={stepperBtns ? style : undefined}
+      />
+      <BadgeFilterDraw
+        draw={draw}
+        setDraw={setDraw}
+        form={form}
+        setForm={setForm}
+        defaults={defaults}
+        filtered={filtered}
+        setFiltered={setFiltered}
+        style={style}
+      />
+      {stepperBtns}
     </div>
   )
 }
 
 export default BadgePicker
+
+

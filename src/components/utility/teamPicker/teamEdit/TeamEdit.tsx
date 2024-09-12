@@ -22,6 +22,7 @@ interface teamEditType<T> {
   team: teamType // The team in question.
   setTeam: React.Dispatch<React.SetStateAction<teamType>>
   teams: teamType[] // Teams requested from DB.
+  style?: React.CSSProperties
 }
 
 export interface teamEditFormType {
@@ -41,7 +42,16 @@ export interface teamEditFormErrType {
   [key: string]: string
 }
 
-const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, setForm, user, setUser, team, setTeam, teams }: teamEditType<T>) => {
+const TeamEdit = <T extends { teams: teamType[] }>({ 
+  setIsEdit, 
+  setForm, 
+  user, 
+  setUser, 
+  team, 
+  setTeam,
+  teams,
+  style,
+}: teamEditType<T>) => {
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ delLoading, setDelLoading ] = useState<boolean>(false)
@@ -102,7 +112,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, setForm, user, s
   }
 
   return (
-    <div className="team-edit">
+    <div className="team-edit" style={style}>
       <h4>{`${!team.name ? `New` : `Edit`} Team`}</h4>
       <DropZone<teamEditFormType, teamEditFormErrType>
         form={editForm}
@@ -119,7 +129,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, setForm, user, s
       <TextField
         name="teamName"
         inputProps={{ maxLength: 30 }}
-        className="mui-el"
+        className="mui-form-el"
         label={inputLabel("teamName", editFormErr, backendErr)}
         variant="filled" 
         onChange={e => updateForm<teamEditFormType, teamEditFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
@@ -153,7 +163,7 @@ const TeamEdit = <T extends { teams: teamType[] }>({ setIsEdit, setForm, user, s
         value={editForm.inceptionDate as null}
         disabled={!canEditTeam(team, user)}
         error={editFormErr.inceptionDate || backendErr.type === "inceptionDate" ? true : false}
-        className="mui-el"
+        className="mui-form-el"
         onChange={(newValue: Moment | null) => {
           setEditForm(prevForm => {
             return {

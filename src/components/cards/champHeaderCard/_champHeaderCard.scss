@@ -1,0 +1,15 @@
+@use '../../../scss/mixins';
+
+.champ-header-card {
+  width: 100%;
+  @include mixins.flexbox-start-column;
+  flex-shrink: 0;
+  padding: 20px 0;
+  box-sizing: border-box;
+  background: white;
+  margin-bottom: 2px;
+
+  .form-title {
+    margin-bottom: 30px;
+  }
+}

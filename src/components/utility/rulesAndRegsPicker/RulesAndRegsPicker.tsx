@@ -4,14 +4,15 @@ import RuleOrReg from "./ruleOrReg/RuleOrReg"
 import { isDefaultRorR } from "../../../shared/rulesAndRegs"
 import { userType } from "../../../shared/localStorage"
 import { ruleOrRegType, rulesAndRegsType } from "../../../shared/types"
-import { IconButton } from "@mui/material"
-import { Add } from "@mui/icons-material"
 import RulesAndRegsEdit from "./rulesAndRegsEdit/RulesAndRegsEdit"
+import RulesAndRegsToolbar from "./rulesAndRegsToolbar/RulesAndRegsToolbar"
 
 interface rulesAndRegsPickerType<T> {
   user: userType
   form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
+  stepperBtns?: JSX.Element
+  style?: React.CSSProperties
 }
 
 export interface editStateType {
@@ -26,7 +27,13 @@ export const initEditState = {
   ruleReg: null,
 }
 
-const RulesAndRegsPicker = <T extends { rulesAndRegs: rulesAndRegsType }>({ user, form, setForm }: rulesAndRegsPickerType<T>) => {
+const RulesAndRegsPicker = <T extends { rulesAndRegs: rulesAndRegsType }>({ 
+  user, 
+  form, 
+  setForm,
+  stepperBtns,
+  style,
+}: rulesAndRegsPickerType<T>) => {
   const [ edit, setEdit ] = useState<editStateType>(initEditState)
 
   const isEdit = edit.newRuleReg || edit.ruleReg
@@ -36,31 +43,32 @@ const RulesAndRegsPicker = <T extends { rulesAndRegs: rulesAndRegsType }>({ user
       user={user}
       edit={edit} 
       setEdit={setEdit}
-      setForm={setForm} 
+      setForm={setForm}
+      style={{ marginBottom: 157 }}
     /> : (
-    <div className="rules-and-regs-picker">
-      <div className="rules-and-regs-list">
-        {form.rulesAndRegs.list.map((item: ruleOrRegType, i: number) => 
-          <RuleOrReg
-            key={i} 
-            index={i + 1}
-            item={item}
-            setEdit={setEdit}
-            def={isDefaultRorR(user, item)}
-          />
-        )}
-      </div>
-      <IconButton 
-        className="add-button" 
-        onClick={e => setEdit(prevEdit => {
-          return {
-            ...prevEdit,
-            newRuleReg: true,
-          }
-        })}
-      >
-        <Add/>
-      </IconButton>
+    <div className="rules-and-regs-picker" style={style}>
+      {form.rulesAndRegs.list.length > 0 ? 
+        <div className="rules-and-regs-list">
+          {form.rulesAndRegs.list.map((item: ruleOrRegType, i: number) => 
+            <RuleOrReg
+              key={i} 
+              index={i + 1}
+              item={item}
+              setEdit={setEdit}
+              def={isDefaultRorR(user, item)}
+            />
+          )}
+        </div> :
+        <p>You need some Rules and Regulations. This is simply illegal!</p>
+      }
+      <RulesAndRegsToolbar
+        user={user}
+        form={form}
+        setForm={setForm}
+        setEdit={setEdit}
+        style={style}
+      />
+      {stepperBtns}
     </div>
   )
 }

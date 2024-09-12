@@ -6,13 +6,13 @@ import { ResponsivePie } from '@nivo/pie'
 import {nivoColours, presetArrays, presetNames} from "./ppPresets"
 import { MUISelect } from "../../utility/muiSelect/MUISelect"
 
-interface pointsPickerType {
-  setForm: React.Dispatch<React.SetStateAction<createChampFormType>>
+interface pointsPickerType<T> {
+  setForm: React.Dispatch<React.SetStateAction<T>>
   formErr: createChampFormErrType
   backendErr: graphQLErrorType
 }
 
-const PointsPicker: React.FC<pointsPickerType> = ({ setForm, formErr, backendErr }) => {
+const PointsPicker= <T extends createChampFormType>({ setForm, formErr, backendErr }: pointsPickerType<T>) => {
   const [ preset, setPreset ] = useState(1)
 
   const handleSelectChange = (i: number) => {

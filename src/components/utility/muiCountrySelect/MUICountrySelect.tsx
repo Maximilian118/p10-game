@@ -17,7 +17,7 @@ const MUICountrySelect: React.FC<MUICountrySelectType> = ({ label, value, error,
   return (
     <Autocomplete
       id="country-select-demo"
-      className="mui-el"
+      className="mui-form-el"
       disabled={disabled}
       options={countries}
       autoHighlight

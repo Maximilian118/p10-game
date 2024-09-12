@@ -12,6 +12,7 @@ interface regsAndRulesEditType<T> {
   edit: editStateType
   setEdit: React.Dispatch<React.SetStateAction<editStateType>>
   setForm: React.Dispatch<React.SetStateAction<T>>
+  style?: React.CSSProperties
 }
 
 const initruleReg = (user: userType, ruleReg?: ruleOrRegType | null) => {
@@ -34,7 +35,13 @@ const initError = {
   index: null
 }
 
-const RulesAndRegsEdit = <T extends { rulesAndRegs: rulesAndRegsType }>({ user, edit, setEdit, setForm }: regsAndRulesEditType<T>) => {
+const RulesAndRegsEdit = <T extends { rulesAndRegs: rulesAndRegsType }>({ 
+  user, 
+  edit, 
+  setEdit, 
+  setForm,
+  style,
+}: regsAndRulesEditType<T>) => {
   const [ delConfirm, SetDelConfirm ] = useState<boolean>(false)
   const [ ruleReg, setRuleReg ] = useState<ruleOrRegType>(initruleReg(user, edit.ruleReg))
   const [ error, setError ] = useState<errorType>(initError)
@@ -268,11 +275,11 @@ const RulesAndRegsEdit = <T extends { rulesAndRegs: rulesAndRegsType }>({ user, 
   }
 
   return (
-    <div className="rules-and-regs-edit">
+    <div className="rules-and-regs-edit" style={style}>
       <h4>{`${edit.newRuleReg ? `New` : `Edit`} Rule or Regulation`}</h4>
       {section(ruleReg)}
       {ruleReg.subsections?.map((rr: ruleOrRegType, i: number) => section(ruleReg, i))}
-      <div className="button-bar">
+      <div className="button-bar sub-btns">
         <Button
           className="sub-add-button"
           variant="contained"

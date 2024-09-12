@@ -3,33 +3,38 @@
 
 .badge-picker {
   width: 100%;
-  height: 330px;
   @include mixins.flexbox-start-column;
-  margin-top: 10px !important;
-  box-sizing: border-box;
-  position: relative;
-  z-index: 1;
+  flex-shrink: 0;
+  background: white;
 
-  .badge-list {
+  .badge-list-container {
     width: 100%;
-    @include mixins.flexbox-start;
-    align-items: start;
-    flex-flow: wrap;
-    overflow-y: scroll;
-    padding-bottom: 50px;
+    position: relative;
+    flex-grow: 1;
+    min-height: 800px;
+
+    .badge-list {
+      width: 100%;
+      @include mixins.flexbox-start;
+      align-items: start;
+      flex-flow: wrap;
+      overflow-y: scroll;
+      padding: 20px 7.5%;
+      box-sizing: border-box;
+    }
+
+    .list-item {
+      @include mixins.flexbox;
+    }
+  
+    .badge-list>.list-item {
+      flex: 0 0 16.6%;
+      margin-bottom: 10px;
+    }
   }
 
   .badge-picker-spinner-wrapper {
     height: 100%;
     @include mixins.flexbox;
-  }
-
-  .list-item {
-    @include mixins.flexbox;
-  }
-
-  .badge-list>.list-item {
-    flex: 0 0 16.6%;
-    margin-bottom: 10px;
   }
 }

@@ -2,22 +2,23 @@
 
 .driver-group-picker {
   width: 100%;
-  height: 340px;
-  position: relative;
-  z-index: 1;
-  margin-top: 10px;
+  min-height: 800px;
   @include mixins.flexbox-column;
+  flex-shrink: 0;
+  background: #ffffff;
 
-  .driver-group-list {
+  .driver-group-list-container {
     width: 100%;
-    height: 100%;
-    @include mixins.flexbox-start-column;
-    overflow-y: scroll;
-  }
+    position: relative;
+    flex-grow: 1;
+    padding: 0 7.5%;
+    box-sizing: border-box;
 
-  .add-button {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+    .driver-group-list {
+      width: 100%;
+      height: 100%;
+      @include mixins.flexbox-start-column;
+      overflow-y: scroll;
+    }
   }
 }

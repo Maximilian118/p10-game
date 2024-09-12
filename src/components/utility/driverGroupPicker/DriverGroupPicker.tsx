@@ -17,9 +17,19 @@ interface driverGroupPickerType<T> {
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
+  stepperBtns?: JSX.Element
+  style?: React.CSSProperties
 }
 
-const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({ form, setForm, user, setUser, setBackendErr }: driverGroupPickerType<T>) => {
+const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({ 
+  form, 
+  setForm, 
+  user, 
+  setUser, 
+  setBackendErr,
+  stepperBtns,
+  style,
+}: driverGroupPickerType<T>) => {
   const [ isEdit, setIsEdit ] = useState<boolean>(false) // Render DriverGroupEdit or not.
   const [ group, setGroup ] = useState<driverGroupType>(initDriverGroup(user)) // If we're editing a driver group rather than making a new one, populate.
   const [ groups, setGroups ] = useState<driverGroupType[]>([]) // Stores all driver groups from getDriverGroups response.
@@ -43,25 +53,30 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({ form,
       setIsEdit={setIsEdit}
       group={group}
       setGroup={setGroup}
+      style={style}
     /> : (
-    <div className="driver-group-picker">
-      {loading ? <CircularProgress/> : 
-        <div className="driver-group-list">
-          {groups.map((driverGroup: driverGroupType) => 
-            <DriverGroup 
-              onClick={() => {
-                setGroup(driverGroup)
-                setIsEdit(!isEdit)
-              }}
-            />)}
-          <IconButton 
-            className="add-button"
-            onClick={() => setIsEdit(!isEdit)}
-          >
-            <Add/>
-          </IconButton>
-        </div>
-      }
+    <div className="driver-group-picker" style={style}>
+      <div className="driver-group-list-container">
+        {loading ? <CircularProgress/> : 
+          <div className="driver-group-list">
+            {groups.map((driverGroup: driverGroupType) => 
+              <DriverGroup 
+                onClick={() => {
+                  setGroup(driverGroup)
+                  setIsEdit(!isEdit)
+                }}
+              />)}
+          </div>
+        }
+      </div>
+      <IconButton 
+        className="add-button"
+        style={style}
+        onClick={() => setIsEdit(!isEdit)}
+      >
+        <Add/>
+      </IconButton>
+      {stepperBtns}
     </div>
   )
 }

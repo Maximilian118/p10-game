@@ -1,7 +1,7 @@
 @use '../../../scss/mixins';
 
 .checkbox-container {
-  width: 50%;
+  width: 42%;
   @include mixins.flexbox-end;
   flex-shrink: 0;
 

@@ -5,13 +5,13 @@
   width: 100%;
   height: 175px;
   position: absolute;
-  bottom: -220px;
-  background: variables.$colour-1;
-  z-index: 10;
+  bottom: -214px;
+  background: white;
+  z-index: 5;
   padding: 18px 12px;
   transition: variables.$trans-speed;
   @include mixins.flexbox-space-between-column;
-  border-top: 1px solid rgba(0, 0, 0, 0.42);
+  border-top: 2px solid variables.$background;
 
   .badge-filter-options, .badge-filter-buttons {
     width: 100%;
@@ -24,17 +24,16 @@
   }
   
   .badge-filter-options {
-    @include mixins.flexbox-start;
-    align-items: start;
+    @include mixins.flexbox;
     flex-wrap: wrap;
-    padding-left: 0;
   }
 
   .badge-filter-buttons {
     @include mixins.flexbox-space-between;
+    padding: 20px 7.5%;
   }
 }
 
 .badge-draw-open {
-  bottom: -8px;
+  bottom: 0px;
 }

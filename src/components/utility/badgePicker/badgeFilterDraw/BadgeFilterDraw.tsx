@@ -13,11 +13,21 @@ interface badgeFilterDrawType<T> {
   defaults: badgeType[]
   filtered: number[]
   setFiltered: React.Dispatch<React.SetStateAction<number[]>>
+  style?: React.CSSProperties
 }
 
-const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({ draw, setDraw, form, setForm, defaults, filtered, setFiltered }: badgeFilterDrawType<T>) => {
+const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({ 
+  draw, 
+  setDraw, 
+  form, 
+  setForm,
+  defaults, 
+  filtered, 
+  setFiltered,
+  style,
+}: badgeFilterDrawType<T>) => {
   const [ defs, setDefs ] = useState<boolean>(false)
-  
+
   const removeDefaultsHandler = (champBadges: badgeType[], setForm: React.Dispatch<React.SetStateAction<T>> ) => {
     setForm(prevForm => {
       return {
@@ -66,7 +76,7 @@ const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({ draw, setDraw
   }
 
   return (
-    <div className={`badge-filter-draw ${draw ? "badge-draw-open" : ""}`}>
+    <div className={`badge-filter-draw ${draw ? "badge-draw-open" : ""}`} style={style}>
       <div className="badge-filter-options">
         {badgeRarities().map((rarity: badgeRarityType, i: number) => (
           <MUICheckbox
@@ -85,7 +95,7 @@ const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({ draw, setDraw
           color="inherit"
           size="small"
           onClick={e => setDraw(!draw)}
-        >Back</Button>
+        >Close</Button>
         <Button
           variant="contained" 
           size="small"

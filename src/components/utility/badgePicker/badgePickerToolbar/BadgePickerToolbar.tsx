@@ -8,10 +8,11 @@ interface badgePickerToolbarType {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean | badgeType>>
   draw: boolean
   setDraw: React.Dispatch<React.SetStateAction<boolean>>
+  style?: React.CSSProperties
 }
 
-const BadgePickerToolbar: React.FC<badgePickerToolbarType> = ({ setIsEdit, draw, setDraw }) => (
-  <div className="badge-picker-toolbar">
+const BadgePickerToolbar: React.FC<badgePickerToolbarType> = ({ setIsEdit, draw, setDraw, style }) => (
+  <div className="badge-picker-toolbar" style={style}>
     <Button 
       variant="contained" 
       size="small" 
@@ -20,7 +21,7 @@ const BadgePickerToolbar: React.FC<badgePickerToolbarType> = ({ setIsEdit, draw,
       Filter
     </Button>
     <IconButton 
-      className="add-button"
+      className="add-button add-button-toolbar"
       onClick={e => setIsEdit(true)}
     >
       <Add/>

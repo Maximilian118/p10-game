@@ -30,6 +30,7 @@ interface driverEditType<T> {
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
   drivers: driverType[]
+  style?: React.CSSProperties
 }
 
 export interface driverEditFormType {
@@ -73,6 +74,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
   backendErr, 
   setBackendErr, 
   drivers,
+  style,
   }: driverEditType<T>) => {
   const [ isEdit, setIsEdit ] = useState<boolean>(false) // Render TeamEdit or not.
   const [ team, setTeam ] = useState<teamType>(initTeam(user)) // If we're editing a team rather than making a new one, populate.
@@ -157,8 +159,9 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
       team={team}
       setTeam={setTeam}
       teams={teams}
+      style={style}
     /> : (
-    <div className="driver-edit">
+    <div className="driver-edit" style={style}>
       <h4>{`${!driver.name ? `New` : `Edit`} Driver`}</h4>
       <DropZone<driverEditFormType, driverEditFormErrType>
         form={editForm}
@@ -175,7 +178,7 @@ const DriverEdit = <T extends { drivers: driverType[] }>({
       <TextField
         name="driverName"
         inputProps={{ maxLength: 30 }}
-        className="mui-el"
+        className="mui-form-el"
         label={inputLabel("driverName", editFormErr, backendErr)}
         variant="filled" 
         onChange={e => updateForm<driverEditFormType, driverEditFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}

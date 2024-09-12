@@ -1,0 +1,20 @@
+@use '../../../scss/variables';
+
+.champ-complete-card {
+  width: 100%;
+  min-height: 800px;
+  flex-shrink: 0;
+  background: white;
+
+  .champ-complete-text-container {
+    padding: 20px 7.5%;
+    box-sizing: border-box;
+  }
+
+  h4 {
+    width: 100%;
+    color: variables.$colour-6;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+}

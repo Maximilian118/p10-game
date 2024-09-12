@@ -17,6 +17,7 @@ interface driverGroupEditType<T> {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
   group: driverGroupType
   setGroup: React.Dispatch<React.SetStateAction<driverGroupType>>
+  style?: React.CSSProperties
 }
 
 interface editFormType {
@@ -40,6 +41,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
   setIsEdit, 
   group, 
   setGroup,
+  style
 }: driverGroupEditType<T>) => {
   const [ isDriverEdit, setIsDriverEdit ] = useState<boolean>(false) // Render isDriverEdit or not.
   const [ driver, setDriver ] = useState<driverType>(initDriver(user)) // If we're editing a driver rather than making a new one, populate.
@@ -72,8 +74,9 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
       backendErr={backendErr}
       setBackendErr={setBackendErr}
       drivers={drivers}
+      style={style}
     /> : (
-    <div className="driver-group-edit">
+    <div className="driver-group-edit" style={style}>
       <h4>{`${!group.name ? `New` : `Edit`} Group`}</h4>
       <DropZone<editFormType, editFormErrType>
         form={editForm}
@@ -84,12 +87,11 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
         setBackendErr={setBackendErr}
         purposeText="Group Image"
         thumbImg={group.url ? group.url : false}
-        style={{ marginBottom: 40 }}
       />
       <TextField
         name="groupName"
         inputProps={{ maxLength: 30 }}
-        className="mui-el"
+        className="mui-form-el"
         label={inputLabel("groupName", editFormErr, backendErr)}
         variant="filled" 
         onChange={e => updateForm<editFormType, editFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
