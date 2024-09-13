@@ -4,20 +4,23 @@
   width: 100%;
   @include mixins.flexbox-column;
   flex-shrink: 0;
-  background: #ffffff;
 
   .driver-group-list-container {
     width: 100%;
     position: relative;
     flex-grow: 1;
 
-    .driver-group-list {
+    .driver-group-list, .driver-group-empty {
       width: 100%;
-      height: 100%;
       @include mixins.flexbox-start-column;
       overflow-y: scroll;
-      padding: 20px 7.5%;
+      background: #ffffff;
+      padding: 20px 7.5% 60px;
       box-sizing: border-box;
+    }
+
+    .driver-group-empty {
+      padding: 20px 7.5%;
     }
   }
 }

@@ -3,28 +3,31 @@
 
 .rules-and-regs-edit {
   width: 100%;
-  min-height: 500px;
   @include mixins.flexbox-start-column;
   flex-shrink: 0;
-  padding: 20px 7.5%;
-  box-sizing: border-box;
-  background: white;
-  overflow-y: scroll;
+  overflow-y: auto;
   flex-grow: 1;
 
-  h4 {
+  .rules-and-regs-title {
     width: 100%;
-    color: variables.$colour-6;
-    margin-bottom: 40px;
-    text-align: left;
+    padding: 20px 7.5% 30px;
+    box-sizing: border-box;
+    background: white;
+    
+    h4 {
+      width: 100%;
+      color: variables.$colour-6;
+      text-align: left;
+    }
   }
   
   .rule-or-reg-edit {
     width: 100%;
-    padding: 0 0 20px;
-    box-sizing: border-box;
+    @include mixins.flexbox;
     position: relative;
-    @include mixins.flexbox-start-column;
+    padding: 0 7.5% 20px;
+    box-sizing: border-box;
+    background: white;
 
     .mui-multiline {
       width: 100%;
@@ -44,7 +47,7 @@
       height: 22px;
       position: absolute;
       top: 5px;
-      right: 15px;
+      right: calc(7.5% + 5px);
       background: variables.$f1-red;
       color: white;
 

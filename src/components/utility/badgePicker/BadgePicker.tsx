@@ -47,6 +47,8 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({
     }
   }, [form, user, setUser, navigate, setBackendErr, setForm, reqSent, defaults])
 
+  const badgesFiltered = form.champBadges.filter((badge) => filtered.includes(badge.rarity))
+
   return isEdit ? 
     <BadgePickerEdit 
       isEdit={isEdit} 
@@ -59,20 +61,16 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({
       {loading ? 
         <div className="badge-picker-spinner-wrapper">
           <CircularProgress/>
-        </div> :
+        </div> : badgesFiltered.length > 0 ?
         <div className="badge-list-container">
-          {form.champBadges.length > 0 ? 
-            <div className="badge-list">
-              {form.champBadges
-                .filter((badge) => filtered.includes(badge.rarity))
-                .map((badge: badgeType, i: number) => (
-                <div key={i} className="list-item">
-                  <Badge badge={badge} zoom={badge.zoom} onClick={() => setIsEdit(badge)}/>
-                </div>
-              ))}
-            </div> :
-            <p>No Badges? Boring...</p>
-          }
+          {badgesFiltered.map((badge: badgeType, i: number) => (
+            <div key={i} className="badge-item">
+              <Badge badge={badge} zoom={badge.zoom} onClick={() => setIsEdit(badge)}/>
+            </div>
+          ))}      
+        </div> :
+        <div className="badge-list-empty">
+          <p>{form.champBadges.length > 0 ? `You've filtered everything dummy...` : `No Badges? Boring...`}</p>
         </div>
       }
       <BadgePickerToolbar

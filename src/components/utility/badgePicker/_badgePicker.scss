@@ -7,29 +7,24 @@
   flex-shrink: 0;
   background: white;
 
-  .badge-list-container {
+  .badge-list-container, .badge-list-empty {
     width: 100%;
-    position: relative;
-    flex-grow: 1;
-    padding: 20px 7.5%;
+    @include mixins.flexbox-start;
+    padding: 20px 7.5% 60px;
     box-sizing: border-box;
+    align-items: start;
+    flex-flow: wrap;
+    overflow-y: auto;
 
-    .badge-list {
-      width: 100%;
-      @include mixins.flexbox-start;
-      align-items: start;
-      flex-flow: wrap;
-      overflow-y: scroll;
-    }
-
-    .list-item {
+    .badge-item {
       @include mixins.flexbox;
-    }
-  
-    .badge-list>.list-item {
-      flex: 0 0 16.6%;
+      flex: 0 0 16.66%;
       margin-bottom: 10px;
     }
+  }
+
+  .badge-list-empty {
+    padding: 20px 7.5%;
   }
 
   .badge-picker-spinner-wrapper {

@@ -17,7 +17,9 @@ const ChampHeaderCard: React.FC<champHeaderCardType> = ({ activeStep }) => {
         <h2 style={{ marginBottom: 10 }}>Create Championship</h2>
         <h2 className="clickable" onClick={() => navigate(-1)}>Back</h2>
       </div>
-      <MUIStepper steps={muiStepperSteps.createChamp} activeStep={activeStep} style={{ width: "85%" }}/>
+      <div className="champ-header-stepper">
+        <MUIStepper steps={muiStepperSteps.createChamp} activeStep={activeStep}/>
+      </div>
     </div>
   )
 }

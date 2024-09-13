@@ -276,7 +276,9 @@ const RulesAndRegsEdit = <T extends { rulesAndRegs: rulesAndRegsType }>({
 
   return (
     <div className="rules-and-regs-edit" style={style}>
-      <h4>{`${edit.newRuleReg ? `New` : `Edit`} Rule or Regulation`}</h4>
+      <div className="rules-and-regs-title">
+        <h4>{`${edit.newRuleReg ? `New` : `Edit`} Rule or Regulation`}</h4>
+      </div>
       {section(ruleReg)}
       {ruleReg.subsections?.map((rr: ruleOrRegType, i: number) => section(ruleReg, i))}
       <div className="button-bar sub-btns">

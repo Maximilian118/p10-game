@@ -59,7 +59,9 @@ const RulesAndRegsPicker = <T extends { rulesAndRegs: rulesAndRegsType }>({
             />
           )}
         </div> :
-        <p>You need some Rules and Regulations. This is simply illegal!</p>
+        <div className="rules-and-regs-empty">
+          <p>You need some Rules and Regulations. This is simply illegal!</p>
+        </div>
       }
       <RulesAndRegsToolbar
         user={user}

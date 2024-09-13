@@ -4,15 +4,16 @@
 .rules-and-regs-picker {
   width: 100%;
   @include mixins.flexbox-start-column;
-  background: white;
-  padding: 20px 7.5%;
-  box-sizing: border-box;
 
-  .rules-and-regs-list {
+  .rules-and-regs-list, .rules-and-regs-empty {
     width: 100%;
-    flex-grow: 1;
-    overflow-y: scroll;
+    background: white;
+    padding: 20px 7.5% 60px;
     box-sizing: border-box;
-    padding: 0 4px 20px;
+    overflow-y: auto;
+  }
+
+  .rules-and-regs-empty {
+    padding: 20px 7.5%;
   }
 }

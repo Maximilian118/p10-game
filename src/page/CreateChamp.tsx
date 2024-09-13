@@ -101,9 +101,9 @@ const CreateChamp: React.FC = props => {
   const contentMargin = { marginBottom: 78.5 }
 
   return (
-    <form className="content-container" onSubmit={e => onSubmitHandler(e, navigate)}>
+    <form className="content-container" onSubmit={e => onSubmitHandler(e, navigate)} style={{ height: "100vh" }}>
       <ChampHeaderCard activeStep={activeStep}/>
-      {activeStep === 0 && 
+        {activeStep === 0 && 
         <ChampBasicsCard
           form={form}
           setForm={setForm}
@@ -149,7 +149,6 @@ const CreateChamp: React.FC = props => {
       {activeStep === 4 && 
         <ChampCompleteCard
           stepperBtns={stepperBtns}
-          style={contentMargin}
         />
       }
     </form>
