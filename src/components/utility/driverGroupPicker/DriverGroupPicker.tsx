@@ -16,6 +16,7 @@ interface driverGroupPickerType<T> {
   setForm: React.Dispatch<React.SetStateAction<T>>
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
+  backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
   stepperBtns?: JSX.Element
   style?: React.CSSProperties
@@ -25,7 +26,8 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
   form, 
   setForm, 
   user, 
-  setUser, 
+  setUser,
+  backendErr,
   setBackendErr,
   stepperBtns,
   style,
@@ -53,15 +55,20 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
       setIsEdit={setIsEdit}
       group={group}
       setGroup={setGroup}
+      groups={groups}
       style={style}
     /> : (
     <div className="driver-group-picker" style={style}>
       <div className="driver-group-list-container">
-        {loading ? <CircularProgress/> : 
+        {loading ? 
+          <div className="driver-group-loading">
+            <CircularProgress/>
+          </div> : 
           groups.length > 0 ? 
           <div className="driver-group-list">
-            {groups.map((driverGroup: driverGroupType) => 
-              <DriverGroup 
+            {groups.map((driverGroup: driverGroupType, i: number) => 
+              <DriverGroup
+                key={i}
                 onClick={() => {
                   setGroup(driverGroup)
                   setIsEdit(!isEdit)
@@ -70,7 +77,10 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
             }
           </div> :
           <div className="driver-group-empty">
-            <p>No Driver Groups found... That may be a problem.</p>
+            {backendErr.message ? 
+              <p className="driver-group-error">{backendErr.message}</p> : 
+              <p>No Driver Groups found... That may be a problem.</p>
+            }
           </div>
         }
       </div>

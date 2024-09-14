@@ -1,4 +1,5 @@
 @use '../../../scss/mixins';
+@use '../../../scss/variables';
 
 .driver-group-picker {
   width: 100%;
@@ -10,7 +11,7 @@
     position: relative;
     flex-grow: 1;
 
-    .driver-group-list, .driver-group-empty {
+    .driver-group-list, .driver-group-empty, .driver-group-loading {
       width: 100%;
       @include mixins.flexbox-start-column;
       overflow-y: scroll;
@@ -19,8 +20,12 @@
       box-sizing: border-box;
     }
 
-    .driver-group-empty {
+    .driver-group-empty, .driver-group-loading {
       padding: 20px 7.5%;
+    }
+
+    .driver-group-error {
+      color: variables.$delete-hover;
     }
   }
 }

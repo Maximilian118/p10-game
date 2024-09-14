@@ -77,7 +77,7 @@ export const updateForm = <T extends formStateType, U>(
       return
     }
 
-    if (/^[a-zA-Z0-9]{1,30}$/.test(e.target.value) || e.target.value.trim() === "") {
+    if (/^[a-zA-Z0-9\s]{1,30}$/.test(e.target.value) || e.target.value.trim() === "") {
       handleInput<U>(e.target.name, setFormErr)
     } else {
       handleInput<U>(e.target.name, setFormErr, "No special characters.")

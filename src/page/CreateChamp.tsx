@@ -123,6 +123,7 @@ const CreateChamp: React.FC = props => {
           setForm={setForm}
           user={user}
           setUser={setUser}
+          backendErr={backendErr}
           setBackendErr={setBackendErr}
           stepperBtns={stepperBtns}
           style={contentMargin}
@@ -143,6 +144,7 @@ const CreateChamp: React.FC = props => {
           setForm={setForm}
           user={user}
           setUser={setUser}
+          backendErr={backendErr}
           setBackendErr={setBackendErr}
           stepperBtns={stepperBtns}
           style={contentMargin}

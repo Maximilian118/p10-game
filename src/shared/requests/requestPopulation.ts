@@ -6,7 +6,9 @@ export const populateUser = `
   email
   icon
   profile_picture
-  championships
+  championships {
+    _id
+  }
   created_at
   badges {
     _id
@@ -26,7 +28,9 @@ export const populateTeam = `
   _id
   url
   name
-  driverGroups
+  driverGroups {
+    _id
+  }
   drivers {
     _id
   }
@@ -34,7 +38,9 @@ export const populateTeam = `
     inceptionDate
     nationality
   }
-  created_by
+  created_by {
+    ${populateUser}
+  }
   created_at
   updated_at
 `
@@ -47,7 +53,9 @@ export const populateDriver = `
   teams {
     ${populateTeam}
   }
-  driverGroups
+  driverGroups {
+    _id
+  }
   stats {
     nationality
     heightCM
@@ -56,7 +64,24 @@ export const populateDriver = `
     moustache
     mullet
   }
-  created_by
+  created_by {
+    ${populateUser}
+  }
+  created_at
+  updated_at
+`
+
+// Driver Group population template literal.
+export const populateDriverGroup = `
+  _id
+  url
+  name
+  drivers {
+    ${populateDriver}
+  }
+  created_by {
+    ${populateUser}
+  }
   created_at
   updated_at
 `

@@ -7,7 +7,7 @@
   flex-shrink: 0;
   background: white;
 
-  .badge-list-container, .badge-list-empty {
+  .badge-list-container, .badge-list-empty, .badge-picker-loading {
     width: 100%;
     @include mixins.flexbox-start;
     padding: 20px 7.5% 60px;
@@ -23,12 +23,15 @@
     }
   }
 
-  .badge-list-empty {
+  .badge-list-empty, .badge-picker-loading {
     padding: 20px 7.5%;
   }
 
-  .badge-picker-spinner-wrapper {
-    height: 100%;
-    @include mixins.flexbox;
+  .badge-picker-loading {
+    justify-content: center;
+  }
+
+  .badge-list-error {
+    color: variables.$delete-hover;
   }
 }

@@ -17,6 +17,7 @@ interface badgePickerType<T> {
   setForm: React.Dispatch<React.SetStateAction<T>>
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
+  backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
   badgesReqSent?: boolean
   setBadgesReqSent?: React.Dispatch<React.SetStateAction<boolean>>
@@ -31,6 +32,7 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({
   setForm, 
   user, 
   setUser, 
+  backendErr,
   setBackendErr,
   badgesReqSent,
   setBadgesReqSent,
@@ -70,9 +72,10 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({
     /> : (
     <div className="badge-picker" style={style}>
       {loading ? 
-        <div className="badge-picker-spinner-wrapper">
+        <div className="badge-picker-loading">
           <CircularProgress/>
-        </div> : badgesFiltered.length > 0 ?
+        </div> : 
+        badgesFiltered.length > 0 ?
         <div className="badge-list-container">
           {badgesFiltered.map((badge: badgeType, i: number) => (
             <div key={i} className="badge-item">
@@ -81,7 +84,10 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({
           ))}      
         </div> :
         <div className="badge-list-empty">
-          <p>{form.champBadges.length > 0 ? `You've filtered everything dummy...` : `No Badges? Boring...`}</p>
+          {backendErr.message ? 
+            <p className="badge-list-error">{backendErr.message}</p> : 
+            <p>{form.champBadges.length > 0 ? `You've filtered everything dummy...` : `No Badges? Boring...`}</p>
+          }
         </div>
       }
       <BadgePickerToolbar

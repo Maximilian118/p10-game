@@ -2,32 +2,37 @@ import React, { useState } from "react"
 import './_driverGroupEdit.scss'
 import { driverGroupType, driverType } from "../../../../shared/types"
 import DropZone from "../../dropZone/DropZone"
-import { Button, TextField } from "@mui/material"
+import { Button, CircularProgress, TextField } from "@mui/material"
 import { inputLabel, updateForm } from "../../../../shared/formValidation"
 import { graphQLErrorType, initGraphQLError } from "../../../../shared/requests/requestsUtility"
 import DriverEdit from '../../driverPicker/driverEdit/DriverEdit'
 import { userType } from "../../../../shared/localStorage"
 import DriverPicker from "../../driverPicker/DriverPicker"
 import { initDriver, initDriverGroup } from "../../../../shared/init"
+import { newDriverGroup } from "../../../../shared/requests/driverGroupRequests"
+import { useNavigate } from "react-router-dom"
+import { driverGroupEditErrors } from "./driverGroupUtility"
 
 interface driverGroupEditType<T> {
   setForm: React.Dispatch<React.SetStateAction<T>>
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>
-  group: driverGroupType
+  group: driverGroupType // The specific group we're editing.
   setGroup: React.Dispatch<React.SetStateAction<driverGroupType>>
+  groups: driverGroupType[] // all groups from backend.
   style?: React.CSSProperties
 }
 
-interface editFormType {
+export interface driverGroupEditFormType {
+  _id: string | null
   groupName: string
   drivers: driverType[]
   icon: File | null
   profile_picture: File | null
 }
 
-interface editFormErrType {
+export interface driverGroupEditFormErrType {
   groupName: string
   drivers: string
   dropzone: string
@@ -41,26 +46,40 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
   setIsEdit, 
   group, 
   setGroup,
+  groups,
   style
 }: driverGroupEditType<T>) => {
   const [ isDriverEdit, setIsDriverEdit ] = useState<boolean>(false) // Render isDriverEdit or not.
+  const [ loading, setLoading ] = useState<boolean>(false)
   const [ driver, setDriver ] = useState<driverType>(initDriver(user)) // If we're editing a driver rather than making a new one, populate.
   const [ drivers, setDrivers ] = useState<driverType[]>([]) // Drivers requested from DB.
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
-  const [ editForm, setEditForm ] = useState<editFormType>({
+  const [ editForm, setEditForm ] = useState<driverGroupEditFormType>({
+    _id: group._id ? group._id : "",
     groupName: group.name ? group.name : "",
     drivers: group.drivers ? group.drivers : [], // All the drivers that belong to the driver group.
     icon: null,
     profile_picture: null,
   })
-  const [ editFormErr, setEditFormErr ] = useState<editFormErrType>({
+  const [ editFormErr, setEditFormErr ] = useState<driverGroupEditFormErrType>({
     groupName: "",
     drivers: "",
     dropzone: "",
   })
 
-  const onSubmitHandler = () => {
-    // SetForm with any changes.
+  const navigate = useNavigate()
+
+  const onSubmitHandler = async () => {
+    // Check for Errors
+    if (driverGroupEditErrors(editForm, setEditFormErr, groups)) {
+      return
+    }
+    // Send request to add a new driver group to the DB and mutate form state
+    if (await newDriverGroup(editForm, setForm, user, setUser, navigate, setLoading, setBackendErr)) {
+      // Redirect back to previous page and clear driver information
+      setIsEdit(false)
+      setDriver(initDriver(user))
+    }
   }
 
   return isDriverEdit ? 
@@ -78,7 +97,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
     /> : (
     <div className="driver-group-edit" style={style}>
       <h4>{`${!group.name ? `New` : `Edit`} Group`}</h4>
-      <DropZone<editFormType, editFormErrType>
+      <DropZone<driverGroupEditFormType, driverGroupEditFormErrType>
         form={editForm}
         setForm={setEditForm}
         formErr={editFormErr}
@@ -94,7 +113,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
         className="mui-form-el"
         label={inputLabel("groupName", editFormErr, backendErr)}
         variant="filled" 
-        onChange={e => updateForm<editFormType, editFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
+        onChange={e => updateForm<driverGroupEditFormType, driverGroupEditFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
         value={editForm.groupName}
         error={editFormErr.groupName || backendErr.type === "groupName" ? true : false}
       />
@@ -124,6 +143,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
         <Button
           variant="contained"
           onClick={e => onSubmitHandler()}
+          startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
         >Submit</Button>
       </div>
     </div>
