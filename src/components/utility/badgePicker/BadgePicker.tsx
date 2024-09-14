@@ -52,7 +52,6 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({
   // Send a subsequent request if local reqSent state or if it exists non-local badgeReqSent state is true. 
   useEffect(() => {
     if (form.champBadges.length === 0 && !reqSent && !badgesReqSent) {
-      console.log("reqsent")
       setReqSent(true) // Local state to ensure req doesn't send twice.
       setBadgesReqSent && setBadgesReqSent(true) // Remote state to ensure req doesn't send again even if component unloads and reloads.
       getBadgesByChamp(null, user, setUser, navigate, setLoading, setBackendErr, setForm, setDefaults, setDefaultBadges) // Req
