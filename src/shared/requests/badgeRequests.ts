@@ -55,7 +55,8 @@ export const getBadgesByChamp = async <T extends { champBadges: badgeType[] }>(
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
   setForm?: React.Dispatch<React.SetStateAction<T>>,
-  setDefaults?: React.Dispatch<React.SetStateAction<badgeType[]>>,
+  setDefaults?: React.Dispatch<React.SetStateAction<badgeType[]>>, // For component local state
+  setDefaultBadges?: React.Dispatch<React.SetStateAction<badgeType[]>>, // For component remote state
 ): Promise<void> => {
   setLoading(true)
 
@@ -120,6 +121,10 @@ export const getBadgesByChamp = async <T extends { champBadges: badgeType[] }>(
 
           if (setDefaults) {
             setDefaults(badges.array)
+          }
+
+          if (setDefaultBadges) {
+            setDefaultBadges(badges.array)
           }
         }
       })

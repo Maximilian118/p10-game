@@ -18,6 +18,10 @@ interface badgePickerType<T> {
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
+  badgesReqSent?: boolean
+  setBadgesReqSent?: React.Dispatch<React.SetStateAction<boolean>>
+  defaultBadges?: badgeType[]
+  setDefaultBadges?: React.Dispatch<React.SetStateAction<badgeType[]>>
   stepperBtns?: JSX.Element
   style?: React.CSSProperties
 }
@@ -28,24 +32,32 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({
   user, 
   setUser, 
   setBackendErr,
+  badgesReqSent,
+  setBadgesReqSent,
+  defaultBadges,
+  setDefaultBadges,
   stepperBtns,
   style,
 }: badgePickerType<T>) => {
-  const [ isEdit, setIsEdit ] = useState<boolean | badgeType>(false)
+  const [ isEdit, setIsEdit ] = useState<boolean | badgeType>(false) // Fill with badge info to edit or false to close BadgePickerEdit.
   const [ loading, setLoading ] = useState<boolean>(false)
-  const [ draw, setDraw ] = useState<boolean>(false)
-  const [ defaults, setDefaults ] = useState<badgeType[]>([])
-  const [ reqSent, setReqSent ] = useState<boolean>(false)
+  const [ draw, setDraw ] = useState<boolean>(false) // Open or close the filter draw.
+  const [ defaults, setDefaults ] = useState<badgeType[]>(defaultBadges ? defaultBadges : []) // default badges from backend
+  const [ reqSent, setReqSent ] = useState<boolean>(false) // Determine if getBadgesByChamp has been sent or not.
   const [ filtered, setFiltered ] = useState<number[]>(badgeRarities().map((rarity: badgeRarityType) => rarity.rarity))
 
   const navigate = useNavigate()
 
+  // Send a request for default badges of first mount of the BadgePicker componenet.
+  // Send a subsequent request if local reqSent state or if it exists non-local badgeReqSent state is true. 
   useEffect(() => {
-    if (form.champBadges.length === 0 && !reqSent) {
-      getBadgesByChamp(null, user, setUser, navigate, setLoading, setBackendErr, setForm, setDefaults)
-      setReqSent(true)
+    if (form.champBadges.length === 0 && !reqSent && !badgesReqSent) {
+      console.log("reqsent")
+      setReqSent(true) // Local state to ensure req doesn't send twice.
+      setBadgesReqSent && setBadgesReqSent(true) // Remote state to ensure req doesn't send again even if component unloads and reloads.
+      getBadgesByChamp(null, user, setUser, navigate, setLoading, setBackendErr, setForm, setDefaults, setDefaultBadges) // Req
     }
-  }, [form, user, setUser, navigate, setBackendErr, setForm, reqSent, defaults])
+  }, [form, user, setUser, navigate, setBackendErr, setForm, reqSent, badgesReqSent, setBadgesReqSent, defaults, setDefaultBadges])
 
   const badgesFiltered = form.champBadges.filter((badge) => filtered.includes(badge.rarity))
 
@@ -87,6 +99,8 @@ const BadgePicker = <T extends { champBadges: badgeType[] }>({
         defaults={defaults}
         filtered={filtered}
         setFiltered={setFiltered}
+        defaultBadges={defaultBadges}
+        setDefaultBadges={setDefaultBadges}
         style={style}
       />
       {stepperBtns}

@@ -39,10 +39,12 @@ export interface createChampFormErrType extends createChampFormBaseType {
 
 const CreateChamp: React.FC = props => {
   const { user, setUser } = useContext(AppContext)
-  const [ loading, setLoading ] = useState<boolean>(false)
+  const [ loading, setLoading ] = useState<boolean>(false) // loading for createChamp req.
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
-  const [ activeStep, setActiveStep ] = useState<number>(0)
-  const [ stepperBtns, setStepperBtns ] = useState<JSX.Element>(<></>)
+  const [ activeStep, setActiveStep ] = useState<number>(0) // Active step for stepper component.
+  const [ stepperBtns, setStepperBtns ] = useState<JSX.Element>(<></>) // button-bar component to be distributed across child components as needed.
+  const [ badgesReqSent, setBadgesReqSent ] = useState<boolean>(false) // As we can unload the badge picker component. State to dictate wheather to send another req is in parent.
+  const [ defaultBadges, setDefaultBadges ] = useState<badgeType[]>([]) // For the same reason the res of getBadges sits here.
   const [ form, setForm ] = useState<createChampFormType>({
     champName: "",
     rounds: 24,
@@ -144,6 +146,10 @@ const CreateChamp: React.FC = props => {
           setBackendErr={setBackendErr}
           stepperBtns={stepperBtns}
           style={contentMargin}
+          badgesReqSent={badgesReqSent}
+          setBadgesReqSent={setBadgesReqSent}
+          defaultBadges={defaultBadges}
+          setDefaultBadges={setDefaultBadges}
         />
       }
       {activeStep === 4 && 

@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from "react"
+import React, { MouseEvent } from "react"
 import './_badgeFilterDraw.scss'
 import { Button, ClickAwayListener } from "@mui/material"
 import { badgeType } from "../../../../shared/types"
@@ -13,6 +13,8 @@ interface badgeFilterDrawType<T> {
   defaults: badgeType[]
   filtered: number[]
   setFiltered: React.Dispatch<React.SetStateAction<number[]>>
+  defaultBadges?: badgeType[]
+  setDefaultBadges?: React.Dispatch<React.SetStateAction<badgeType[]>>
   style?: React.CSSProperties
 }
 
@@ -26,7 +28,7 @@ const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({
   setFiltered,
   style,
 }: badgeFilterDrawType<T>) => {
-  const [ defs, setDefs ] = useState<boolean>(false)
+  const hasDefbadges = (form: T) => form.champBadges.some(a => defaults.map(b => b._id).includes(a._id))
 
   const removeDefaultsHandler = (champBadges: badgeType[], setForm: React.Dispatch<React.SetStateAction<T>> ) => {
     setForm(prevForm => {
@@ -66,9 +68,9 @@ const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({
     champBadges: badgeType[],
     defaults: badgeType[], 
     setForm: React.Dispatch<React.SetStateAction<T>>, 
-    defs: boolean,
+    hasDefbadges: boolean,
   ): void => {
-    if (defs) {
+    if (!hasDefbadges) {
       return addDefaultsHandler(defaults, setForm)
     } else {
       return removeDefaultsHandler(champBadges, setForm)
@@ -99,11 +101,8 @@ const BadgeFilterDraw = <T extends { champBadges: badgeType[] }>({
             <Button
               variant="contained" 
               size="small"
-              onClick={e => {
-                onDefaultClickHandler(form.champBadges, defaults, setForm, defs)
-                setDefs(!defs)
-              }}
-            >{`${defs ? "Add" : "Remove"} defaults`}</Button>
+              onClick={e => onDefaultClickHandler(form.champBadges, defaults, setForm, hasDefbadges(form))}
+            >{`${!hasDefbadges(form) ? "Add" : "Remove"} defaults`}</Button>
           </div>
       </div>
     </ClickAwayListener>
