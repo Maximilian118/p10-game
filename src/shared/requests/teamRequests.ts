@@ -7,6 +7,7 @@ import { teamEditFormType } from "../../components/utility/teamPicker/teamEdit/T
 import { uplaodS3 } from "./bucketRequests"
 import moment from "moment"
 import { populateTeam } from "./requestPopulation"
+import { capitalise } from "../utility"
 
 export const newTeam = async <T extends { teams: teamType[] }>(
   editForm: teamEditFormType,
@@ -38,7 +39,7 @@ export const newTeam = async <T extends { teams: teamType[] }>(
           variables: {
             created_by: user._id,
             url: iconURL,
-            name: editForm.teamName,
+            name: capitalise(editForm.teamName),
             nationality: editForm.nationality?.label,
             inceptionDate: moment(editForm.inceptionDate).format(),
           },

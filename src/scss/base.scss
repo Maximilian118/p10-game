@@ -38,7 +38,7 @@ body {
       border-radius: 25px;
       background: white;
       box-shadow: variables.$shadow;
-      @include mixins.flexbox-space-between-column;
+      @include mixins.flexbox-start-column;
       overflow: hidden;
       color: variables.$colour-4;
       position: relative;

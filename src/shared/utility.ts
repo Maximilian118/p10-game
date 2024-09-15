@@ -111,3 +111,5 @@ export const isThreeLettersUppercase = (
 export const onlyNumbers = (str: string): number => Number(str.replace(/\D/g, ""))
 // Sort an array of objects with name key of type string.
 export const sortAlphabetically = <T extends { name: string }[]>(arr: T) => arr.sort((a, b) => a.name.localeCompare(b.name)) // prettier-ignore
+// Capatalise the first letter in a string.
+export const capitalise = (s: string) => (s && s[0].toUpperCase() + s.slice(1)) || ""

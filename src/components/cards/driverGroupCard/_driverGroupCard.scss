@@ -1,0 +1,45 @@
+@use '../../../scss/mixins';
+@use '../../../scss/variables';
+
+.driver-group-card {
+  width: 100%;
+  height: 120px;
+  @include mixins.flexbox-start;
+  background: white;
+  cursor: pointer;
+  transition: variables.$trans-speed;
+  position: relative;
+  padding: 20px 7.5%;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  .driver-group-content {
+    height: 100%;
+    flex-grow: 1;
+    @include mixins.flexbox-column;
+    align-items: start;
+    margin-left: 20px;
+    overflow: hidden;
+
+    p {
+      width: 100%;
+      color: variables.$colour-6;
+      margin-bottom: 8px;
+      text-transform: capitalize;
+      overflow-y: scroll;
+    }
+
+    .driver-group-drivers {
+      width: 100%;
+      @include mixins.flexbox-start;
+
+      .icon {
+        margin-right: 5px;
+      }
+    }
+  }
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
+}

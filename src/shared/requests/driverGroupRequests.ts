@@ -6,6 +6,7 @@ import { driverGroupType } from "../types"
 import { driverGroupEditFormType } from "../../components/utility/driverGroupPicker/driverGroupEdit/DriverGroupEdit"
 import { populateDriverGroup } from "./requestPopulation"
 import { uplaodS3 } from "./bucketRequests"
+import { capitalise } from "../utility"
 
 export const newDriverGroup = async <T extends { driverGroups: driverGroupType[] }>(
   editForm: driverGroupEditFormType,
@@ -37,7 +38,7 @@ export const newDriverGroup = async <T extends { driverGroups: driverGroupType[]
           variables: {
             created_by: user._id,
             url: iconURL,
-            name: editForm.groupName,
+            name: capitalise(editForm.groupName),
             drivers: editForm.drivers.map((driver) => driver._id!),
           },
           query: `

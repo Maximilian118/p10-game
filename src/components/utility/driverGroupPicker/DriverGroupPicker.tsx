@@ -3,13 +3,14 @@ import "./_driverGroupPicker.scss"
 import { CircularProgress, IconButton } from "@mui/material"
 import { Add } from "@mui/icons-material"
 import { driverGroupType } from "../../../shared/types"
-import DriverGroup from "./driverGroup/DriverGroup"
 import { getDriverGroups } from "../../../shared/requests/driverGroupRequests"
 import { userType } from "../../../shared/localStorage"
 import { useNavigate } from "react-router-dom"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
 import DriverGroupEdit from "./driverGroupEdit/DriverGroupEdit"
 import { initDriverGroup } from "../../../shared/init"
+import DriverGroupCard from "../../cards/driverGroupCard/DriverGroupCard"
+import { sortAlphabetically } from "../../../shared/utility"
 
 interface driverGroupPickerType<T> {
   form: T
@@ -66,15 +67,16 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
           </div> : 
           groups.length > 0 ? 
           <div className="driver-group-list">
-            {groups.map((driverGroup: driverGroupType, i: number) => 
-              <DriverGroup
+            {sortAlphabetically(groups).map((group: driverGroupType, i: number) => 
+              <DriverGroupCard
                 key={i}
+                group={group}
                 onClick={() => {
-                  setGroup(driverGroup)
+                  setGroup(group)
                   setIsEdit(!isEdit)
                 }}
-              />)
-            }
+              />
+            )}
           </div> :
           <div className="driver-group-empty">
             {backendErr.message ? 

@@ -7,7 +7,7 @@ import { populateDriver } from "./requestPopulation"
 import { driverEditFormType } from "../../components/utility/driverPicker/driverEdit/DriverEdit"
 import { uplaodS3 } from "./bucketRequests"
 import moment from "moment"
-import { onlyNumbers } from "../utility"
+import { capitalise, onlyNumbers } from "../utility"
 
 export const newDriver = async <T extends { drivers: driverType[] }>(
   editForm: driverEditFormType, // form state of driver
@@ -39,7 +39,7 @@ export const newDriver = async <T extends { drivers: driverType[] }>(
           variables: {
             created_by: user._id,
             url: iconURL,
-            name: editForm.driverName,
+            name: capitalise(editForm.driverName),
             driverID: editForm.driverID,
             teams: editForm.teams.map((team) => team._id),
             nationality: editForm.nationality?.label,

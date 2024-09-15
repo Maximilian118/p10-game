@@ -3,10 +3,11 @@ import './_icon.scss'
 
 interface iconType {
   src: string
+  id?: string
   style?: object
 }
 
-const Icon: React.FC<iconType> = ({ src, style }) => {
+const Icon: React.FC<iconType> = ({ src, id, style }) => {
   const [ error, setError ] = useState<boolean>(false)
 
   const iconContent = (error: boolean, src: string) => {
@@ -22,7 +23,7 @@ const Icon: React.FC<iconType> = ({ src, style }) => {
   }
 
   return (
-    <div className="icon" style={style}>
+    <div id={id} className="icon" style={style}>
       {iconContent(error, src)}
     </div>
   )

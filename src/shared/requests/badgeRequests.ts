@@ -3,6 +3,7 @@ import { userType } from "../localStorage"
 import { badgeType } from "../types"
 import { graphQLErrors, graphQLErrorType, graphQLResponse, headers } from "./requestsUtility"
 import { NavigateFunction } from "react-router-dom"
+import { capitalise } from "../utility"
 
 export const newBadge = async (
   badge: badgeType,
@@ -19,7 +20,10 @@ export const newBadge = async (
       .post(
         "",
         {
-          variables: badge,
+          variables: {
+            ...badge,
+            name: capitalise(badge.name),
+          },
           query: `
             mutation NewBadge($championship: String, $url: String!, $name: String!, $rarity: Int!, $awardedHow: String!, $awardedDesc: String!, $zoom: Int) {
               newBadge(badgeInput: { championship: $championship, url: $url,  name: $name, rarity: $rarity, awardedHow: $awardedHow, awardedDesc: $awardedDesc, zoom: $zoom }) {
