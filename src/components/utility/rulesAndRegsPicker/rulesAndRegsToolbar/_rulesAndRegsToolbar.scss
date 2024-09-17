@@ -14,11 +14,7 @@
     pointer-events: all;
   }
 
-  .add-button-toolbar {
-    margin-left: 10px !important;
-    z-index: 4;
-    position: relative !important;
-    bottom: auto !important;
-    right: auto !important;
+  > *:not(:first-child) {
+    margin-left: 10px;
   }
 }

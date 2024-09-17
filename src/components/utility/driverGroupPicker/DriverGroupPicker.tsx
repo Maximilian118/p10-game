@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import "./_driverGroupPicker.scss"
-import { CircularProgress, IconButton } from "@mui/material"
-import { Add } from "@mui/icons-material"
+import { CircularProgress } from "@mui/material"
 import { driverGroupType } from "../../../shared/types"
 import { getDriverGroups } from "../../../shared/requests/driverGroupRequests"
 import { userType } from "../../../shared/localStorage"
@@ -11,6 +10,8 @@ import DriverGroupEdit from "./driverGroupEdit/DriverGroupEdit"
 import { initDriverGroup } from "../../../shared/init"
 import DriverGroupCard from "../../cards/driverGroupCard/DriverGroupCard"
 import { sortAlphabetically } from "../../../shared/utility"
+import Search from "../search/Search"
+import AddButton from "../button/addButton/AddButton"
 
 interface driverGroupPickerType<T> {
   form: T
@@ -38,6 +39,7 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
   const [ groups, setGroups ] = useState<driverGroupType[]>([]) // Stores all driver groups from getDriverGroups response.
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ reqSent, setReqSent ] = useState<boolean>(false)
+  const [ search, setSearch ] = useState<driverGroupType[]>([])
 
   const navigate = useNavigate()
 
@@ -60,6 +62,10 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
       style={style}
     /> : (
     <div className="driver-group-picker" style={style}>
+      <Search
+        original={groups}
+        setSearch={setSearch}
+      />
       <div className="driver-group-list-container">
         {loading ? 
           <div className="driver-group-loading">
@@ -67,7 +73,7 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
           </div> : 
           groups.length > 0 ? 
           <div className="driver-group-list">
-            {sortAlphabetically(groups).map((group: driverGroupType, i: number) => 
+            {sortAlphabetically(search ? search : groups).map((group: driverGroupType, i: number) => 
               <DriverGroupCard
                 key={i}
                 group={group}
@@ -89,13 +95,11 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
           </div>
         }
       </div>
-      <IconButton 
-        className="add-button"
+      <AddButton
         style={style}
         onClick={() => setIsEdit(!isEdit)}
-      >
-        <Add/>
-      </IconButton>
+        absolute
+      />
       {stepperBtns}
     </div>
   )

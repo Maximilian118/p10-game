@@ -7,12 +7,11 @@ import { useNavigate } from "react-router-dom"
 import { getDrivers } from "../../../shared/requests/driverRequests"
 import { userType } from "../../../shared/localStorage"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
-import { IconButton } from "@mui/material"
-import { Add } from "@mui/icons-material"
 import DriverCard from "../../cards/driverCard/DriverCard"
 import { canEditDriver } from "./driverEdit/driverEditUtility"
 import { sortAlphabetically } from "../../../shared/utility"
 import { canEditGroup } from "../driverGroupPicker/driverGroupEdit/driverGroupUtility"
+import AddButton from "../button/addButton/AddButton"
 
 interface driverPickerType<T, U> {
   user: userType
@@ -122,14 +121,12 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
             }}
           />
         ))}
-        <IconButton 
-          className="add-button" 
+        <AddButton
           onClick={() => {
             setIsDriverEdit(true)
           }}
-        >
-          <Add/>
-        </IconButton>
+          absolute
+        />
       </div>
     </div>
   )

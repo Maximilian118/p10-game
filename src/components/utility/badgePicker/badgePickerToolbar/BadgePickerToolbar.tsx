@@ -1,8 +1,9 @@
 import React from "react"
 import './_badgePickerToolbar.scss'
-import { Button, IconButton } from "@mui/material"
-import { Add, FilterList } from "@mui/icons-material"
+import { Button } from "@mui/material"
+import { FilterList } from "@mui/icons-material"
 import { badgeType } from "../../../../shared/types"
+import AddButton from "../../button/addButton/AddButton"
 
 interface badgePickerToolbarType {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean | badgeType>>
@@ -23,12 +24,7 @@ const BadgePickerToolbar: React.FC<badgePickerToolbarType> = ({ setIsEdit, draw,
       endIcon={<FilterList/>}>
       Filter
     </Button>
-    <IconButton 
-      className="add-button add-button-toolbar"
-      onClick={e => setIsEdit(true)}
-    >
-      <Add/>
-    </IconButton>
+    <AddButton onClick={e => setIsEdit(true)}/>
   </div>
 )
 

@@ -7,14 +7,13 @@ import { driverType, teamType } from "../../../shared/types"
 import { userType } from "../../../shared/localStorage"
 import { useNavigate } from "react-router-dom"
 import { graphQLErrorType } from "../../../shared/requests/requestsUtility"
-import { IconButton } from "@mui/material"
-import { Add } from "@mui/icons-material"
 import TeamCard from "../../cards/teamCard/TeamCard"
 import { canEditTeam } from "./teamEdit/teamEditUtility"
 import { canEditDriver } from "../driverPicker/driverEdit/driverEditUtility"
 import { sortAlphabetically } from "../../../shared/utility"
 import { updateDriver } from "../../../shared/requests/driverRequests"
 import { driverEditFormType } from "../driverPicker/driverEdit/DriverEdit"
+import AddButton from "../button/addButton/AddButton"
 
 interface teamPickerType<T, U, V> {
   user: userType
@@ -156,14 +155,10 @@ const TeamPicker = <T extends driverEditFormType, U extends { teams: string }, V
           ))
         }
       </div>
-      <IconButton 
-        className="add-button" 
-        onClick={() => {
-          setIsEdit(true)
-        }}
-      >
-        <Add/>
-      </IconButton>
+      <AddButton
+        onClick={() => setIsEdit(true)}
+        absolute
+      />
     </div>
   )
 }

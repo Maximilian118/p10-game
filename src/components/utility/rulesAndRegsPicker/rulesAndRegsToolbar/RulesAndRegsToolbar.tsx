@@ -1,11 +1,11 @@
 import React from "react"
 import './_rulesAndRegsToolbar.scss'
-import { Button, IconButton } from "@mui/material"
-import { Add } from "@mui/icons-material"
+import { Button } from "@mui/material"
 import { editStateType } from "../RulesAndRegsPicker"
 import { rulesAndRegsType } from "../../../../shared/types"
 import { defaultRulesAndRegs, isDefaultRorR } from "../../../../shared/rulesAndRegs"
 import { userType } from "../../../../shared/localStorage"
+import AddButton from "../../button/addButton/AddButton"
 
 interface rulesAndRegsToolbarType<T> {
   user: userType
@@ -49,17 +49,14 @@ const RulesAndRegsToolbar = <T extends { rulesAndRegs: rulesAndRegsType }>({
       >
         {`${hasDefs ? "Remove" : "Add"} Defaults`}
       </Button>
-      <IconButton 
-        className="add-button add-button-toolbar"
+      <AddButton
         onClick={e => setEdit(prevEdit => {
           return {
             ...prevEdit,
             newRuleReg: true,
           }
         })}
-      >
-        <Add/>
-      </IconButton>
+      />
     </div>
   )
 }

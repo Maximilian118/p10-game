@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { champType } from "../shared/types"
-import ChampUtilityCard from "../components/cards/champUtilityCard/ChampUtilityCard"
+import Search from "../components/utility/search/Search"
+import AddButton from "../components/utility/button/addButton/AddButton"
+import { useNavigate } from "react-router-dom"
 
 const Championships: React.FC = props => {
   const [ champs, setChamps ] = useState<champType[]>([])
@@ -10,12 +12,17 @@ const Championships: React.FC = props => {
     // retrieve all open championships and setChamps.
   }, [])
 
+  const navigate = useNavigate()
+
   return (
     <div className="content-container">
-      <ChampUtilityCard
-        champs={champs}
-        search={search}
+      <Search
+        original={champs}
         setSearch={setSearch}
+      />
+      <AddButton
+        onClick={() => navigate("/create-championship")}
+        absolute
       />
     </div>
   )
