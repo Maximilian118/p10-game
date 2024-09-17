@@ -15,7 +15,7 @@ interface dropZoneType<T, U> {
   backendErr?: graphQLErrorType
   setBackendErr?: React.Dispatch<React.SetStateAction<graphQLErrorType>>
   user?: userType
-  style?: object
+  style?: React.CSSProperties
   purposeText?: string
   zoom?: number
   thumbImg?: string | false

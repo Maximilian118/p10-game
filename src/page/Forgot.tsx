@@ -66,6 +66,7 @@ const Forgot: React.FC = () => {
           <Button 
             variant="contained" 
             type="submit"
+            className="mui-form-btn"
             startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
           >Submit</Button>
         </form>}

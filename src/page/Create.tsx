@@ -60,7 +60,7 @@ const Create: React.FC = () => {
           className="form-background" 
           style={{ width: "250%", top: 50, left: "-35%" }}
         />
-        <div className="form-title" style={{ marginBottom: 20 }}>
+        <div className="form-title" style={{ marginBottom: 10 }}>
           <h2 style={{ marginBottom: 10 }}>Create Account</h2>
           <h2 className="clickable" onClick={() => navigate(-1)}>Back</h2>
         </div>
@@ -71,6 +71,7 @@ const Create: React.FC = () => {
             setFormErr={setFormErr} 
             backendErr={backendErr}
             setBackendErr={setBackendErr}
+            style={{ width: "60%" }}
           />
           <TextField
             required={!formErr.name && backendErr.type !== "name"}
@@ -122,7 +123,7 @@ const Create: React.FC = () => {
             type="submit"
             className="mui-form-btn"
             startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
-          >Create</Button>
+          >Create Account</Button>
         </form>
       </div>
     </div>
