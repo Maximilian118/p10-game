@@ -12,7 +12,7 @@
   transition: variables.$trans-speed;
   position: relative;
 
-  p {
+  .driver-name {
     color: variables.$colour-9;
     font-size: 14px;
     overflow-x: scroll;
@@ -29,38 +29,8 @@
     position: absolute;
     right: 16px;
 
-    .button {
-      width: 22px;
-      height: 22px;
-      border-radius: 22px;
-      transition: variables.$trans-speed;
-      color: white;
-
-      svg {
-        width: 14px;
-        height: 14px;
-      }
-    }
-
-    .button:not(:last-child) {
-      margin-right: 10px;
-    }
-
-    .edit {
-      background: variables.$mui-blue;
-
-      &:hover {
-        background: variables.$mui-blue-hover;
-      }
-    }
-
-    .remove {
-      background: variables.$delete-hover;
-
-      svg {
-        width: 18px;
-        height: 18px;
-      }
+    > *:not(:first-child) {
+      margin-left: 5px;
     }
   }
 }

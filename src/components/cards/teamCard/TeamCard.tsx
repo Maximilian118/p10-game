@@ -1,9 +1,9 @@
 import React from "react"
 import './_teamCard.scss';
 import { teamType } from "../../../shared/types";
-import Icon from "../../utility/icon/Icon";
-import { IconButton } from "@mui/material";
-import { Edit, Remove } from "@mui/icons-material";
+import ImageIcon from "../../utility/icon/imageIcon/ImageIcon";
+import EditButton from "../../utility/button/editButton/EditButton";
+import RemoveButton from "../../utility/button/removeButton/RemoveButton";
 
 interface teamCardType {
   team: teamType
@@ -15,24 +15,17 @@ interface teamCardType {
 
 const TeamCard: React.FC<teamCardType> = ({ team, onClick, canEdit, onRemove, canRemove }) => (
   <div className="team-card" onClick={() => onClick && onClick(team)}>
-    <Icon src={team.url} style={{ marginRight: 16 }}/>
-    <p>{team.name}</p>
+    <ImageIcon src={team.url} style={{ marginRight: 16 }}/>
+    <p className="team-name">{team.name}</p>
     <div className="toolbar">
-      {canEdit && (
-        <IconButton className="button edit">
-          <Edit/>
-        </IconButton>
-      )}
+      {canEdit && <EditButton/>}
       {canRemove && (
-        <IconButton
-          className="button remove"
+        <RemoveButton
           onClick={(e) => {
             e.stopPropagation()
             onRemove && onRemove(team)
           }}
-        >
-          <Remove/>
-        </IconButton>
+        />
       )}
     </div>
   </div>

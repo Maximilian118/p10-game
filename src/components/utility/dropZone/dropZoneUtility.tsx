@@ -70,6 +70,12 @@ export const dropZoneThumb = (
         <p>{getInitials(user.name)}</p>
       </div>
     )
+  } else if (imgErr) {
+    return (
+      <div className="dropzone-image-error">
+        <p>Err</p>
+      </div>
+    )
   } else {
     return (
       <img 

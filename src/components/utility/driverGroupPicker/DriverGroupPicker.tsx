@@ -71,9 +71,12 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
               <DriverGroupCard
                 key={i}
                 group={group}
-                onClick={() => {
+                onEditClicked={() => {
                   setGroup(group)
                   setIsEdit(!isEdit)
+                }}
+                onClick={() => {
+                  
                 }}
               />
             )}

@@ -1,11 +1,11 @@
 import React, { useState } from "react"
 import './_rulesAndRegsEdit.scss'
 import { editStateType, initEditState } from "../RulesAndRegsPicker"
-import { Button, IconButton, TextField } from "@mui/material"
+import { Button, TextField } from "@mui/material"
 import { ruleOrRegType, rulesAndRegsType } from "../../../../shared/types"
 import moment from "moment"
 import { userType } from "../../../../shared/localStorage"
-import { Remove } from "@mui/icons-material"
+import RemoveButton from "../../button/removeButton/RemoveButton"
 
 interface regsAndRulesEditType<T> {
   user: userType
@@ -263,13 +263,7 @@ const RulesAndRegsEdit = <T extends { rulesAndRegs: rulesAndRegsType }>({
           variant="filled"
           error={hasErr() ? true : false}
         />
-        {isSub && 
-        <IconButton 
-          className="subsection-delete"
-          onClick={e => deleteSubsection(setRuleReg, index)}
-        >
-          <Remove/>
-        </IconButton>}
+        {isSub && <RemoveButton onClick={e => deleteSubsection(setRuleReg, index)}/>}
       </div>
     )
   }

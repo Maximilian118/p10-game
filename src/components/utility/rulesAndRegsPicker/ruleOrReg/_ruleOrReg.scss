@@ -45,52 +45,10 @@
     padding: 0 0 0 30px;
     box-sizing: border-box;
     margin-top: 5px !important;
-    
-    .button, .text-button {
-      margin: 0 5px 0 0;
-      width: 22px;
-      height: 22px;
-      border-radius: 22px;
-      transition: variables.$trans-speed;
+    @include mixins.flexbox-start;
 
-      svg {
-        width: 18px;
-        height: 18px;
-      }
-    }
-
-    .text-button {
-      pointer-events: none;
-      width: auto;
-    }
-
-    .edit {
-      background: variables.$mui-blue;
-      color: white;
-
-      svg {
-        width: 14px;
-        height: 14px;
-      }
-
-      &:hover {
-        background: variables.$mui-blue-hover;
-      }
-    }
-
-    .global, .default {
-      p {
-        color: white;
-        transform: translateY(1px);
-      }
-    }
-
-    .global {
-      background: variables.$mui-blue;
-    }
-
-    .default {
-      background: variables.$colour-4;
+    > *:not(:last-child) {
+      margin-right: 5px;
     }
   }
 }

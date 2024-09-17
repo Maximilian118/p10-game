@@ -1,13 +1,15 @@
 import React, { useState } from "react"
-import './_icon.scss'
+import '../_icon.scss'
+import './_imageIcon.scss'
 
 interface iconType {
   src: string
   id?: string
-  style?: object
+  size?: "small" | "medium" | "large" | "contained"
+  style?: React.CSSProperties
 }
 
-const Icon: React.FC<iconType> = ({ src, id, style }) => {
+const ImageIcon: React.FC<iconType> = ({ src, id, size, style }) => {
   const [ error, setError ] = useState<boolean>(false)
 
   const iconContent = (error: boolean, src: string) => {
@@ -23,10 +25,10 @@ const Icon: React.FC<iconType> = ({ src, id, style }) => {
   }
 
   return (
-    <div id={id} className="icon" style={style}>
+    <div id={id} className={`icon-${size ? size : "medium"} image-icon`} style={style}>
       {iconContent(error, src)}
     </div>
   )
 }
 
-export default Icon
+export default ImageIcon

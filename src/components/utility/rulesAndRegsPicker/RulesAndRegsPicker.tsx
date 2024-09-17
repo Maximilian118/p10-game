@@ -55,7 +55,7 @@ const RulesAndRegsPicker = <T extends { rulesAndRegs: rulesAndRegsType }>({
               index={i + 1}
               item={item}
               setEdit={setEdit}
-              def={isDefaultRorR(user, item)}
+              isDefault={isDefaultRorR(user, item)}
             />
           )}
         </div> :

@@ -1,16 +1,18 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { SyntheticEvent, useEffect, useRef, useState } from "react"
 import './_driverGroupCard.scss'
-import Icon from "../../utility/icon/Icon"
 import { driverGroupType, driverType } from "../../../shared/types"
-import IconCounter from "../../utility/icon/iconCounter/IconCounter"
+import EditButton from "../../utility/button/editButton/EditButton"
+import CounterIcon from "../../utility/icon/counterIcon/CounterIcon"
+import ImageIcon from "../../utility/icon/imageIcon/ImageIcon"
 
 interface driverGroupCardType {
   group: driverGroupType
-  onClick: () => void
+  onClick: (e: SyntheticEvent) => void
+  onEditClicked: (e: SyntheticEvent) => void
 }
 
-const DriverGroupCard: React.FC<driverGroupCardType> = ({ group, onClick }) => {
-  const [ lastIcon, setLastIcon ] = useState<number>(10) // Last Icon to be rendered before IconCounter.
+const DriverGroupCard: React.FC<driverGroupCardType> = ({ group, onClick, onEditClicked }) => {
+  const [ lastIcon, setLastIcon ] = useState<number>(10) // Last Icon to be rendered before CounterIcon.
   const groupDriversRef = useRef<HTMLDivElement>(null) // Ref of the Icon list container.
 
   useEffect(() => {
@@ -23,15 +25,23 @@ const DriverGroupCard: React.FC<driverGroupCardType> = ({ group, onClick }) => {
 
   return (
     <div className="driver-group-card" onClick={onClick}>
-      <Icon src={group.url} style={{ height: 80, width: 80 }}/>
+      <div className="main-icon-container">
+        <ImageIcon src={group.url} size="contained"/>
+        <EditButton
+          onClick={e => {
+            e.stopPropagation()
+            onEditClicked(e)
+          }}
+        />
+      </div>
       <div className="driver-group-content">
-        <p>{group.name}</p>
+        <p className="driver-group-title">{group.name}</p>
         <div ref={groupDriversRef} className="driver-group-drivers">
           {group.drivers.map((driver: driverType, i: number) => {
             if (i < lastIcon ) {
-              return <Icon key={i} src={driver.url}/>
+              return <ImageIcon key={i} src={driver.url}/>
             } else if (i === lastIcon) {
-              return <IconCounter key={i} counter={group.drivers.length - lastIcon}/>
+              return <CounterIcon key={i} counter={group.drivers.length - lastIcon}/>
             } else {
               return null
             }

@@ -1,0 +1,15 @@
+@use '../../../../scss/variables';
+
+.edit-button {
+  background: variables.$mui-blue !important;
+
+  svg {
+    width: 64%;
+    height: 64%;
+    color: white !important;
+  }
+
+  &:hover {
+    background: variables.$mui-blue-hover !important;
+  }
+}

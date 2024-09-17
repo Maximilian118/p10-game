@@ -2,7 +2,7 @@ import { Autocomplete, CircularProgress, Paper, TextField } from "@mui/material"
 import React, { SyntheticEvent } from "react"
 import './_muiAutocomplete.scss'
 import { Add } from "@mui/icons-material"
-import Icon from "../icon/Icon"
+import ImageIcon from "../icon/imageIcon/ImageIcon"
 
 interface muiAutocompleteType<T> {
   label: string
@@ -111,7 +111,7 @@ const MUIAutocomplete = <T extends { url: string, name: string }>({
       getOptionLabel={(option: T | string | null) => findValueString(option) as string}
       renderOption={(props: object, option: T | string | null, state: { index: number }) => (
         <li key={state.index} {...props}>
-          {typeof option !== "string" && !!option && <Icon src={option.url} style={{ marginRight: 16 }}/>}
+          {typeof option !== "string" && !!option && <ImageIcon src={option.url} style={{ marginRight: 16 }}/>}
           <p>{findValueString(option)}</p>
         </li>
       )}

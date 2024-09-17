@@ -42,23 +42,10 @@
       }
     }
 
-    .subsection-delete {
-      width: 22px;
-      height: 22px;
+    .remove-button {
       position: absolute;
       top: 5px;
       right: calc(7.5% + 5px);
-      background: variables.$f1-red;
-      color: white;
-
-      svg {
-        width: 18px;
-        height: 18px;
-      }
-
-      &:hover {
-        background: variables.$f1-red-hover;
-      }
     }
   }
 

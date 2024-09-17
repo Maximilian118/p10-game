@@ -1,70 +1,54 @@
 import React from "react"
 import './_ruleOrReg.scss'
 import { ruleOrRegType } from "../../../../shared/types"
-import { Button, IconButton } from "@mui/material"
-import { Edit } from "@mui/icons-material"
 import { editStateType } from "../RulesAndRegsPicker"
+import EditButton from "../../button/editButton/EditButton"
+import TextIcon from "../../icon/textIcon/TextIcon"
 
 interface rOrrType {
   index: number
   item: ruleOrRegType
   setEdit: React.Dispatch<React.SetStateAction<editStateType>>
-  global?: boolean
-  def?: boolean
+  isDefault?: boolean // if Truthy, the rule or reg matches a rule reg from the default rule reg array.
 }
 
-const RuleOrReg: React.FC<rOrrType> = ({ index, item, setEdit, global, def }) => {
-  const toolbarContent = (global?: boolean): JSX.Element => {
-    if (global) {
+const RuleOrReg: React.FC<rOrrType> = ({ index, item, setEdit, isDefault }) => (
+  <div className="rule-or-reg">
+    <div className="main">
+      <div className="title">
+        <h4>{`${index}.`}</h4>
+      </div>
+      <p>{item.text}</p>
+    </div>
+    {item.subsections && item.subsections.map((r: ruleOrRegType, i: number) => {
       return (
-        <Button className="text-button global">
-          <p>Global</p>
-        </Button>
+        <div key={i} className="subsection">
+          <div className="title" >
+            <p>{`${index}.${i + 1}`}</p>
+          </div>
+          <p>{r.text}</p>
+        </div>
       )
-    }
-
-    return ( 
-      <>
-        {def && 
-        <Button className="text-button default">
-          <p>Default</p>
-        </Button>}
-        <IconButton className="button edit" onClick={e => setEdit(prevEdit => {
+    })}
+    <div className="toolbar">
+      {isDefault && 
+        <TextIcon 
+          text="Default" 
+          size="small"
+        />
+      }
+      <EditButton
+        size="small"
+        onClick={e => setEdit(prevEdit => {
           return {
             ...prevEdit,
             index,
             ruleReg: item,
           }
-        })}>
-          <Edit/>
-        </IconButton>
-      </>
-    )
-  }
-
-  return (
-    <div className="rule-or-reg">
-      <div className="main">
-        <div className="title">
-          <h4>{`${index}.`}</h4>
-        </div>
-        <p>{item.text}</p>
-      </div>
-      {item.subsections && item.subsections.map((r: ruleOrRegType, i: number) => {
-        return (
-          <div key={i} className="subsection">
-            <div className="title" >
-              <p>{`${index}.${i + 1}`}</p>
-            </div>
-            <p>{r.text}</p>
-          </div>
-        )
-      })}
-      <div className="toolbar">
-        {toolbarContent(global)}
-      </div>
+        })}
+      />
     </div>
-  )
-}
+  </div>
+)
 
 export default RuleOrReg

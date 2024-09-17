@@ -126,6 +126,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
         setEditFormErr={setEditFormErr}
         backendErr={backendErr}
         setBackendErr={setBackendErr}
+        group={group}
         setIsDriverEdit={setIsDriverEdit}
         setDriver={setDriver}
         setDrivers={setDrivers}

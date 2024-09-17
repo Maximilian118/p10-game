@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import './_driverPicker.scss'
 import MUIAutocomplete from "../muiAutocomplete/muiAutocomplete"
 import { inputLabel } from "../../../shared/formValidation"
-import { driverType } from "../../../shared/types"
+import { driverGroupType, driverType } from "../../../shared/types"
 import { useNavigate } from "react-router-dom"
 import { getDrivers } from "../../../shared/requests/driverRequests"
 import { userType } from "../../../shared/localStorage"
@@ -12,6 +12,7 @@ import { Add } from "@mui/icons-material"
 import DriverCard from "../../cards/driverCard/DriverCard"
 import { canEditDriver } from "./driverEdit/driverEditUtility"
 import { sortAlphabetically } from "../../../shared/utility"
+import { canEditGroup } from "../driverGroupPicker/driverGroupEdit/driverGroupUtility"
 
 interface driverPickerType<T, U> {
   user: userType
@@ -22,6 +23,7 @@ interface driverPickerType<T, U> {
   setEditFormErr: React.Dispatch<React.SetStateAction<U>>
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
+  group: driverGroupType
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
   setDriver: React.Dispatch<React.SetStateAction<driverType>>
   setDrivers?: React.Dispatch<React.SetStateAction<driverType[]>> // Drivers requested from DB in a state of parent.
@@ -36,6 +38,7 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
   setEditFormErr,
   backendErr,
   setBackendErr,
+  group,
   setIsDriverEdit,
   setDriver,
   setDrivers,
@@ -112,6 +115,7 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
             driver={driver}
             canEdit={!!canEditDriver(driver, user)}
             onRemove={(driver) => removeDriverHandler(driver)}
+            canRemove={!!canEditGroup(group, user)}
             onClick={() => {
               setDriver(driver)
               setIsDriverEdit(true)

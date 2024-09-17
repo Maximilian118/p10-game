@@ -1,3 +1,4 @@
+import { userType } from "../../../../shared/localStorage"
 import { driverGroupType } from "../../../../shared/types"
 import { driverGroupEditFormErrType, driverGroupEditFormType } from "./DriverGroupEdit"
 
@@ -53,4 +54,25 @@ export const driverGroupEditErrors = (
   })
 
   return Object.values(errors).some((error) => error !== "")
+}
+// Determine what privilages the user has to edit this group.
+export const canEditGroup = (group: driverGroupType, user: userType): "delete" | "edit" | "" => {
+  const noDrivers = group.drivers.length === 0
+  const creator = group.created_by === user._id
+  const authority = user.permissions.adjudicator || creator
+  // If user is admin, can do anything.
+  if (user.permissions.admin) {
+    return "delete"
+  }
+  // If user is an adjudicator or user created the group and
+  // the group has no drivers assigned to it, can delete.
+  if (authority && noDrivers) {
+    return "delete"
+  }
+  // If user has the authority to do so, can edit the group.
+  if (authority) {
+    return "edit"
+  }
+  // If user meets none of the criteria, cannot do anything.
+  return ""
 }
