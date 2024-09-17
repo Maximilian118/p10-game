@@ -20,7 +20,7 @@ interface createChampFormBaseType {
 }
 
 export interface createChampFormType extends createChampFormBaseType {
-  driverGroups: driverGroupType[]
+  driverGroup: driverGroupType | null
   icon: File | null
   profile_picture: File | null
   pointsStructure: pointsStructureType
@@ -29,7 +29,7 @@ export interface createChampFormType extends createChampFormBaseType {
 }
 
 export interface createChampFormErrType extends createChampFormBaseType {
-  driverGroups: string
+  driverGroup: string
   dropzone: string
   pointsStructure: string
   rulesAndRegs: string
@@ -45,10 +45,11 @@ const CreateChamp: React.FC = props => {
   const [ stepperBtns, setStepperBtns ] = useState<JSX.Element>(<></>) // button-bar component to be distributed across child components as needed.
   const [ badgesReqSent, setBadgesReqSent ] = useState<boolean>(false) // As we can unload the badge picker component. State to dictate wheather to send another req is in parent.
   const [ defaultBadges, setDefaultBadges ] = useState<badgeType[]>([]) // For the same reason the res of getBadges sits here.
+  const [ groups, setGroups ] = useState<driverGroupType[]>([]) // Stores all driver groups from getDriverGroups response in DriverGroupPicker.
   const [ form, setForm ] = useState<createChampFormType>({
     champName: "",
     rounds: 24,
-    driverGroups: [],
+    driverGroup: null,
     icon: null,
     profile_picture: null,
     pointsStructure: presetArrays(1).map(item => {
@@ -64,7 +65,7 @@ const CreateChamp: React.FC = props => {
     champBadges: [],
   })
   const [ formErr, setFormErr ] = useState<createChampFormErrType>({
-    driverGroups: "",
+    driverGroup: "",
     champName: "",
     rounds: "",
     dropzone: "",
@@ -77,6 +78,7 @@ const CreateChamp: React.FC = props => {
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>, navigate: NavigateFunction) => {
     e.preventDefault()
+    console.log(form)
     // create a champ
   }
 
@@ -121,6 +123,8 @@ const CreateChamp: React.FC = props => {
         <DriverGroupPicker
           form={form}
           setForm={setForm}
+          groups={groups}
+          setGroups={setGroups}
           user={user}
           setUser={setUser}
           backendErr={backendErr}

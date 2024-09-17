@@ -6,9 +6,9 @@ import { driverGroupType } from "../types"
 import { driverGroupEditFormType } from "../../components/utility/driverGroupPicker/driverGroupEdit/DriverGroupEdit"
 import { populateDriverGroup } from "./requestPopulation"
 import { uplaodS3 } from "./bucketRequests"
-import { capitalise } from "../utility"
+import { capitalise, sortAlphabetically } from "../utility"
 
-export const newDriverGroup = async <T extends { driverGroups: driverGroupType[] }>(
+export const newDriverGroup = async <T extends { driverGroup: driverGroupType | null }>(
   editForm: driverGroupEditFormType,
   setForm: React.Dispatch<React.SetStateAction<T>>,
   user: userType,
@@ -16,6 +16,7 @@ export const newDriverGroup = async <T extends { driverGroups: driverGroupType[]
   navigate: NavigateFunction,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
+  setGroups: React.Dispatch<React.SetStateAction<driverGroupType[]>>,
 ): Promise<boolean> => {
   setLoading(true)
   let iconURL = ""
@@ -58,10 +59,12 @@ export const newDriverGroup = async <T extends { driverGroups: driverGroupType[]
         } else {
           const driverGroup = graphQLResponse("newDriverGroup", res, user, setUser, false) as driverGroupType // prettier-ignore
 
+          setGroups((prevGroups) => sortAlphabetically([...prevGroups, driverGroup]))
+
           setForm((prevForm) => {
             return {
               ...prevForm,
-              driverGroup: [...prevForm.driverGroups, driverGroup],
+              driverGroup,
             }
           })
 

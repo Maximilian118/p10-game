@@ -16,6 +16,8 @@ import AddButton from "../button/addButton/AddButton"
 interface driverGroupPickerType<T> {
   form: T
   setForm: React.Dispatch<React.SetStateAction<T>>
+  groups: driverGroupType[] // all groups from backend.
+  setGroups: React.Dispatch<React.SetStateAction<driverGroupType[]>>
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
   backendErr: graphQLErrorType
@@ -24,9 +26,11 @@ interface driverGroupPickerType<T> {
   style?: React.CSSProperties
 }
 
-const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({ 
+const DriverGroupPicker= <T extends { driverGroup: driverGroupType | null }>({ 
   form, 
-  setForm, 
+  setForm,
+  groups,
+  setGroups,
   user, 
   setUser,
   backendErr,
@@ -36,7 +40,6 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
 }: driverGroupPickerType<T>) => {
   const [ isEdit, setIsEdit ] = useState<boolean>(false) // Render DriverGroupEdit or not.
   const [ group, setGroup ] = useState<driverGroupType>(initDriverGroup(user)) // If we're editing a driver group rather than making a new one, populate.
-  const [ groups, setGroups ] = useState<driverGroupType[]>([]) // Stores all driver groups from getDriverGroups response.
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ reqSent, setReqSent ] = useState<boolean>(false)
   const [ search, setSearch ] = useState<driverGroupType[]>([])
@@ -44,11 +47,11 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (form.driverGroups.length === 0 && !reqSent) {
+    if (groups.length === 0 && !reqSent) {
       getDriverGroups(setGroups, user, setUser, navigate, setLoading, setBackendErr)
       setReqSent(true)
     }
-  }, [navigate, user, setUser, setBackendErr, form, reqSent])
+  }, [navigate, user, setUser, groups, setGroups, setBackendErr, form, reqSent])
 
   return isEdit ? 
     <DriverGroupEdit
@@ -59,6 +62,7 @@ const DriverGroupPicker= <T extends { driverGroups: driverGroupType[] }>({
       group={group}
       setGroup={setGroup}
       groups={groups}
+      setGroups={setGroups}
       style={style}
     /> : (
     <div className="driver-group-picker" style={style}>

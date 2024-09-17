@@ -21,6 +21,7 @@ interface driverGroupEditType<T> {
   group: driverGroupType // The specific group we're editing.
   setGroup: React.Dispatch<React.SetStateAction<driverGroupType>>
   groups: driverGroupType[] // all groups from backend.
+  setGroups: React.Dispatch<React.SetStateAction<driverGroupType[]>>
   style?: React.CSSProperties
 }
 
@@ -39,7 +40,7 @@ export interface driverGroupEditFormErrType {
   [key: string]: string
 }
 
-const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
+const DriverGroupEdit = <T extends { driverGroup: driverGroupType | null }>({
   setForm,
   user,
   setUser,
@@ -47,6 +48,7 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
   group, 
   setGroup,
   groups,
+  setGroups,
   style
 }: driverGroupEditType<T>) => {
   const [ isDriverEdit, setIsDriverEdit ] = useState<boolean>(false) // Render isDriverEdit or not.
@@ -74,8 +76,9 @@ const DriverGroupEdit = <T extends { driverGroups: driverGroupType[] }>({
     if (driverGroupEditErrors(editForm, setEditFormErr, groups)) {
       return
     }
+
     // Send request to add a new driver group to the DB and mutate form state
-    if (await newDriverGroup(editForm, setForm, user, setUser, navigate, setLoading, setBackendErr)) {
+    if (await newDriverGroup(editForm, setForm, user, setUser, navigate, setLoading, setBackendErr, setGroups)) {
       // Redirect back to previous page and clear driver information
       setIsEdit(false)
       setDriver(initDriver(user))

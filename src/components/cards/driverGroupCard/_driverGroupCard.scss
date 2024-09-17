@@ -39,7 +39,8 @@
       color: variables.$colour-9;
       margin-bottom: 8px;
       text-transform: capitalize;
-      overflow-y: scroll;
+      overflow-wrap: break-word;
+      font-size: 15px;
     }
 
     .driver-group-drivers {
