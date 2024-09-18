@@ -1,6 +1,6 @@
 @use '../../../../scss/variables';
 
-.edit-button {
+.edit-button, .edit-button-inverted {
   background: variables.$mui-blue !important;
 
   svg {
@@ -11,5 +11,17 @@
 
   &:hover {
     background: variables.$mui-blue-hover !important;
+  }
+}
+
+.edit-button-inverted {
+  background: white !important;
+
+  svg {
+    color: variables.$mui-blue !important;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.6) !important;
   }
 }

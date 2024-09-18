@@ -9,9 +9,10 @@ interface driverGroupCardType {
   group: driverGroupType
   onClick: (e: SyntheticEvent) => void
   onEditClicked: (e: SyntheticEvent) => void
+  selected?: boolean
 }
 
-const DriverGroupCard: React.FC<driverGroupCardType> = ({ group, onClick, onEditClicked }) => {
+const DriverGroupCard: React.FC<driverGroupCardType> = ({ group, onClick, onEditClicked, selected }) => {
   const [ lastIcon, setLastIcon ] = useState<number>(10) // Last Icon to be rendered before CounterIcon.
   const groupDriversRef = useRef<HTMLDivElement>(null) // Ref of the Icon list container.
 
@@ -24,10 +25,11 @@ const DriverGroupCard: React.FC<driverGroupCardType> = ({ group, onClick, onEdit
   }, [])
 
   return (
-    <div className="driver-group-card" onClick={onClick}>
+    <div className={`driver-group-card${selected ? "-selected" : ""}`} onClick={onClick}>
       <div className="main-icon-container">
         <ImageIcon src={group.url} size="contained"/>
         <EditButton
+          inverted={selected}
           onClick={e => {
             e.stopPropagation()
             onEditClicked(e)
@@ -35,13 +37,20 @@ const DriverGroupCard: React.FC<driverGroupCardType> = ({ group, onClick, onEdit
         />
       </div>
       <div className="driver-group-content">
+        {selected && <p className="driver-group-selected">Selected</p>}
         <p className="driver-group-title">{group.name}</p>
         <div ref={groupDriversRef} className="driver-group-drivers">
           {group.drivers.map((driver: driverType, i: number) => {
             if (i < lastIcon ) {
               return <ImageIcon key={i} src={driver.url}/>
             } else if (i === lastIcon) {
-              return <CounterIcon key={i} counter={group.drivers.length - lastIcon}/>
+              return (
+                <CounterIcon 
+                key={i} 
+                inverted={selected} 
+                counter={group.drivers.length - lastIcon}
+                />
+              )
             } else {
               return null
             }

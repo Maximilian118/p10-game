@@ -17,6 +17,7 @@ export const newDriverGroup = async <T extends { driverGroup: driverGroupType | 
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>,
   setGroups: React.Dispatch<React.SetStateAction<driverGroupType[]>>,
+  setSelected: React.Dispatch<React.SetStateAction<string>>,
 ): Promise<boolean> => {
   setLoading(true)
   let iconURL = ""
@@ -60,7 +61,7 @@ export const newDriverGroup = async <T extends { driverGroup: driverGroupType | 
           const driverGroup = graphQLResponse("newDriverGroup", res, user, setUser, false) as driverGroupType // prettier-ignore
 
           setGroups((prevGroups) => sortAlphabetically([...prevGroups, driverGroup]))
-
+          setSelected(() => driverGroup._id!)
           setForm((prevForm) => {
             return {
               ...prevForm,

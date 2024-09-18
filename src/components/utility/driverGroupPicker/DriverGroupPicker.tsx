@@ -43,6 +43,7 @@ const DriverGroupPicker= <T extends { driverGroup: driverGroupType | null }>({
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ reqSent, setReqSent ] = useState<boolean>(false)
   const [ search, setSearch ] = useState<driverGroupType[]>([])
+  const [ selected, setSelected ] = useState<string>(form.driverGroup ? form.driverGroup._id! : "") // The Driver Group that's currently selected.
 
   const navigate = useNavigate()
 
@@ -52,6 +53,14 @@ const DriverGroupPicker= <T extends { driverGroup: driverGroupType | null }>({
       setReqSent(true)
     }
   }, [navigate, user, setUser, groups, setGroups, setBackendErr, form, reqSent])
+
+  const sortedDriverGroups = () => {
+    const sortedGroups = sortAlphabetically(search ? search : groups)
+    const selectedGroup = sortedGroups.find(group => group._id === selected)
+    const filteredGroups = sortedGroups.filter(group => group._id !== selected)
+
+    return selectedGroup ? [ selectedGroup, ...filteredGroups ] : filteredGroups
+  }
 
   return isEdit ? 
     <DriverGroupEdit
@@ -63,6 +72,7 @@ const DriverGroupPicker= <T extends { driverGroup: driverGroupType | null }>({
       setGroup={setGroup}
       groups={groups}
       setGroups={setGroups}
+      setSelected={setSelected}
       style={style}
     /> : (
     <div className="driver-group-picker" style={style}>
@@ -77,16 +87,23 @@ const DriverGroupPicker= <T extends { driverGroup: driverGroupType | null }>({
           </div> : 
           groups.length > 0 ? 
           <div className="driver-group-list">
-            {sortAlphabetically(search ? search : groups).map((group: driverGroupType, i: number) => 
+            {sortedDriverGroups().map((driverGroup: driverGroupType, i: number) => 
               <DriverGroupCard
                 key={i}
-                group={group}
+                group={driverGroup}
+                selected={driverGroup._id === selected}
                 onEditClicked={() => {
-                  setGroup(group)
+                  setGroup(driverGroup)
                   setIsEdit(!isEdit)
                 }}
                 onClick={() => {
-                  
+                  setSelected(driverGroup._id!)
+                  setForm(prevForm => {
+                    return {
+                      ...prevForm,
+                      driverGroup,
+                    }
+                  })
                 }}
               />
             )}

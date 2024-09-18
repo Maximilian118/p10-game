@@ -1,7 +1,7 @@
 @use '../../../../scss/variables';
 @use '../../../../scss/mixins';
 
-.counter-icon {
+.counter-icon, .counter-icon-inverted {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -12,11 +12,19 @@
   flex-shrink: 0;
   background: variables.$mui-blue;
 
-  p {
+  .count {
     width: auto !important;
     color: white !important;
     text-align: center;
     font-size: 12px;
     margin: 2px 1px 0 0 !important;
+  }
+}
+
+.counter-icon-inverted {
+  background: white;
+
+  .count {
+    color: variables.$mui-blue !important;
   }
 }

@@ -1,15 +1,15 @@
 @use '../../../scss/mixins';
 @use '../../../scss/variables';
 
-.driver-group-card {
+.driver-group-card, .driver-group-card-selected {
   width: 100%;
-  height: 120px;
+  min-height: 120px;
   @include mixins.flexbox-start;
   background: white;
   cursor: pointer;
   transition: variables.$trans-speed;
   position: relative;
-  padding: 20px 7.5%;
+  padding: 10px 7.5%;
   box-sizing: border-box;
   overflow: hidden;
 
@@ -18,6 +18,7 @@
     height: 80px;
     flex-shrink: 0;
     position: relative;
+    @include mixins.flexbox;
 
     > :last-child {
       position: absolute;
@@ -33,6 +34,12 @@
     align-items: start;
     margin-left: 20px;
     overflow: hidden;
+
+    .driver-group-selected {
+      font-size: 15px;
+      color: white;
+      margin-bottom: 5px;
+    }
 
     .driver-group-title {
       width: 100%;
@@ -55,5 +62,16 @@
   
   &:hover {
     background: rgba(0, 0, 0, 0.06);
+  }
+}
+
+.driver-group-card-selected {
+  background: variables.$mui-blue;
+
+  .driver-group-content {
+
+    .driver-group-title {
+      color: white;
+    }
   }
 }
