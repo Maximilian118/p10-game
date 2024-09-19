@@ -54,13 +54,8 @@ const DriverGroupPicker= <T extends { driverGroup: driverGroupType | null }>({
     }
   }, [navigate, user, setUser, groups, setGroups, setBackendErr, form, reqSent])
 
-  const sortedDriverGroups = () => {
-    const sortedGroups = sortAlphabetically(search ? search : groups)
-    const selectedGroup = sortedGroups.find(group => group._id === selected)
-    const filteredGroups = sortedGroups.filter(group => group._id !== selected)
-
-    return selectedGroup ? [ selectedGroup, ...filteredGroups ] : filteredGroups
-  }
+  const sortedGroups = sortAlphabetically(search ? search : groups) // All of the available groups.
+  const selectedGroup = sortedGroups.find(group => group._id === selected) // find the single selected group from the array.
 
   return isEdit ? 
     <DriverGroupEdit
@@ -81,17 +76,28 @@ const DriverGroupPicker= <T extends { driverGroup: driverGroupType | null }>({
         setSearch={setSearch}
       />
       <div className="driver-group-list-container">
+        {selectedGroup && ( // If a group has been selected, display that group at the top of the page.
+          <DriverGroupCard
+            selected
+            group={selectedGroup}
+            onEditClicked={() => {
+              setGroup(selectedGroup)
+              setIsEdit(!isEdit)
+            }}
+          />
+        )}
         {loading ? 
           <div className="driver-group-loading">
             <CircularProgress/>
           </div> : 
           groups.length > 0 ? 
           <div className="driver-group-list">
-            {sortedDriverGroups().map((driverGroup: driverGroupType, i: number) => 
+            {sortedGroups
+              .filter(g => g._id !== selected) // Remove the selected group from the array.
+              .map((driverGroup: driverGroupType, i: number) => // Map through all of the groups available.
               <DriverGroupCard
                 key={i}
                 group={driverGroup}
-                selected={driverGroup._id === selected}
                 onEditClicked={() => {
                   setGroup(driverGroup)
                   setIsEdit(!isEdit)

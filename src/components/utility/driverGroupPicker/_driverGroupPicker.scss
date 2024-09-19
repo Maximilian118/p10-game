@@ -6,6 +6,20 @@
   @include mixins.flexbox-column;
   flex-shrink: 0;
 
+  .search {
+    position: sticky;
+    top: 66px;
+    z-index: 6;
+    margin-bottom: 0 !important;
+    border-bottom: 2px solid variables.$background !important;
+  }
+
+  .driver-group-card-selected {
+    position: sticky;
+    top: 124px;
+    z-index: 5;
+  }
+
   .driver-group-list-container {
     width: 100%;
     position: relative;

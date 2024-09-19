@@ -7,7 +7,7 @@ import ImageIcon from "../../utility/icon/imageIcon/ImageIcon"
 
 interface driverGroupCardType {
   group: driverGroupType
-  onClick: (e: SyntheticEvent) => void
+  onClick?: (e: SyntheticEvent) => void
   onEditClicked: (e: SyntheticEvent) => void
   selected?: boolean
 }
