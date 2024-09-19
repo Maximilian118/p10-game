@@ -107,6 +107,19 @@ export const isThreeLettersUppercase = (
   return true
 }
 
+// Retrieve the ID of the user from created_by fields.
+export const createdByID = (created_by?: userType | string): string => {
+  if (!created_by) {
+    return ""
+  }
+
+  if (typeof created_by === "string") {
+    return created_by
+  } else {
+    return created_by._id
+  }
+}
+
 // Remove everything but numbers from a string.
 export const onlyNumbers = (str: string): number => Number(str.replace(/\D/g, ""))
 // Sort an array of objects with name key of type string.

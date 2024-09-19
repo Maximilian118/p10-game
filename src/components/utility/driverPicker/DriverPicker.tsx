@@ -23,6 +23,7 @@ interface driverPickerType<T, U> {
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
   group: driverGroupType
+  setGroup: React.Dispatch<React.SetStateAction<driverGroupType>>
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
   setDriver: React.Dispatch<React.SetStateAction<driverType>>
   setDrivers?: React.Dispatch<React.SetStateAction<driverType[]>> // Drivers requested from DB in a state of parent.
@@ -38,6 +39,7 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
   backendErr,
   setBackendErr,
   group,
+  setGroup,
   setIsDriverEdit,
   setDriver,
   setDrivers,
@@ -62,11 +64,19 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
   }, [localDrivers, setDrivers])
 
   const removeDriverHandler = (driver: driverType) => {
+    const removedDriver = editForm.drivers.filter(d => d._id !== driver._id)
     // Remove this driver from driver group form state.
     setEditForm(prevForm => {
       return {
         ...prevForm,
-        drivers: prevForm.drivers.filter(d => d._id !== driver._id),
+        drivers: removedDriver,
+      }
+    })
+
+    setGroup(prevGroup => {
+      return {
+        ...prevGroup,
+        drivers: removedDriver,
       }
     })
     // Remove this driver from the driver group in db.
@@ -95,6 +105,16 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
                 value,
                 ...prevForm.drivers,
               ],
+            }
+          })
+
+          setGroup(prevGroup => {
+            return {
+              ...prevGroup,
+              drivers: [
+                value,
+                ...prevGroup.drivers,
+              ]
             }
           })
         }}

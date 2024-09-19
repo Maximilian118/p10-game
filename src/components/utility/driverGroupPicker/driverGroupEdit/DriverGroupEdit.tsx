@@ -11,7 +11,7 @@ import DriverPicker from "../../driverPicker/DriverPicker"
 import { initDriver, initDriverGroup } from "../../../../shared/init"
 import { newDriverGroup } from "../../../../shared/requests/driverGroupRequests"
 import { useNavigate } from "react-router-dom"
-import { driverGroupEditErrors } from "./driverGroupUtility"
+import { canEditGroup, driverGroupEditErrors } from "./driverGroupUtility"
 
 interface driverGroupEditType<T> {
   setForm: React.Dispatch<React.SetStateAction<T>>
@@ -55,6 +55,7 @@ const DriverGroupEdit = <T extends { driverGroup: driverGroupType | null }>({
 }: driverGroupEditType<T>) => {
   const [ isDriverEdit, setIsDriverEdit ] = useState<boolean>(false) // Render isDriverEdit or not.
   const [ loading, setLoading ] = useState<boolean>(false)
+  const [ delLoading, setDelLoading ] = useState<boolean>(false)
   const [ driver, setDriver ] = useState<driverType>(initDriver(user)) // If we're editing a driver rather than making a new one, populate.
   const [ drivers, setDrivers ] = useState<driverType[]>([]) // Drivers requested from DB.
   const [ backendErr, setBackendErr ] = useState<graphQLErrorType>(initGraphQLError)
@@ -72,6 +73,19 @@ const DriverGroupEdit = <T extends { driverGroup: driverGroupType | null }>({
   })
 
   const navigate = useNavigate()
+
+  const deleteDriverGroupHandler = () => {
+    
+  }
+
+  const updateDriverHandler = () => {
+    // Check for Errors
+    if (driverGroupEditErrors(editForm, setEditFormErr, groups, true)) {
+      return
+    }
+
+    // updateGroup
+  }
 
   const onSubmitHandler = async () => {
     // Check for Errors
@@ -132,6 +146,7 @@ const DriverGroupEdit = <T extends { driverGroup: driverGroupType | null }>({
         backendErr={backendErr}
         setBackendErr={setBackendErr}
         group={group}
+        setGroup={setGroup}
         setIsDriverEdit={setIsDriverEdit}
         setDriver={setDriver}
         setDrivers={setDrivers}
@@ -146,9 +161,16 @@ const DriverGroupEdit = <T extends { driverGroup: driverGroupType | null }>({
             setGroup(initDriverGroup(user))
           }}
         >Back</Button>
+        {canEditGroup(group, user) === "delete" && group._id && <Button
+          variant="contained" 
+          color="error"
+          onClick={e => deleteDriverGroupHandler()}
+          startIcon={delLoading && <CircularProgress size={20} color={"inherit"}/>}
+        >Delete</Button>}
         <Button
           variant="contained"
-          onClick={e => onSubmitHandler()}
+          disabled={group.drivers.length < 2}
+          onClick={e => editForm._id ? updateDriverHandler() : onSubmitHandler()}
           startIcon={loading && <CircularProgress size={20} color={"inherit"}/>}
         >Submit</Button>
       </div>

@@ -12,6 +12,7 @@ import DriverGroupCard from "../../cards/driverGroupCard/DriverGroupCard"
 import { sortAlphabetically } from "../../../shared/utility"
 import Search from "../search/Search"
 import AddButton from "../button/addButton/AddButton"
+import { canEditGroup } from "./driverGroupEdit/driverGroupUtility"
 
 interface driverGroupPickerType<T> {
   form: T
@@ -80,6 +81,7 @@ const DriverGroupPicker= <T extends { driverGroup: driverGroupType | null }>({
           <DriverGroupCard
             selected
             group={selectedGroup}
+            canEdit={!!canEditGroup(selectedGroup, user)}
             onEditClicked={() => {
               setGroup(selectedGroup)
               setIsEdit(!isEdit)
@@ -98,6 +100,7 @@ const DriverGroupPicker= <T extends { driverGroup: driverGroupType | null }>({
               <DriverGroupCard
                 key={i}
                 group={driverGroup}
+                canEdit={!!canEditGroup(driverGroup, user)}
                 onEditClicked={() => {
                   setGroup(driverGroup)
                   setIsEdit(!isEdit)

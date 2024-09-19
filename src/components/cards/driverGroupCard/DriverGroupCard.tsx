@@ -8,11 +8,12 @@ import ImageIcon from "../../utility/icon/imageIcon/ImageIcon"
 interface driverGroupCardType {
   group: driverGroupType
   onClick?: (e: SyntheticEvent) => void
-  onEditClicked: (e: SyntheticEvent) => void
   selected?: boolean
+  canEdit?: boolean
+  onEditClicked?: (e: SyntheticEvent) => void
 }
 
-const DriverGroupCard: React.FC<driverGroupCardType> = ({ group, onClick, onEditClicked, selected }) => {
+const DriverGroupCard: React.FC<driverGroupCardType> = ({ group, onClick, selected, canEdit, onEditClicked }) => {
   const [ lastIcon, setLastIcon ] = useState<number>(10) // Last Icon to be rendered before CounterIcon.
   const groupDriversRef = useRef<HTMLDivElement>(null) // Ref of the Icon list container.
 
@@ -28,13 +29,13 @@ const DriverGroupCard: React.FC<driverGroupCardType> = ({ group, onClick, onEdit
     <div className={`driver-group-card${selected ? "-selected" : ""}`} onClick={onClick}>
       <div className="main-icon-container">
         <ImageIcon src={group.url} size="contained"/>
-        <EditButton
+        {canEdit && <EditButton
           inverted={selected}
           onClick={e => {
             e.stopPropagation()
-            onEditClicked(e)
+            onEditClicked && onEditClicked(e)
           }}
-        />
+        />}
       </div>
       <div className="driver-group-content">
         {selected && <p className="driver-group-selected">Selected</p>}
@@ -46,9 +47,9 @@ const DriverGroupCard: React.FC<driverGroupCardType> = ({ group, onClick, onEdit
             } else if (i === lastIcon) {
               return (
                 <CounterIcon 
-                key={i} 
-                inverted={selected} 
-                counter={group.drivers.length - lastIcon}
+                  key={i} 
+                  inverted={selected} 
+                  counter={group.drivers.length - lastIcon}
                 />
               )
             } else {
