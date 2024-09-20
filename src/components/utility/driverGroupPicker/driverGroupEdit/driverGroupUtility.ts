@@ -56,9 +56,38 @@ export const driverGroupEditErrors = (
 
   return Object.values(errors).some((error) => error !== "")
 }
+
+export const driverGroupDeleteErrors = (
+  driverGroup: driverGroupType,
+  setEditFormErr: React.Dispatch<React.SetStateAction<driverGroupEditFormErrType>>,
+): boolean => {
+  const errors: driverGroupEditFormErrType = {
+    groupName: "",
+    drivers: "",
+    dropzone: "",
+  }
+
+  if (driverGroup.drivers.length > 2) {
+    errors.drivers = "Driver group has too many drivers."
+  }
+
+  if (driverGroup.championships.length > 0) {
+    errors.groupName = "Driver group still belongs to some championships."
+  }
+
+  setEditFormErr((prevErrs) => {
+    return {
+      ...prevErrs,
+      ...errors,
+    }
+  })
+
+  return Object.values(errors).some((error) => error !== "")
+}
 // Determine what privilages the user has to edit this group.
 export const canEditGroup = (group: driverGroupType, user: userType): "delete" | "edit" | "" => {
   const lessThan2Drivers = group.drivers.length < 2
+  const hasNoChamps = group.championships.length === 0
   const creator = createdByID(group.created_by) === user._id
   const authority = user.permissions.adjudicator || creator
 
@@ -68,7 +97,7 @@ export const canEditGroup = (group: driverGroupType, user: userType): "delete" |
   }
   // If user is an adjudicator or user created the group and
   // the group has no drivers assigned to it, can delete.
-  if (creator && lessThan2Drivers) {
+  if (creator && lessThan2Drivers && hasNoChamps) {
     return "delete"
   }
   // If user has the authority to do so, can edit the group.

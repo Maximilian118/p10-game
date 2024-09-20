@@ -76,6 +76,9 @@ export const populateDriverGroup = `
   _id
   url
   name
+  championships {
+    _id
+  }
   drivers {
     ${populateDriver}
   }

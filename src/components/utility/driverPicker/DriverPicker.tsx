@@ -12,26 +12,31 @@ import { canEditDriver } from "./driverEdit/driverEditUtility"
 import { sortAlphabetically } from "../../../shared/utility"
 import { canEditGroup } from "../driverGroupPicker/driverGroupEdit/driverGroupUtility"
 import AddButton from "../button/addButton/AddButton"
+import { updateDriverGroup } from "../../../shared/requests/driverGroupRequests"
+import { driverGroupEditFormType } from "../driverGroupPicker/driverGroupEdit/DriverGroupEdit"
 
-interface driverPickerType<T, U> {
+interface driverPickerType<T, U, V> {
   user: userType
   setUser: React.Dispatch<React.SetStateAction<userType>>
-  editForm: T
+  setForm: React.Dispatch<React.SetStateAction<V>> // Form state for champ.
+  editForm: T // editForm for driver group state
   setEditForm: React.Dispatch<React.SetStateAction<T>>
-  editFormErr: U
+  editFormErr: U // editForm Errors for driver group state
   setEditFormErr: React.Dispatch<React.SetStateAction<U>>
   backendErr: graphQLErrorType
   setBackendErr: React.Dispatch<React.SetStateAction<graphQLErrorType>>
   group: driverGroupType
   setGroup: React.Dispatch<React.SetStateAction<driverGroupType>>
+  setGroups: React.Dispatch<React.SetStateAction<driverGroupType[]>> // Groups retrieved from the DB.
   setIsDriverEdit: React.Dispatch<React.SetStateAction<boolean>>
   setDriver: React.Dispatch<React.SetStateAction<driverType>>
   setDrivers?: React.Dispatch<React.SetStateAction<driverType[]>> // Drivers requested from DB in a state of parent.
 }
 
-const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: string }>({
+const DriverPicker = <T extends driverGroupEditFormType, U extends { drivers: string }, V extends { driverGroup: driverGroupType | null }>({
   user,
   setUser,
+  setForm,
   editForm,
   setEditForm,
   editFormErr,
@@ -40,10 +45,11 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
   setBackendErr,
   group,
   setGroup,
+  setGroups,
   setIsDriverEdit,
   setDriver,
   setDrivers,
-}: driverPickerType<T, U>) => {
+}: driverPickerType<T, U, V>) => {
   const [ localDrivers, setLocalDrivers ] = useState<driverType[]>([]) // All drivers in db.
   const [ value, setValue ] = useState<driverType | null>(null) // Current value of Autocomplete.
   const [ reqSent, setReqSent ] = useState<boolean>(false)
@@ -63,24 +69,51 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
     setDrivers && setDrivers(localDrivers)
   }, [localDrivers, setDrivers])
 
-  const removeDriverHandler = (driver: driverType) => {
-    const removedDriver = editForm.drivers.filter(d => d._id !== driver._id)
-    // Remove this driver from driver group form state.
-    setEditForm(prevForm => {
-      return {
-        ...prevForm,
-        drivers: removedDriver,
-      }
-    })
-
+  const removeDriverHandler = async (driver: driverType) => {
+    const filteredDrivers = editForm.drivers.filter(d => d._id !== driver._id)
+    const withoutDriver: T = {
+      ...editForm,
+      drivers: filteredDrivers,
+    }
+    // Remove this driver from group form state.
+    setEditForm(() => withoutDriver)
+    // Remove this driver from the group state the form state is based upon.
     setGroup(prevGroup => {
       return {
         ...prevGroup,
-        drivers: removedDriver,
+        drivers: filteredDrivers,
       }
     })
-    // Remove this driver from the driver group in db.
-    // Request
+    // If we're editing an existing group.
+    if (group._id) {
+      await updateDriverGroup(group, withoutDriver, setForm, user, setUser, navigate, setLoading, setBackendErr, setGroups)
+    }
+  }
+
+  const addDriverHandler = async (driver: driverType) => {
+    const addedDriver = [
+      driver,
+      ...editForm.drivers,
+    ]
+
+    const withDriver: T = {
+      ...editForm,
+      drivers: addedDriver,
+    }
+    // Add this driver to driver group form local form state.
+    setEditForm(() => withDriver)
+    // update state of group the local form is based upon.
+    setGroup(prevGroup => {
+      return {
+        ...prevGroup,
+        drivers: addedDriver,
+      }
+    })
+    // If we're editing an existing group.
+    if (group._id) {
+      await updateDriverGroup(group, withDriver, setForm, user, setUser, navigate, setLoading, setBackendErr, setGroups)
+      // Request
+    }
   }
 
   return (
@@ -97,29 +130,9 @@ const DriverPicker = <T extends { drivers: driverType[] }, U extends { drivers: 
         setObjValue={(value) => {
           setValue(value)
         }}
-        onLiClick={(value) => {
-          setEditForm(prevForm => {
-            return {
-              ...prevForm,
-              drivers: [
-                value,
-                ...prevForm.drivers,
-              ],
-            }
-          })
-
-          setGroup(prevGroup => {
-            return {
-              ...prevGroup,
-              drivers: [
-                value,
-                ...prevGroup.drivers,
-              ]
-            }
-          })
-        }}
+        onLiClick={(value) => addDriverHandler(value)}
         onChange={() => 
-          setEditFormErr(prevErrs => {
+          setEditFormErr(prevErrs => { // Remove an errors onChange
             return {
               ...prevErrs,
               drivers: "",

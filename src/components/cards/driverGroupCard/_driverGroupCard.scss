@@ -32,6 +32,8 @@
     flex-grow: 1;
     @include mixins.flexbox-column;
     align-items: start;
+    padding: 10px 0;
+    box-sizing: border-box;
     margin-left: 20px;
     overflow: hidden;
 

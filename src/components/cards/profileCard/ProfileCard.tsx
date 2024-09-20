@@ -61,6 +61,7 @@ const ProfileCard = <T extends formType, U extends formErrType>({ user, setUser,
       <DropZone<T, U>
         form={form}
         setForm={setForm}
+        user={user}
         formErr={formErr}
         setFormErr={setFormErr}
         backendErr={backendErr}

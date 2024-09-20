@@ -9,9 +9,9 @@ import DriverEdit from '../../driverPicker/driverEdit/DriverEdit'
 import { userType } from "../../../../shared/localStorage"
 import DriverPicker from "../../driverPicker/DriverPicker"
 import { initDriver, initDriverGroup } from "../../../../shared/init"
-import { newDriverGroup } from "../../../../shared/requests/driverGroupRequests"
+import { deleteDriverGroup, newDriverGroup, updateDriverGroup } from "../../../../shared/requests/driverGroupRequests"
 import { useNavigate } from "react-router-dom"
-import { canEditGroup, driverGroupEditErrors } from "./driverGroupUtility"
+import { canEditGroup, driverGroupDeleteErrors, driverGroupEditErrors } from "./driverGroupUtility"
 
 interface driverGroupEditType<T> {
   setForm: React.Dispatch<React.SetStateAction<T>>
@@ -74,17 +74,30 @@ const DriverGroupEdit = <T extends { driverGroup: driverGroupType | null }>({
 
   const navigate = useNavigate()
 
-  const deleteDriverGroupHandler = () => {
-    
+  const deleteDriverGroupHandler = async () => {
+    // Check for Errors
+    if (driverGroupDeleteErrors(group, setEditFormErr)) {
+      return
+    }
+    // Send request to delete driver group from the DB and mutate form state
+    if (await deleteDriverGroup(group, setGroups, setForm, user, setUser, navigate, setDelLoading, setBackendErr)) {
+      // Redirect back to previous page and clear driver information
+      setIsEdit(false)
+      setGroup(initDriverGroup(user))
+    }
   }
 
-  const updateDriverHandler = () => {
+  const updateDriverHandler = async () => {
     // Check for Errors
     if (driverGroupEditErrors(editForm, setEditFormErr, groups, true)) {
       return
     }
-
-    // updateGroup
+    // Send request to update driver group in the DB and mutate form state
+    if (await updateDriverGroup(group, editForm, setForm, user, setUser, navigate, setLoading, setBackendErr, setGroups)) {
+      // Redirect back to previous page and clear driver information
+      setIsEdit(false)
+      setGroup(initDriverGroup(user))
+    }
   }
 
   const onSubmitHandler = async () => {
@@ -92,12 +105,11 @@ const DriverGroupEdit = <T extends { driverGroup: driverGroupType | null }>({
     if (driverGroupEditErrors(editForm, setEditFormErr, groups)) {
       return
     }
-
     // Send request to add a new driver group to the DB and mutate form state
     if (await newDriverGroup(editForm, setForm, user, setUser, navigate, setLoading, setBackendErr, setGroups, setSelected)) {
       // Redirect back to previous page and clear driver information
       setIsEdit(false)
-      setDriver(initDriver(user))
+      setGroup(initDriverGroup(user))
     }
   }
 
@@ -125,6 +137,7 @@ const DriverGroupEdit = <T extends { driverGroup: driverGroupType | null }>({
         setBackendErr={setBackendErr}
         purposeText="Group Image"
         thumbImg={group.url ? group.url : false}
+        disabled={!canEditGroup(group, user)}
       />
       <TextField
         name="groupName"
@@ -135,10 +148,12 @@ const DriverGroupEdit = <T extends { driverGroup: driverGroupType | null }>({
         onChange={e => updateForm<driverGroupEditFormType, driverGroupEditFormErrType>(e, editForm, setEditForm, setEditFormErr, backendErr, setBackendErr)}
         value={editForm.groupName}
         error={editFormErr.groupName || backendErr.type === "groupName" ? true : false}
+        disabled={!canEditGroup(group, user)}
       />
       <DriverPicker
         user={user}
         setUser={setUser}
+        setForm={setForm}
         editForm={editForm}
         setEditForm={setEditForm}
         editFormErr={editFormErr}
@@ -147,6 +162,7 @@ const DriverGroupEdit = <T extends { driverGroup: driverGroupType | null }>({
         setBackendErr={setBackendErr}
         group={group}
         setGroup={setGroup}
+        setGroups={setGroups}
         setIsDriverEdit={setIsDriverEdit}
         setDriver={setDriver}
         setDrivers={setDrivers}
